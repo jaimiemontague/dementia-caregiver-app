@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   unselected: {
-    backgroundColor: '#e6e6e6',
+    backgroundColor: 'white',
   },
   selected: {
     backgroundColor: 'lightgreen',
