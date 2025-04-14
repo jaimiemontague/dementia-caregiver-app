@@ -28,6 +28,13 @@ export default function SituationListScreen() {
         {behaviorKey.charAt(0).toUpperCase() + behaviorKey.slice(1)}
       </Text>
 
+      <TouchableOpacity
+        onPress={() => console.log("Static button pressed")}
+        style={{ padding: 16, backgroundColor: "#ccc", marginBottom: 20 }}
+      >
+        <Text>Test Button</Text>
+      </TouchableOpacity>
+
       {situations.map((situation, index) => (
         <TouchableOpacity
           key={index}
@@ -37,15 +44,13 @@ export default function SituationListScreen() {
             borderRadius: 8,
             marginBottom: 12,
           }}
-          onPress={() =>
+          onPress={() => {
+            console.log("Navigating to situation:", situation);
             router.push({
               pathname: "/(tabs)/behavior/[behavior]/[situation]",
-              params: {
-                behavior: behaviorKey,
-                situation,
-              },
-            })
-          }
+              params: { behavior: behaviorKey, situation },
+            });
+          }}
         >
           <Text style={{ fontSize: 18 }}>{situation}</Text>
         </TouchableOpacity>
