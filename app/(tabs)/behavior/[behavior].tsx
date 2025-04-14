@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
-// 👇 Behavior → Situation mock mapping
+// Behavior → Situation mock mapping
 const situationMap: Record<string, string[]> = {
   sundowning: [
     "Getting fidgety, unstable, irritable",
@@ -28,13 +28,20 @@ export default function SituationListScreen() {
         {behaviorKey.charAt(0).toUpperCase() + behaviorKey.slice(1)}
       </Text>
 
+      {/* Static test button */}
       <TouchableOpacity
-        onPress={() => console.log("Static button pressed")}
-        style={{ padding: 16, backgroundColor: "#ccc", marginBottom: 20 }}
+        onPress={() => console.log("Static test button pressed")}
+        style={{
+          padding: 16,
+          backgroundColor: "#888",
+          borderRadius: 8,
+          marginBottom: 20,
+        }}
       >
-        <Text>Test Button</Text>
+        <Text style={{ fontSize: 18, color: "#fff" }}>Test Button</Text>
       </TouchableOpacity>
 
+      {/* Situation buttons */}
       {situations.map((situation, index) => (
         <TouchableOpacity
           key={index}

@@ -1,19 +1,17 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-type BehaviorCardProps = {
-    title: string;
-    onPress?: () => void;
-    selected?: boolean;
-  };
+type Props = {
+  title: string;
+  onPress: () => void;
+  selected?: boolean;
+};
 
-export default function BehaviorCard({ title, onPress, selected }: BehaviorCardProps) {
+export default function BehaviorCard({ title, onPress, selected = false }: Props) {
   return (
-    <TouchableOpacity 
-    style={[
-        styles.card,
-        selected ? styles.selected : styles.unselected
-    ]}
-    onPress={onPress}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.card, selected && styles.selected]}
+    >
       <Text style={styles.cardText}>{title}</Text>
     </TouchableOpacity>
   );
@@ -21,18 +19,22 @@ export default function BehaviorCard({ title, onPress, selected }: BehaviorCardP
 
 const styles = StyleSheet.create({
   card: {
-    padding: 15,
-    marginBottom: 10,
-    backgroundColor: '#e6e6e6',
-    borderRadius: 10,
-  },
-  cardText: {
-    fontSize: 16,
-  },
-  unselected: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFA790',
+    borderRadius: 12,
+    width: '45%',
+    height: 60,
+    marginVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   selected: {
-    backgroundColor: 'lightgreen',
+    borderWidth: 2,
+    borderColor: '#FF7043', // Optional: highlight selected state
+  },
+  cardText: {
+    color: '#333',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });
