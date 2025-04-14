@@ -8,7 +8,7 @@ const situationData: Record<string, string[]> = {
     'Thinks they have to go to work', // https://www.youtube.com/shorts/NfhsDluXWDs
     'Refuses to sit down or sleep', // https://www.youtube.com/shorts/cQlXDeeloDw
   ],
-  'i-want-to-go-home!': [
+  'i-want-to-go-home': [
     'Keeps trying to leave the house', // https://www.youtube.com/shorts/rZa4MV9c_yQ
     'Asks repeatedly to go home', // https://www.youtube.com/shorts/kSKBxtrG-3Q
     'Wants to go to mom’s house (who passed away)', // https://www.youtube.com/shorts/jfFDlr_6RPo
@@ -30,7 +30,8 @@ export default function Page() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>
-        {normalizedBehavior.replace(/-/g, ' ')}
+      {normalizedBehavior.replace(/-/g, ' ')}
+    : Choose the specific situation you're dealing with.
       </Text>
 
       {situations.map((situation, index) => (
@@ -61,8 +62,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   header: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
     marginBottom: 24,
     textTransform: 'capitalize',
     color: '#333',

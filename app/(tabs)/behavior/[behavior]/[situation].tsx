@@ -10,7 +10,15 @@ const videoData: Record<string, Record<string, { videoUrl: string; prompt2?: str
       videoUrl: 'https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/258+Dementia+False+Belief-+Responding+to+_I+Need+To+Go+See+Grandma%2C+Im+Leaving_+(When+She+Passed+Years+Ago).mp4',
       prompt2: 'Try redirecting them with calm tone and eye contact.',
     },
-    // Add the rest...
+    // Add the rest...You become the target
+    'you-become-the-target': {
+      videoUrl: 'https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/258+Dementia+False+Belief-+Responding+to+_I+Need+To+Go+See+Grandma%2C+Im+Leaving_+(When+She+Passed+Years+Ago).mp4',
+      prompt2: 'Try redirecting them with calm tone and eye contact.',
+    },
+    'throws-things-or-slams-doors': {
+      videoUrl: 'https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/258+Dementia+False+Belief-+Responding+to+_I+Need+To+Go+See+Grandma%2C+Im+Leaving_+(When+She+Passed+Years+Ago).mp4',
+      prompt2: 'Try redirecting them with calm tone and eye contact.',
+    },
   },
   // Add other behaviors here...
 };
@@ -45,7 +53,8 @@ export default function Page() {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
-      <Text style={styles.title}>{situationKey.replace(/-/g, ' ')}</Text>
+      
+      <Text style={styles.title}>Watch this to help with {situationKey.replace(/-/g, ' ')}:</Text>
 
       <Video
         ref={videoRef}
@@ -72,8 +81,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
     marginBottom: 16,
     color: '#333',
   },

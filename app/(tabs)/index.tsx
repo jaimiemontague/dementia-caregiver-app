@@ -1,10 +1,10 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import BehaviorCard from '../../components/BehaviorCard';
 
 const behaviors = [
-  { id: 1, title: "I Want to Go Home!" },
+  { id: 1, title: "I Want to Go Home" },
   { id: 2, title: "Sundowning" },
   { id: 3, title: "Anger or Aggression" },
 ];
@@ -17,6 +17,13 @@ export default function Page() {
     <View style={styles.container}>
 
       {/* Behavior Buttons */}
+
+      <View style={styles.instructionsContainer}>
+        <Text style={styles.instructions}>
+          Choose the challenging behavior you're facing
+        </Text>
+      </View>
+
       <View style={styles.buttonGrid}>
         {behaviors.map((item) => (
           <BehaviorCard
@@ -60,5 +67,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     paddingHorizontal: 16,
     paddingTop: 20,
+  },
+  instructionsContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 10,
+    alignItems: 'center',
+  },
+  instructions: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 12,
   },
 });
