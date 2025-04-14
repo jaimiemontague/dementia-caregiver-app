@@ -6,9 +6,6 @@ export default function SituationDetailScreen() {
   // Grab the route params: "behavior" and "situation"
   const { behavior, situation } = useLocalSearchParams();
 
-  // 👉 Optional: Uncomment the next line to simulate a crash
-  // throw new Error("Simulated crash: Breaking the app on purpose for testing!");
-
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{`Behavior: ${behavior}`}</Text>

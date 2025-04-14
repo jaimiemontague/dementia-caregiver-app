@@ -15,14 +15,6 @@ export default function Page() {
 
   return (
     <View style={styles.container}>
-      {/* Logo Header */}
-      <View style={styles.header}>
-        <Image
-          source={require('../../assets/images/appheader.png')} // Update path if needed
-          style={styles.logo}
-          resizeMode="contain"
-        />
-      </View>
 
       {/* Behavior Buttons */}
       <View style={styles.buttonGrid}>
