@@ -20,7 +20,7 @@ function CustomHeader() {
     <View style={styles.header}>
       {!isHome && (
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="home" size={24} color="#333" />
+          <Ionicons name="home" size={24} color="#FFF" />
         </TouchableOpacity>
       )}
       <Image
