@@ -1,6 +1,6 @@
 import { Tabs, usePathname, useRouter } from 'expo-router';
 import React from 'react';
-import { View, Image, Platform, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, Text, Platform, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { HapticTab } from '@/components/HapticTab';
@@ -28,6 +28,8 @@ function CustomHeader() {
         style={styles.logo}
         resizeMode="contain"
       />
+      <Text style={styles.appNameHelp}>Help</Text>
+      <Text style={styles.appNameNow}>Now!</Text>
     </View>
   );
 }
@@ -80,10 +82,26 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     left: 20,
-    top: 65,
+    top: 83,
   },
   logo: {
     width: 250,
     height: 60,
+  },
+  appNameHelp: {
+    position: 'absolute',
+    right: 30,
+    top: 80,
+    fontSize: 11,
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+  appNameNow: {
+    position: 'absolute',
+    right: 28,
+    top: 95,
+    fontSize: 11,
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });
