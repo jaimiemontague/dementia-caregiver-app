@@ -3,11 +3,15 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import BehaviorCard from '../../components/BehaviorCard';
 
-const behaviors = [
-  { id: 1, title: "I Want to Go Home" },
-  { id: 2, title: "Sundowning" },
-  { id: 3, title: "Anger or Aggression" },
-];
+import videoData from '../../data/videoData.json';
+
+const behaviorKeys = Object.keys(videoData);
+
+const behaviors = behaviorKeys.map((key, index) => ({
+  id: index + 1,
+  title: key.replace(/-/g, ' ').replace(/!/g, '').replace(/\b\w/g, l => l.toUpperCase()),
+  slug: key,
+}));
 
 export default function Page() {
   const [selectedId, setSelectedId] = useState<number | null>(null);

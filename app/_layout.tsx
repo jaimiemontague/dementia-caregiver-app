@@ -1,3 +1,10 @@
+
+
+
+// THIS IS NOT THE MAIN APP LAYOUT!  This is the Expo page's layout.
+
+
+
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';

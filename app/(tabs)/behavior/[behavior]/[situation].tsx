@@ -4,24 +4,10 @@ import { Video, ResizeMode } from 'expo-av';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRef, useCallback } from 'react';
 
-const videoData: Record<string, Record<string, { videoUrl: string; prompt2?: string }>> = {
-  'anger-or-aggression': {
-    'cursing-or-yelling': {
-      videoUrl: 'https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/258+Dementia+False+Belief-+Responding+to+_I+Need+To+Go+See+Grandma%2C+Im+Leaving_+(When+She+Passed+Years+Ago).mp4',
-      prompt2: 'Try redirecting them with calm tone and eye contact.',
-    },
-    // Add the rest...You become the target
-    'you-become-the-target': {
-      videoUrl: 'https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/258+Dementia+False+Belief-+Responding+to+_I+Need+To+Go+See+Grandma%2C+Im+Leaving_+(When+She+Passed+Years+Ago).mp4',
-      prompt2: 'Try redirecting them with calm tone and eye contact.',
-    },
-    'throws-things-or-slams-doors': {
-      videoUrl: 'https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/258+Dementia+False+Belief-+Responding+to+_I+Need+To+Go+See+Grandma%2C+Im+Leaving_+(When+She+Passed+Years+Ago).mp4',
-      prompt2: 'Try redirecting them with calm tone and eye contact.',
-    },
-  },
-  // Add other behaviors here...
-};
+import videoData from '../../../../data/videoData.json'; 
+
+type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
+const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
   const { behavior, situation } = useLocalSearchParams();
@@ -30,9 +16,8 @@ export default function Page() {
   const behaviorKey = decodeURIComponent(behavior as string).toLowerCase();
   const situationKey = decodeURIComponent(situation as string).toLowerCase();
 
-  const data = videoData[behaviorKey]?.[situationKey];
+  const data = typedVideoData[behaviorKey]?.[situationKey];
 
-  // Stop video when navigating away
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -53,8 +38,7 @@ export default function Page() {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
-      
-      <Text style={styles.title}>Watch this to help with {situationKey.replace(/-/g, ' ')}:</Text>
+      <Text style={styles.title}>Watch this to help with {situationKey.replace(/-/g, ' ').toLowerCase()}:</Text>
 
       <Video
         ref={videoRef}

@@ -1,40 +1,25 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
-// Fake example data (normally you'd pull this from your behavior database)
-const situationData: Record<string, string[]> = {
-  'sundowning': [
-    'Wants to go home',  // https://www.youtube.com/shorts/aRzM4gzlQ7w
-    'Thinks they have to go to work', // https://www.youtube.com/shorts/NfhsDluXWDs
-    'Refuses to sit down or sleep', // https://www.youtube.com/shorts/cQlXDeeloDw
-  ],
-  'i-want-to-go-home': [
-    'Keeps trying to leave the house', // https://www.youtube.com/shorts/rZa4MV9c_yQ
-    'Asks repeatedly to go home', // https://www.youtube.com/shorts/kSKBxtrG-3Q
-    'Wants to go to mom’s house (who passed away)', // https://www.youtube.com/shorts/jfFDlr_6RPo
-  ],
-  'anger-or-aggression': [
-    'Cursing or yelling', // https://www.youtube.com/shorts/mA5q7243fTw
-    'You become the target', // https://www.youtube.com/shorts/dKfGrQCzEmA
-    'Throws things or slams doors', // https://www.youtube.com/shorts/wiTJ7cAqqGI
-  ],
-};
+import videoData from '../../../data/videoData.json';
+
+type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
+const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
   const router = useRouter();
   const { behavior } = useLocalSearchParams();
 
-  const normalizedBehavior = decodeURIComponent(behavior as string);
-  const situations = situationData[normalizedBehavior.toLowerCase()] || [];
+  const normalizedBehavior = decodeURIComponent(behavior as string).toLowerCase();
+  const situations = Object.keys(typedVideoData[normalizedBehavior] || {});
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>
-      {normalizedBehavior.replace(/-/g, ' ')}
-    : Choose the specific situation you're dealing with.
+        {normalizedBehavior.replace(/-/g, ' ')}: Choose the specific situation you're dealing with.
       </Text>
 
-      {situations.map((situation, index) => (
+      {situations.map((situationKey, index) => (
         <TouchableOpacity
           key={index}
           style={styles.card}
@@ -43,17 +28,20 @@ export default function Page() {
               pathname: "/(tabs)/behavior/[behavior]/[situation]",
               params: {
                 behavior: behavior as string,
-                situation: situation.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
+                situation: situationKey,
               },
             })
           }
         >
-          <Text style={styles.cardText}>{situation}</Text>
+          <Text style={styles.cardText}>
+            {situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          </Text>
         </TouchableOpacity>
       ))}
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
