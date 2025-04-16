@@ -61,8 +61,15 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingTop: 40,
-    paddingBottom: 40,
+    paddingTop: 30,
+    paddingBottom: 30,
+    flexGrow: 1,
+    backgroundColor: '#FFFFFF', 
+  },
+  scrollContainer: {
+    flexGrow: 1,          // makes it stretch to full height
+    backgroundColor: '#FFFFFF', 
+    paddingBottom: 30,
   },
   title: {
     fontSize: 18,

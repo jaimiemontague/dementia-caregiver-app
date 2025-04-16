@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import videoData from '../../../data/videoData.json';
@@ -14,6 +14,7 @@ export default function Page() {
   const situations = Object.keys(typedVideoData[normalizedBehavior] || {});
 
   return (
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>
       <Text style={styles.header}>
         {normalizedBehavior.replace(/-/g, ' ')}: Choose the specific situation you're dealing with.
@@ -39,6 +40,7 @@ export default function Page() {
         </TouchableOpacity>
       ))}
     </View>
+    </ScrollView>
   );
 }
 
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingTop: 30,
   },
   header: {
     fontSize: 20,
@@ -66,5 +68,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     fontWeight: '600',
+  },
+  scrollContainer: {
+    paddingBottom: 30,
+    flexGrow: 1,
+    backgroundColor: '#FFFFFF', 
+  },
+  situationButton: {
+    backgroundColor: '#FFA790',
+    padding: 12,
+    marginVertical: 6,
+    marginHorizontal: 20,
+    borderRadius: 10,
+  },
+  situationText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
