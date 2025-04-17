@@ -13,7 +13,6 @@ function CustomHeader() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Confirm pathname on index screen (can also console.log it to check exact value)
   const isHome = pathname === '/index' || pathname === '/(tabs)/index' || pathname === '/';
 
   return (
@@ -23,13 +22,14 @@ function CustomHeader() {
           <Ionicons name="arrow-back" size={24} color="#FFF" />
         </TouchableOpacity>
       )}
-  
+
       <Image
         source={require('../../assets/images/appheader.png')}
         style={styles.logo}
         resizeMode="contain"
       />
 
+      {/* Help Now link */}
       <TouchableOpacity 
         onPress={() => router.push('/(tabs)/help-now')} 
         style={{ position: 'absolute', right: 30, top: 80 }}
@@ -43,43 +43,51 @@ function CustomHeader() {
       >
         <Text style={styles.appNameNow}>Now!</Text>
       </TouchableOpacity>
-</View>
+    </View>
   );
 }
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const isHome = pathname === '/index' || pathname === '/(tabs)/index' || pathname === '/';
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        header: () => <CustomHeader />,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+    <View style={{ flex: 1 }}>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          header: () => <CustomHeader />,
+          tabBarButton: HapticTab,
+          tabBarBackground: TabBarBackground,
+          tabBarStyle: { display: 'none' }, // hide bottom bar
         }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Home',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="explore"
+          options={{
+            title: 'Explore',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          }}
+        />
+      </Tabs>
+
+      {/* Floating Home Button (only if not on Home) */}
+      {!isHome && (
+        <TouchableOpacity onPress={() => router.push('/')} style={styles.floatingHomeButton}>
+          <Ionicons name="home" size={28} color="#fff" />
+        </TouchableOpacity>
+      )}
+    </View>
   );
 }
 
@@ -110,5 +118,13 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#FFF',
     fontWeight: 'bold',
+  },
+  floatingHomeButton: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    padding: 12,
+    borderRadius: 30,
   },
 });
