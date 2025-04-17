@@ -20,17 +20,30 @@ function CustomHeader() {
     <View style={styles.header}>
       {!isHome && (
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="home" size={24} color="#FFF" />
+          <Ionicons name="arrow-back" size={24} color="#FFF" />
         </TouchableOpacity>
       )}
+  
       <Image
         source={require('../../assets/images/appheader.png')}
         style={styles.logo}
         resizeMode="contain"
       />
-      <Text style={styles.appNameHelp}>Help</Text>
-      <Text style={styles.appNameNow}>Now!</Text>
-    </View>
+
+      <TouchableOpacity 
+        onPress={() => router.push('/(tabs)/help-now')} 
+        style={{ position: 'absolute', right: 30, top: 80 }}
+      >
+        <Text style={styles.appNameHelp}>Help</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+        onPress={() => router.push('/(tabs)/help-now')} 
+        style={{ position: 'absolute', right: 28, top: 95 }}
+      >
+        <Text style={styles.appNameNow}>Now!</Text>
+      </TouchableOpacity>
+</View>
   );
 }
 
@@ -89,17 +102,11 @@ const styles = StyleSheet.create({
     height: 60,
   },
   appNameHelp: {
-    position: 'absolute',
-    right: 30,
-    top: 80,
     fontSize: 11,
     color: '#FFF',
     fontWeight: 'bold',
   },
   appNameNow: {
-    position: 'absolute',
-    right: 28,
-    top: 95,
     fontSize: 11,
     color: '#FFF',
     fontWeight: 'bold',
