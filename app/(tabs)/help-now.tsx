@@ -31,6 +31,7 @@ export default function HelpNowScreen() {
   };
 
   return (
+    <CenteredContainer>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Text style={styles.header}>Welcome to "Help Now!"</Text>
@@ -77,6 +78,7 @@ export default function HelpNowScreen() {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </CenteredContainer>
   );
 }
 

@@ -1,6 +1,6 @@
 import { Tabs, usePathname, useRouter } from 'expo-router';
 import React from 'react';
-import { View, Image, Text, Platform, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { HapticTab } from '@/components/HapticTab';
@@ -8,42 +8,44 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import CenteredContainer from '@/components/ui/CenteredContainer';
 
 function CustomHeader() {
   const pathname = usePathname();
   const router = useRouter();
-
   const isHome = pathname === '/index' || pathname === '/(tabs)/index' || pathname === '/';
 
   return (
     <View style={styles.header}>
-      {!isHome && (
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
-        </TouchableOpacity>
-      )}
+      <View style={styles.innerHeader}>
+        <View style={styles.topRow}>
+          {/* Back button (hidden on Home) */}
+          {!isHome ? (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color="#FFF" />
+            </TouchableOpacity>
+          ) : (
+            <View style={{ width: 24 }} /> // spacer so logo stays centered
+          )}
 
-      <Image
-        source={require('../../assets/images/appheader.png')}
-        style={styles.logo}
-        resizeMode="contain"
-      />
+          {/* Centered logo */}
+          <Image
+            source={require('../../assets/images/appheader.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
 
-      {/* Help Now link */}
-      <TouchableOpacity 
-        onPress={() => router.push('/(tabs)/help-now')} 
-        style={{ position: 'absolute', right: 30, top: 80 }}
-      >
-        <Text style={styles.appNameHelp}>Help</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity 
-        onPress={() => router.push('/(tabs)/help-now')} 
-        style={{ position: 'absolute', right: 28, top: 95 }}
-      >
-        <Text style={styles.appNameNow}>Now!</Text>
-      </TouchableOpacity>
+          {/* Help Now link */}
+          <TouchableOpacity
+            onPress={() => router.push('/(tabs)/help-now')}
+            style={{ paddingRight: 6 }}
+          >
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={styles.appNameHelp}>Help</Text>
+              <Text style={styles.appNameNow}>Now!</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
@@ -63,7 +65,7 @@ export default function TabLayout() {
           header: () => <CustomHeader />,
           tabBarButton: HapticTab,
           tabBarBackground: TabBarBackground,
-          tabBarStyle: { display: 'none' }, // hide bottom bar
+          tabBarStyle: { display: 'none' },
         }}
       >
         <Tabs.Screen
@@ -98,13 +100,17 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 20,
     alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
   },
-  backButton: {
-    position: 'absolute',
-    left: 20,
-    top: 83,
+  innerHeader: {
+    width: '100%',
+    maxWidth: 480,
+    marginHorizontal: 'auto',
+  },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   logo: {
     width: 250,
