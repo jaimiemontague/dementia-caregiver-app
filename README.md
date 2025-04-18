@@ -1,50 +1,51 @@
-# Welcome to your Expo app 👋
+# Dementia Caregiving Made Easier (DCME App)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The DCME App helps family and professional caregivers manage challenging dementia behaviors in real-time. With just a few taps, users can access short, practical video demonstrations tailored to specific situations — even in the middle of a crisis.
 
-## Get started
+Built using [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/) + [Expo Router](https://expo.dev/router) for seamless cross-platform support.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 📲 Platforms Supported
 
-2. Start the app
+- iOS (via App Store or TestFlight)
+- Android (via APK or Google Play Store)
+- Web (hosted version for caregivers who don’t want to install the app)
 
-   ```bash
-    npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🚀 Features
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- 🧠 **Behavior List** – Choose from common dementia behaviors (e.g. *Sundowning*, *Anger*, *I Want to Go Home!*)
+- 📋 **Situation List** – Quickly select the exact situation you're facing
+- 🎥 **Video Guidance** – Watch a <30-second video with the right phrase, tone, and body language
+- 🔍 **Search & Suggestions** – Find help instantly with predictive behavior/situation search
+- 📞 **Help Now Page** – One-tap access to Krista and emergency coaching info
+- 🔙 **In-App Navigation** – Always-visible back button for intuitive UX
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 🛠️ Tech Stack
 
-When you're ready, run:
+| Area            | Tool                          |
+|-----------------|-------------------------------|
+| Framework       | React Native + Expo           |
+| Routing         | Expo Router (File-based)      |
+| State Handling  | React Hooks                   |
+| Video Hosting   | Amazon S3                     |
+| Mobile Builds   | Expo EAS                      |
+| Web Hosting     | Amazon S3 and Cloudflare      |
+| Package Manager | npm                           |
+| Type Checking   | TypeScript                    |
+
+---
+
+## 🧪 Getting Started (Dev)
+
+> You’ll need `node`, `npm` and `expo-cli` installed.
 
 ```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+git clone https://github.com/your-org/dcme-app.git
+cd dcme-app
+npm install
+npx expo start
