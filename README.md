@@ -1,6 +1,6 @@
-# Dementia Caregiving Made Easier (DCME App)
+# Dementia Help Now! App (DHN App)
 
-The DCME App helps family and professional caregivers manage challenging dementia behaviors in real-time. With just a few taps, users can access short, practical video demonstrations tailored to specific situations — even in the middle of a crisis.
+The DHN App helps family and professional caregivers manage challenging dementia behaviors in real-time. With just a few taps, users can access short, practical video demonstrations tailored to specific situations — even in the middle of a crisis.
 
 Built using [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/) + [Expo Router](https://expo.dev/router) for seamless cross-platform support.
 
@@ -45,8 +45,8 @@ Built using [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/)
 > You’ll need `node`, `npm` and `expo-cli` installed.
 
 
-   git clone https://github.com/your-org/dcme-app.git
-   cd dcme-app
+   git clone https://github.com/jaimiemontague/dementia-caregiver-app
+   cd dementia-caregiver-app
    npm install
    npx expo start
 
