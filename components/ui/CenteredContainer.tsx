@@ -1,0 +1,20 @@
+import React from 'react';
+import { View, Platform } from 'react-native';
+
+export default function CenteredContainer({ children }: { children: React.ReactNode }) {
+  if (Platform.OS === 'web') {
+    return (
+      <div
+        style={{
+          maxWidth: 480,
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          padding: 16,
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  return <View style={{ flex: 1 }}>{children}</View>};

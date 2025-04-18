@@ -1,8 +1,9 @@
 import { useLocalSearchParams } from 'expo-router';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Platform } from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRef, useCallback } from 'react';
+import CenteredContainer from '@/components/ui/CenteredContainer';
 
 import videoData from '../../../../data/videoData.json'; 
 
@@ -30,16 +31,29 @@ export default function Page() {
 
   if (!data) {
     return (
+      <CenteredContainer>
       <View style={styles.container}>
         <Text style={styles.title}>No video available for this situation.</Text>
       </View>
+      </CenteredContainer>
     );
   }
 
   return (
+    <CenteredContainer>
     <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
       <Text style={styles.title}>Watch this to help with {situationKey.replace(/-/g, ' ').toLowerCase()}:</Text>
 
+      {Platform.OS === 'web' ? (
+      <View style={styles.webVideoWrapper}>
+        <video
+          src={data.videoUrl}
+          controls
+          autoPlay
+          style={styles.webVideo}
+        />
+      </View>
+    ) : (
       <Video
         ref={videoRef}
         source={{ uri: data.videoUrl }}
@@ -48,9 +62,11 @@ export default function Page() {
         shouldPlay
         style={styles.video}
       />
+    )}
 
       {data.prompt2 && <Text style={styles.altPrompt}>{data.prompt2}</Text>}
     </ScrollView>
+    </CenteredContainer>
   );
 }
 
@@ -90,4 +106,21 @@ const styles = StyleSheet.create({
     color: '#555',
     marginBottom: 20,
   },
+  webVideoWrapper: {
+    position: 'relative',
+    width: '100%',
+    paddingBottom: '177.78%', // 9:16 aspect ratio (100 / (9/16))
+    marginBottom: 20,
+    backgroundColor: '#000',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  webVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    borderRadius: 12,
+  }
 });

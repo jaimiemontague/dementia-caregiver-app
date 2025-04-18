@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import CenteredContainer from '@/components/ui/CenteredContainer';
 
 import videoData from '../../../data/videoData.json';
+import { Component } from 'react';
 
 type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
 const typedVideoData = videoData as VideoDataType;
@@ -14,6 +16,7 @@ export default function Page() {
   const situations = Object.keys(typedVideoData[normalizedBehavior] || {});
 
   return (
+    <CenteredContainer>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>
       <Text style={styles.header}>
@@ -41,6 +44,7 @@ export default function Page() {
       ))}
     </View>
     </ScrollView>
+    </CenteredContainer>
   );
 }
 

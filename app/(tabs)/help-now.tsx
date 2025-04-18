@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Linking, TextInput, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import CenteredContainer from '@/components/ui/CenteredContainer';
 
 export default function HelpNowScreen() {
   const [message, setMessage] = useState('');

@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image, TextInput, FlatList, TouchableOpacity, S
 import { useRouter } from 'expo-router';
 import { useState, useEffect, useMemo } from 'react';
 import BehaviorCard from '../../components/BehaviorCard';
+import CenteredContainer from '@/components/ui/CenteredContainer';
 
 import videoData from '../../data/videoData.json';
 
@@ -74,6 +75,7 @@ export default function Page() {
   };
 
   return (
+    <CenteredContainer>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>
 
@@ -130,6 +132,7 @@ export default function Page() {
         ))}
       </View>
     </View></ScrollView>
+    </CenteredContainer>
   );
 }
 
