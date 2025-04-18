@@ -44,11 +44,13 @@ Built using [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/)
 
 You’ll need `node`, `npm` and `expo-cli` installed.
 
+   git clone https://github.com/jaimiemontague/dementia-caregiver-app
 
-> git clone https://github.com/jaimiemontague/dementia-caregiver-app
-> cd dementia-caregiver-app
-> npm install
-> npx expo start
+   cd dementia-caregiver-app
+
+   npm install
+
+   npx expo start
 
 ---
 
