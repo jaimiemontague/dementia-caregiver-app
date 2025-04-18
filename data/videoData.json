@@ -7,7 +7,7 @@
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CewqlFfp9lO_Yelling-in-anger.mp4"
       },
       "experiencing-anger-outbursts": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpngkR-sEe-_Experiencing-anger-outbursts.mp4"
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpngkR-sEe-_Experiencing-anger-outbursts-v3.mp4"
       },
       "getting-hit-or-yelled-at": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChA7YU8DI5T_Getting-hit-or-yelled-at.mp4"
@@ -51,6 +51,18 @@
       }
     },
     "i-want-to-go-home-|-exit-seeking": {
+      "how-to-redirect-i-want-to-go-home": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/how-to-redirect-i-want-to-go-home.mp4"
+      },
+      "wants-to-go-home-but-they-are-home": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/wants-to-go-home-but-they-are-home.mp4"
+      },
+      "begs-me-to-go-home-(facility)": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/begs-me-to-take-home-facility.mp4"
+      },
+      "what-to-say-when-they-insist-theyre-leaving": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/what-to-say-when-they-insist-theyre-leaving.mp4"
+      },
       "insisting-on-going-home-despite-inability": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C2YWz_-s_CD_Insisting-on-going-home-despite-inability.mp4"
       },
@@ -59,6 +71,9 @@
       },
       "demanding-car-keys-to-go-home": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CkgXsdyuw_B_Demanding-car-keys-to-go-home.mp4"
+      },
+      "how-to-avoid-lying-to-them-when-they-want-to-go-home": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/how-to-avoid-lying-to-them-when-they-want-to-go-home.mp4"
       }
     },
     "accusations": {
@@ -72,7 +87,7 @@
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgUj2T-MsFN_Being-accused-of-cheating.mp4"
       },
       "being-accused-of-poisoning-food-or-water": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CwlLsn_xe1o_Being-accused-of-poisoning-food-or-water.mp4"
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/being-accused-of-poisoning-food-or-water.mp4"
       },
       "being-accused-of-trying-to-hurt-them": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CwipPXzPa7C_Being-accused-of-trying-to-hurt-them.mp4"
@@ -82,14 +97,23 @@
       "refusing-to-eat": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ch5jOXDrS___Refusing-to-eat.mp4"
       },
-      "refusing-to-shower": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CiApfNMpgKD_Refusing-to-shower.mp4"
+      "dementia-refusals-says-i-already-showered": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/dementia-refusals-says-i-already-showered.mp4"
       },
       "refusing-to-take-medication": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgiPKm-uSiU_Refusing-to-take-medication.mp4"
       },
+      "refuses-help-from-paid-caregiver": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-help-from-paid-caregiver.mp4"
+      },
+      "doesnt-want-to-shower-due-to-modesty": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/doesnt-want-to-shower-due-to-modesty.mp4"
+      },
       "refusing-to-change-clothes": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CtZtORitBk1_Refusing-to-change-clothes.mp4"
+      },
+      "refuses-to-shower-im-not-going-to-the-bathroom-with-you": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-im-not-going-to-the-bathroom-with-you.mp4"
       },
       "refusing-to-wear-adult-diapers-depends": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0KWERWOgDW_Refusing-to-wear-adult-diapers.mp4"
@@ -100,7 +124,10 @@
       "refusing-to-stop-driving": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgSAW_QLzh8_Refusing-to-stop-driving.mp4"
       },
-      "refusing-to-accept-help-from-a-caregiver": {
+      "refuses-to-shower-due-to-fear-of-falling": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-due-to-fear-of-falling.mp4"
+      },
+      "refusing-to-accept-your-help": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C2I54LHMp4k_Refusing-to-accept-help-from-a-caregiver.mp4"
       },
       "refusing-to-get-out-of-bed": {
@@ -123,6 +150,9 @@
       },
       "refusing-to-leave-the-house": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ckb4_fEvkp3_Refusing-to-leave-the-house.mp4"
+      },
+      "refuses-to-shower-due-to-temperature-or-pressure": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-due-to-temperature-or-pressure.mp4"
       }
     },
     "inappropriate": {
@@ -139,9 +169,18 @@
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChU7rbhpyWW_Disrobing-or-removing-clothing-in-public.mp4"
       }
     },
-    "apathy": {
+    "apathy-|-withdrawal": {
+      "says-im-not-getting-out-of-bed": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/says-im-not-getting-out-of-bed.mp4"
+      },
       "refusing-to-do-any-activity-due-to-lack-of-interest": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CjYBOwyu4cT_Refusing-to-do-any-activity-due-to-lack-of-interest.mp4"
+      },
+      "doesnt-want-to-go-anywhere-due-to-pain": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/doesnt-want-to-go-anywhere-due-to-pain.mp4"
+      },
+      "says-no-to-everything": {
+        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/says-no-to-everything.mp4"
       }
     },
     "hallucinations": {
@@ -178,9 +217,6 @@
       },
       "becoming-agitated-or-anxious-in-the-evening": {
         "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Convfv-j_r1_Becoming-agitated-or-anxious-in-the-evening.mp4"
-      },
-      "trying-to-get-to-their-car-in-the-evening": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpdRVIePlND_Trying-to-get-to-their-car-in-the-evening.mp4"
       }
     },
     "other": {

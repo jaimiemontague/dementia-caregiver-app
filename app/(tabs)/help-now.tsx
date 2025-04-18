@@ -36,14 +36,14 @@ export default function HelpNowScreen() {
 
         <Text style={styles.text}>To get the most out of the app:</Text>
         <Text style={styles.bullet}>
-        Use the{' '}
+        1- Use the{' '}
         <Text style={styles.linkInline} onPress={() => router.back()}>
             Home page
         </Text>{' '}
         to find the challenging behavior you're facing
         </Text>
 
-        <Text style={styles.bullet}>• Tap a situation to see short, practical videos for what to do in the moment</Text>
+        <Text style={styles.bullet}>2- Tap a situation to see short, practical videos for what to do in the moment</Text>
 
         <Text style={[styles.text, { marginTop: 20 }]}>
           Still stuck? Ask your question here:
