@@ -10,7 +10,7 @@ export default function CenteredContainer({ children }: { children: React.ReactN
           marginLeft: 'auto',
           marginRight: 'auto',
           padding: 16,
-          minHeight: '100vh',      // ensures full height
+          //minHeight: '100vh',      // ensures full height
           overflowY: 'auto',       // explicitly allows scrolling if needed
           boxSizing: 'border-box', // helps with padding & sizing
         }}

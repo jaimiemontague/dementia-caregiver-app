@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   floatingHomeButton: {
     position: 'absolute',
     bottom: 20,
-    left: 20,
+    right: 20,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     padding: 12,
     borderRadius: 30,
