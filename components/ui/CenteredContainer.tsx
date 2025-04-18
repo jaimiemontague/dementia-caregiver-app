@@ -10,6 +10,9 @@ export default function CenteredContainer({ children }: { children: React.ReactN
           marginLeft: 'auto',
           marginRight: 'auto',
           padding: 16,
+          minHeight: '100vh',      // ensures full height
+          overflowY: 'auto',       // explicitly allows scrolling if needed
+          boxSizing: 'border-box', // helps with padding & sizing
         }}
       >
         {children}
@@ -17,4 +20,5 @@ export default function CenteredContainer({ children }: { children: React.ReactN
     );
   }
 
-  return <View style={{ flex: 1 }}>{children}</View>};
+  return <View style={{ flex: 1 }}>{children}</View>;
+}
