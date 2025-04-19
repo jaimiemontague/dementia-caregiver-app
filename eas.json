@@ -5,7 +5,7 @@
           "buildType": "app-bundle"
         },
         "ios": {
-          "buildType": "release"
+
         }
       }
     }

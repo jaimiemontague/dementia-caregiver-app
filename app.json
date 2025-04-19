@@ -9,13 +9,18 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dementiasuccesspath.dementiahelpnow",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo1024x1024.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dementiasuccesspath.dementiahelpnow"
     },
     "web": {
       "bundler": "metro",
