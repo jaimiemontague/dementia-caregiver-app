@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f48f11bd-358f-4224-8220-1b45e2c33685"
+      }
+    },
+    "owner": "jcmont6"
   }
 }
