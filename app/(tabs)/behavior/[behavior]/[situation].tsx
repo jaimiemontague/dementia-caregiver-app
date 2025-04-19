@@ -5,7 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useRef, useCallback } from 'react';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 
-import videoData from '../../../../data/videoData.json'; 
+import videoData from '../../../../data/videoData.json';
 
 type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
 const typedVideoData = videoData as VideoDataType;
@@ -13,6 +13,7 @@ const typedVideoData = videoData as VideoDataType;
 export default function Page() {
   const { behavior, situation } = useLocalSearchParams();
   const videoRef = useRef<Video>(null);
+  const webVideoRef = useRef<HTMLVideoElement | null>(null);
 
   const behaviorKey = decodeURIComponent(behavior as string).toLowerCase();
   const situationKey = decodeURIComponent(situation as string).toLowerCase();
@@ -22,8 +23,15 @@ export default function Page() {
   useFocusEffect(
     useCallback(() => {
       return () => {
+        // Native video cleanup
         if (videoRef.current) {
           videoRef.current.stopAsync();
+        }
+
+        // Web video cleanup
+        if (Platform.OS === 'web' && webVideoRef.current) {
+          webVideoRef.current.pause();
+          webVideoRef.current.currentTime = 0;
         }
       };
     }, [])
@@ -32,40 +40,43 @@ export default function Page() {
   if (!data) {
     return (
       <CenteredContainer>
-      <View style={styles.container}>
-        <Text style={styles.title}>No video available for this situation.</Text>
-      </View>
+        <View style={styles.container}>
+          <Text style={styles.title}>No video available for this situation.</Text>
+        </View>
       </CenteredContainer>
     );
   }
 
   return (
     <CenteredContainer>
-    <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
-      <Text style={styles.title}>Watch this to help with {situationKey.replace(/-/g, ' ').toLowerCase()}:</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
+        <Text style={styles.title}>
+          Watch this to help with {situationKey.replace(/-/g, ' ').toLowerCase()}:
+        </Text>
 
-      {Platform.OS === 'web' ? (
-      <View style={styles.webVideoWrapper}>
-        <video
-          src={data.videoUrl}
-          controls
-          autoPlay
-          style={styles.webVideo}
-        />
-      </View>
-    ) : (
-      <Video
-        ref={videoRef}
-        source={{ uri: data.videoUrl }}
-        useNativeControls
-        resizeMode={ResizeMode.CONTAIN}
-        shouldPlay
-        style={styles.video}
-      />
-    )}
+        {Platform.OS === 'web' ? (
+          <View style={styles.webVideoWrapper}>
+            <video
+              ref={webVideoRef}
+              src={data.videoUrl}
+              controls
+              autoPlay
+              style={styles.webVideo}
+            />
+          </View>
+        ) : (
+          <Video
+            ref={videoRef}
+            source={{ uri: data.videoUrl }}
+            useNativeControls
+            resizeMode={ResizeMode.CONTAIN}
+            shouldPlay
+            style={styles.video}
+          />
+        )}
 
-      {data.prompt2 && <Text style={styles.altPrompt}>{data.prompt2}</Text>}
-    </ScrollView>
+        {data.prompt2 && <Text style={styles.altPrompt}>{data.prompt2}</Text>}
+      </ScrollView>
     </CenteredContainer>
   );
 }
@@ -80,12 +91,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 30,
     flexGrow: 1,
-    backgroundColor: '#FFFFFF', 
-  },
-  scrollContainer: {
-    flexGrow: 1,          // makes it stretch to full height
-    backgroundColor: '#FFFFFF', 
-    paddingBottom: 30,
+    backgroundColor: '#FFFFFF',
   },
   title: {
     fontSize: 18,
@@ -109,7 +115,7 @@ const styles = StyleSheet.create({
   webVideoWrapper: {
     position: 'relative',
     width: '100%',
-    paddingBottom: '177.78%', // 9:16 aspect ratio (100 / (9/16))
+    paddingBottom: '177.78%', // 9:16 aspect ratio
     marginBottom: 20,
     backgroundColor: '#000',
     borderRadius: 12,
@@ -122,5 +128,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 12,
-  }
+  },
 });
