@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { View, Text, StyleSheet, ScrollView, Platform } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRef, useCallback } from 'react';
 import CenteredContainer from '@/components/ui/CenteredContainer';
@@ -12,13 +12,15 @@ const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
   const { behavior, situation } = useLocalSearchParams();
-  const videoRef = useRef<Video>(null);
+  const videoRef = useRef<any>(null);
   const webVideoRef = useRef<HTMLVideoElement | null>(null);
 
   const behaviorKey = decodeURIComponent(behavior as string).toLowerCase();
   const situationKey = decodeURIComponent(situation as string).toLowerCase();
 
   const data = typedVideoData[behaviorKey]?.[situationKey];
+
+  const player = useVideoPlayer({ uri: data.videoUrl });
 
   useFocusEffect(
     useCallback(() => {
@@ -65,12 +67,10 @@ export default function Page() {
             />
           </View>
         ) : (
-          <Video
-            ref={videoRef}
-            source={{ uri: data.videoUrl }}
-            useNativeControls
-            resizeMode={ResizeMode.CONTAIN}
-            shouldPlay
+          <VideoView
+            player={player}
+            nativeControls
+            contentFit="contain"
             style={styles.video}
           />
         )}
