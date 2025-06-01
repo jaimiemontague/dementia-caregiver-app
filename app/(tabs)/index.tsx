@@ -1,8 +1,14 @@
 import { View, Text, StyleSheet, Image, TextInput, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState, useEffect, useMemo } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 import BehaviorCard from '../../components/BehaviorCard';
+import RecentlyViewedCard from '../../components/RecentlyViewedCard';
+import FavoriteCard from '../../components/FavoriteCard';
 import CenteredContainer from '@/components/ui/CenteredContainer';
+import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
+import { useFavorites } from '@/hooks/useFavorites';
 
 import videoData from '../../data/videoData.json';
 
@@ -22,6 +28,16 @@ export default function Page() {
   >([]);
 
   const router = useRouter();
+  const { recentVideos, refreshRecentVideos } = useRecentlyViewed();
+  const { favoriteVideos, refreshFavorites } = useFavorites();
+
+  // Refresh recent videos and favorites when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      refreshRecentVideos();
+      refreshFavorites();
+    }, [])
+  );
 
   // Build a global search index
   const searchIndex = useMemo(() => {
@@ -105,7 +121,6 @@ export default function Page() {
         </View>
       )}
 
-
       {/* Behavior Buttons */}
       <View style={styles.instructionsContainer}>
         <Text style={styles.instructions}>
@@ -131,6 +146,40 @@ export default function Page() {
           />
         ))}
       </View>
+
+      {/* Recently Viewed Section */}
+      {recentVideos.length > 0 && !suggestions.length && (
+        <View style={styles.recentlyViewedSection}>
+          <Text style={styles.sectionTitle}>Recently Viewed</Text>
+          <Text style={styles.sectionSubtitle}>Tap to watch again</Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.recentlyViewedScroll}
+          >
+            {recentVideos.map((video, index) => (
+              <RecentlyViewedCard key={`${video.behavior}-${video.situation}-${index}`} video={video} />
+            ))}
+          </ScrollView>
+        </View>
+      )}
+
+      {/* Favorites Section */}
+      {favoriteVideos.length > 0 && !suggestions.length && (
+        <View style={styles.favoritesSection}>
+          <Text style={styles.sectionTitle}>Favorites</Text>
+          <Text style={styles.sectionSubtitle}>Your saved videos</Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.favoritesScroll}
+          >
+            {favoriteVideos.map((video, index) => (
+              <FavoriteCard key={`${video.behavior}-${video.situation}-${index}`} video={video} />
+            ))}
+          </ScrollView>
+        </View>
+      )}
     </View></ScrollView>
     </CenteredContainer>
   );
@@ -220,5 +269,39 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: '#FFFFFF', 
   },
-
+  recentlyViewedSection: {
+    paddingTop: 30,
+    paddingBottom: 10,
+    marginTop: 20,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 12,
+    paddingHorizontal: 16,
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    marginTop: -8,
+  },
+  recentlyViewedScroll: {
+    paddingHorizontal: 16,
+    paddingRight: 8,
+  },
+  favoritesSection: {
+    paddingTop: 30,
+    paddingBottom: 10,
+    marginTop: 0,
+  },
+  favoritesScroll: {
+    paddingHorizontal: 16,
+    paddingRight: 8,
+  },
 });
