@@ -6,6 +6,7 @@ import { useCallback } from 'react';
 import BehaviorCard from '../../components/BehaviorCard';
 import RecentlyViewedCard from '../../components/RecentlyViewedCard';
 import FavoriteCard from '../../components/FavoriteCard';
+import HorizontalScrollSection from '../../components/HorizontalScrollSection';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useFavorites } from '@/hooks/useFavorites';
@@ -150,34 +151,28 @@ export default function Page() {
       {/* Recently Viewed Section */}
       {recentVideos.length > 0 && !suggestions.length && (
         <View style={styles.recentlyViewedSection}>
-          <Text style={styles.sectionTitle}>Recently Viewed</Text>
-          <Text style={styles.sectionSubtitle}>Tap to watch again</Text>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.recentlyViewedScroll}
+          <HorizontalScrollSection 
+            title="Recently Viewed" 
+            subtitle="Tap to watch again"
           >
             {recentVideos.map((video, index) => (
               <RecentlyViewedCard key={`${video.behavior}-${video.situation}-${index}`} video={video} />
             ))}
-          </ScrollView>
+          </HorizontalScrollSection>
         </View>
       )}
 
       {/* Favorites Section */}
       {favoriteVideos.length > 0 && !suggestions.length && (
         <View style={styles.favoritesSection}>
-          <Text style={styles.sectionTitle}>Favorites</Text>
-          <Text style={styles.sectionSubtitle}>Your saved videos</Text>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.favoritesScroll}
+          <HorizontalScrollSection 
+            title="Favorites" 
+            subtitle="Your saved videos"
           >
             {favoriteVideos.map((video, index) => (
               <FavoriteCard key={`${video.behavior}-${video.situation}-${index}`} video={video} />
             ))}
-          </ScrollView>
+          </HorizontalScrollSection>
         </View>
       )}
     </View></ScrollView>
@@ -270,38 +265,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF', 
   },
   recentlyViewedSection: {
-    paddingTop: 30,
-    paddingBottom: 10,
     marginTop: 20,
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '500',
-    color: '#333',
-    textAlign: 'center',
-    marginBottom: 12,
-    paddingHorizontal: 16,
-  },
-  sectionSubtitle: {
-    fontSize: 14,
-    fontWeight: '400',
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 16,
-    paddingHorizontal: 16,
-    marginTop: -8,
-  },
-  recentlyViewedScroll: {
-    paddingHorizontal: 16,
-    paddingRight: 8,
-  },
   favoritesSection: {
-    paddingTop: 30,
-    paddingBottom: 10,
     marginTop: 0,
-  },
-  favoritesScroll: {
-    paddingHorizontal: 16,
-    paddingRight: 8,
   },
 });

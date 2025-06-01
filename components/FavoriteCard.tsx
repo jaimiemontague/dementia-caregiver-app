@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native
 import { useRouter } from 'expo-router';
 import { FavoriteVideo } from '../hooks/useFavorites';
 import { Ionicons } from '@expo/vector-icons';
+import VideoThumbnail from './VideoThumbnail';
 
 interface FavoriteCardProps {
   video: FavoriteVideo;
@@ -24,6 +25,7 @@ export default function FavoriteCard({ video }: FavoriteCardProps) {
   return (
     <TouchableOpacity onPress={handlePress} style={styles.card}>
       <View style={styles.videoThumbnail}>
+        <VideoThumbnail videoUrl={video.videoUrl} />
         <View style={styles.playButton}>
           <Text style={styles.playIcon}>▶</Text>
         </View>
@@ -67,11 +69,14 @@ const styles = StyleSheet.create({
   videoThumbnail: {
     height: 120,
     backgroundColor: '#2A2A2A',
-    justifyContent: 'center',
-    alignItems: 'center',
     position: 'relative',
+    overflow: 'hidden',
   },
   playButton: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -25 }, { translateY: -25 }],
     width: 50,
     height: 50,
     borderRadius: 25,
