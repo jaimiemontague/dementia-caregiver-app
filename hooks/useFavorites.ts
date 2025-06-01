@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Storage } from './useWebStorage';
 
 const FAVORITES_KEY = 'favorite_videos';
 
@@ -22,7 +22,7 @@ export const useFavorites = () => {
 
   const loadFavorites = async () => {
     try {
-      const stored = await AsyncStorage.getItem(FAVORITES_KEY);
+      const stored = await Storage.getItem(FAVORITES_KEY);
       if (stored) {
         const videos = JSON.parse(stored) as FavoriteVideo[];
         setFavoriteVideos(videos);
@@ -34,7 +34,7 @@ export const useFavorites = () => {
 
   const toggleFavorite = async (video: Omit<FavoriteVideo, 'timestamp'>) => {
     try {
-      const stored = await AsyncStorage.getItem(FAVORITES_KEY);
+      const stored = await Storage.getItem(FAVORITES_KEY);
       let favorites: FavoriteVideo[] = stored ? JSON.parse(stored) : [];
 
       // Check if already favorited
@@ -55,7 +55,7 @@ export const useFavorites = () => {
       }
 
       // Save to storage
-      await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+      await Storage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
       setFavoriteVideos(favorites);
     } catch (error) {
       console.error('Error toggling favorite:', error);
@@ -70,7 +70,7 @@ export const useFavorites = () => {
 
   const clearFavorites = async () => {
     try {
-      await AsyncStorage.removeItem(FAVORITES_KEY);
+      await Storage.removeItem(FAVORITES_KEY);
       setFavoriteVideos([]);
     } catch (error) {
       console.error('Error clearing favorites:', error);

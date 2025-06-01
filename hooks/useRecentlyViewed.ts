@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Storage } from './useWebStorage';
 
 const RECENTLY_VIEWED_KEY = 'recently_viewed_videos';
 const MAX_RECENT_VIDEOS = 10;
@@ -23,7 +23,7 @@ export const useRecentlyViewed = () => {
 
   const loadRecentVideos = async () => {
     try {
-      const stored = await AsyncStorage.getItem(RECENTLY_VIEWED_KEY);
+      const stored = await Storage.getItem(RECENTLY_VIEWED_KEY);
       if (stored) {
         const videos = JSON.parse(stored) as RecentVideo[];
         setRecentVideos(videos);
@@ -41,7 +41,7 @@ export const useRecentlyViewed = () => {
       };
 
       // Get existing videos
-      const stored = await AsyncStorage.getItem(RECENTLY_VIEWED_KEY);
+      const stored = await Storage.getItem(RECENTLY_VIEWED_KEY);
       let videos: RecentVideo[] = stored ? JSON.parse(stored) : [];
 
       // Remove if already exists (to avoid duplicates)
@@ -56,7 +56,7 @@ export const useRecentlyViewed = () => {
       videos = videos.slice(0, MAX_RECENT_VIDEOS);
 
       // Save to storage
-      await AsyncStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(videos));
+      await Storage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(videos));
       setRecentVideos(videos);
     } catch (error) {
       console.error('Error saving recent video:', error);
@@ -65,7 +65,7 @@ export const useRecentlyViewed = () => {
 
   const clearRecentVideos = async () => {
     try {
-      await AsyncStorage.removeItem(RECENTLY_VIEWED_KEY);
+      await Storage.removeItem(RECENTLY_VIEWED_KEY);
       setRecentVideos([]);
     } catch (error) {
       console.error('Error clearing recent videos:', error);
