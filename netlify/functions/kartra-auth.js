@@ -22,6 +22,7 @@ exports.handler = async function(event, context) {
 
     // Get Kartra API credentials from environment variables
     const KARTRA_API_KEY = process.env.KARTRA_API_KEY;
+    const KARTRA_API_PASSWORD = process.env.KARTRA_API_PASSWORD;
     const KARTRA_API_URL = 'https://app.kartra.com/api/v1';
 
     // Make request to Kartra API to verify membership
@@ -29,7 +30,7 @@ exports.handler = async function(event, context) {
       email: email
     }, {
       headers: {
-        'Authorization': `Bearer ${KARTRA_API_KEY}`,
+        'Authorization': `Basic ${Buffer.from(`${KARTRA_API_KEY}:${KARTRA_API_PASSWORD}`).toString('base64')}`,
         'Content-Type': 'application/json'
       }
     });
