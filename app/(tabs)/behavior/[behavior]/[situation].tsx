@@ -144,6 +144,8 @@ export default function Page() {
             nativeControls
             contentFit="contain"
             style={styles.video}
+            allowsFullscreen
+            allowsPictureInPicture
           />
         )}
 

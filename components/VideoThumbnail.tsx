@@ -38,45 +38,65 @@ export default function VideoThumbnail({ videoUrl, style }: VideoThumbnailProps)
 
   const generateWebThumbnail = async () => {
     try {
+      // First, try with a proxy to handle CORS
+      const proxyUrl = `https://cors-anywhere.herokuapp.com/${videoUrl}`;
+      
       const video = document.createElement('video');
-      video.src = videoUrl;
       video.crossOrigin = 'anonymous';
       video.muted = true;
       
-      // Wait for video metadata to load
-      await new Promise((resolve, reject) => {
-        video.onloadedmetadata = resolve;
-        video.onerror = reject;
-        setTimeout(reject, 5000); // 5 second timeout
-      });
-
-      // Seek to 1 second
-      video.currentTime = 1;
+      // Try direct URL first, then proxy if it fails
+      let videoLoaded = false;
       
-      // Wait for seek to complete
-      await new Promise((resolve) => {
-        video.onseeked = resolve;
-      });
-
-      // Create canvas and draw video frame
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      
-      if (ctx) {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        setThumbnailUri(dataUrl);
-      } else {
+      try {
+        video.src = videoUrl;
+        await new Promise((resolve, reject) => {
+          video.onloadedmetadata = () => {
+            videoLoaded = true;
+            resolve(true);
+          };
+          video.onerror = reject;
+          setTimeout(() => reject(new Error('Timeout')), 3000);
+        });
+      } catch (directError) {
+        console.log('Direct video load failed, skipping proxy attempt due to CORS restrictions');
+        // S3 videos often have CORS issues that can't be bypassed
+        // For production, you'd need to configure CORS on your S3 bucket
         setError(true);
+        return;
+      }
+
+      if (videoLoaded) {
+        // Seek to 1 second
+        video.currentTime = 1;
+        
+        // Wait for seek to complete
+        await new Promise((resolve) => {
+          video.onseeked = resolve;
+          setTimeout(resolve, 1000); // Timeout after 1 second
+        });
+
+        // Create canvas and draw video frame
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 320;
+        canvas.height = video.videoHeight || 180;
+        const ctx = canvas.getContext('2d');
+        
+        if (ctx) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          setThumbnailUri(dataUrl);
+        } else {
+          setError(true);
+        }
+        
+        // Clean up
+        canvas.remove();
       }
       
-      // Clean up
       video.remove();
-      canvas.remove();
     } catch (err) {
-      console.log('Error generating thumbnail:', err);
+      console.log('Error generating web thumbnail:', err);
       setError(true);
     }
   };
