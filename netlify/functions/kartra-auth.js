@@ -1,10 +1,27 @@
 const axios = require('axios');
 
 exports.handler = async function(event, context) {
+  // Add CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+  };
+
+  // Handle preflight OPTIONS request
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    };
+  }
+
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: 'Method not allowed' })
     };
   }
@@ -16,6 +33,7 @@ exports.handler = async function(event, context) {
     if (!email) {
       return {
         statusCode: 400,
+        headers,
         body: JSON.stringify({ error: 'Email is required' })
       };
     }
@@ -38,6 +56,7 @@ exports.handler = async function(event, context) {
     // Return the verification result
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({
         isVerified: true,
         memberData: response.data
@@ -52,6 +71,7 @@ exports.handler = async function(event, context) {
       // Kartra API returned an error
       return {
         statusCode: error.response.status,
+        headers,
         body: JSON.stringify({
           error: 'Verification failed',
           details: error.response.data
@@ -62,6 +82,7 @@ exports.handler = async function(event, context) {
     // General error
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({
         error: 'Internal server error',
         details: error.message
