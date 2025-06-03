@@ -41,27 +41,39 @@ exports.handler = async function(event, context) {
     // Get Kartra API credentials from environment variables
     const KARTRA_API_KEY = process.env.KARTRA_API_KEY;
     const KARTRA_API_PASSWORD = process.env.KARTRA_API_PASSWORD;
-    const KARTRA_API_URL = 'https://app.kartra.com/api/v1';
+    const KARTRA_APP_ID = process.env.KARTRA_APP_ID;
 
-    // Make request to Kartra API to verify membership
-    const response = await axios.post(`${KARTRA_API_URL}/members/verify`, {
+    // Make request to Kartra API to search for lead by email
+    const response = await axios.post('https://app.kartra.com/api', {
+      api_key: KARTRA_API_KEY,
+      api_password: KARTRA_API_PASSWORD,
+      app_id: KARTRA_APP_ID,
+      cmd: 'search_lead',
       email: email
-    }, {
-      headers: {
-        'Authorization': `Basic ${Buffer.from(`${KARTRA_API_KEY}:${KARTRA_API_PASSWORD}`).toString('base64')}`,
-        'Content-Type': 'application/json'
-      }
     });
 
-    // Return the verification result
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({
-        isVerified: true,
-        memberData: response.data
-      })
-    };
+    // Check if the API call was successful and if lead exists
+    if (response.data && response.data.status === 'Success') {
+      // Lead exists and has active subscription
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          isVerified: true,
+          memberData: response.data
+        })
+      };
+    } else {
+      // Lead not found or not active
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          isVerified: false,
+          message: 'Email not found or subscription not active'
+        })
+      };
+    }
 
   } catch (error) {
     console.error('Error:', error);
@@ -70,9 +82,10 @@ exports.handler = async function(event, context) {
     if (error.response) {
       // Kartra API returned an error
       return {
-        statusCode: error.response.status,
+        statusCode: 200,
         headers,
         body: JSON.stringify({
+          isVerified: false,
           error: 'Verification failed',
           details: error.response.data
         })
