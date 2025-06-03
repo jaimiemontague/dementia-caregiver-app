@@ -52,6 +52,9 @@ exports.handler = async function(event, context) {
       email: email
     });
 
+    // For debugging - let's see what Kartra actually returns
+    console.log('Kartra API Response:', JSON.stringify(response.data, null, 2));
+
     // Check if the API call was successful and if lead exists
     if (response.data && response.data.status === 'Success') {
       // Lead exists and has active subscription
@@ -60,17 +63,20 @@ exports.handler = async function(event, context) {
         headers,
         body: JSON.stringify({
           isVerified: true,
-          memberData: response.data
+          memberData: response.data,
+          debug: 'Lead found successfully'
         })
       };
     } else {
-      // Lead not found or not active
+      // Lead not found or not active - include raw response for debugging
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
           isVerified: false,
-          message: 'Email not found or subscription not active'
+          message: 'Email not found or subscription not active',
+          debug: response.data,
+          kartraRawResponse: response.data
         })
       };
     }
@@ -87,7 +93,8 @@ exports.handler = async function(event, context) {
         body: JSON.stringify({
           isVerified: false,
           error: 'Verification failed',
-          details: error.response.data
+          details: error.response.data,
+          debug: 'Kartra API error response'
         })
       };
     }
@@ -98,7 +105,8 @@ exports.handler = async function(event, context) {
       headers,
       body: JSON.stringify({
         error: 'Internal server error',
-        details: error.message
+        details: error.message,
+        debug: 'Network or other error'
       })
     };
   }
