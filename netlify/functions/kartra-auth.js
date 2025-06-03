@@ -69,18 +69,17 @@ exports.handler = async function(event, context) {
     }
 
     // Make request to Kartra API to search for lead by email
-    const response = await axios.post('https://app.kartra.com/api', {
-      api_key: KARTRA_API_KEY,
-      api_password: KARTRA_API_PASSWORD,
-      app_id: KARTRA_APP_ID,
-      lead: {
-        email: email
-      },
-      actions: [
-        {
-          cmd: 'search_lead'
-        }
-      ]
+    const formData = new URLSearchParams();
+    formData.append('api_key', KARTRA_API_KEY);
+    formData.append('api_password', KARTRA_API_PASSWORD);
+    formData.append('app_id', KARTRA_APP_ID);
+    formData.append('lead[email]', email);
+    formData.append('actions[0][cmd]', 'search_lead');
+
+    const response = await axios.post('https://app.kartra.com/api', formData, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     });
 
     // For debugging - let's see what Kartra actually returns
