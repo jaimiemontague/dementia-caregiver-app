@@ -46,11 +46,11 @@ exports.handler = async function(event, context) {
     // Debug: Check if environment variables are set
     console.log('Environment variables check:');
     console.log('API Key exists:', !!KARTRA_API_KEY);
-    console.log('API Key length:', KARTRA_API_KEY ? KARTRA_API_KEY.length : 0);
+    console.log('API Key first 4 chars:', KARTRA_API_KEY ? KARTRA_API_KEY.substring(0, 4) + '...' : 'NONE');
     console.log('Password exists:', !!KARTRA_API_PASSWORD);
-    console.log('Password length:', KARTRA_API_PASSWORD ? KARTRA_API_PASSWORD.length : 0);
+    console.log('Password first 4 chars:', KARTRA_API_PASSWORD ? KARTRA_API_PASSWORD.substring(0, 4) + '...' : 'NONE');
     console.log('App ID exists:', !!KARTRA_APP_ID);
-    console.log('App ID length:', KARTRA_APP_ID ? KARTRA_APP_ID.length : 0);
+    console.log('App ID value:', KARTRA_APP_ID || 'NONE');
 
     // Check if any required environment variables are missing
     if (!KARTRA_API_KEY || !KARTRA_API_PASSWORD || !KARTRA_APP_ID) {
