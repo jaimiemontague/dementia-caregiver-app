@@ -30,18 +30,14 @@ exports.handler = async function(event, context) {
     formData.append('api_password', KARTRA_API_PASSWORD);
     formData.append('app_id', KARTRA_APP_ID);
 
-    // Lead data
-    formData.append('lead[email]', email);
-    formData.append('lead[first_name]', 'Test');
-    formData.append('lead[last_name]', 'User');
-
-    // Chain create and search commands
-    formData.append('actions[0][cmd]', 'create_lead');
-    formData.append('actions[1][cmd]', 'search_lead');
+    // Use get_lead to retrieve full lead details including transactions/memberships
+    formData.append('get_lead[email]', email);
 
     const response = await axios.post('https://app.kartra.com/api', formData, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     });
+
+    console.log('Full lead details:', JSON.stringify(response.data, null, 2));
 
     return { statusCode: 200, headers, body: JSON.stringify(response.data) };
   } catch (error) {
