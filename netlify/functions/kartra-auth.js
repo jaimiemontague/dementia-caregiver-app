@@ -43,6 +43,31 @@ exports.handler = async function(event, context) {
     const KARTRA_API_PASSWORD = process.env.KARTRA_API_PASSWORD;
     const KARTRA_APP_ID = process.env.KARTRA_APP_ID;
 
+    // Debug: Check if environment variables are set
+    console.log('Environment variables check:');
+    console.log('API Key exists:', !!KARTRA_API_KEY);
+    console.log('API Key length:', KARTRA_API_KEY ? KARTRA_API_KEY.length : 0);
+    console.log('Password exists:', !!KARTRA_API_PASSWORD);
+    console.log('Password length:', KARTRA_API_PASSWORD ? KARTRA_API_PASSWORD.length : 0);
+    console.log('App ID exists:', !!KARTRA_APP_ID);
+    console.log('App ID length:', KARTRA_APP_ID ? KARTRA_APP_ID.length : 0);
+
+    // Check if any required environment variables are missing
+    if (!KARTRA_API_KEY || !KARTRA_API_PASSWORD || !KARTRA_APP_ID) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: 'Missing environment variables',
+          debug: {
+            hasApiKey: !!KARTRA_API_KEY,
+            hasPassword: !!KARTRA_API_PASSWORD,
+            hasAppId: !!KARTRA_APP_ID
+          }
+        })
+      };
+    }
+
     // Make request to Kartra API to search for lead by email
     const response = await axios.post('https://app.kartra.com/api', {
       api_key: KARTRA_API_KEY,
