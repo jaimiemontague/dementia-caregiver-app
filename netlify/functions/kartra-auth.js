@@ -73,15 +73,21 @@ exports.handler = async function(event, context) {
       api_key: KARTRA_API_KEY,
       api_password: KARTRA_API_PASSWORD,
       app_id: KARTRA_APP_ID,
-      cmd: 'search_lead',
-      email: email
+      lead: {
+        email: email
+      },
+      actions: [
+        {
+          cmd: 'search_lead'
+        }
+      ]
     });
 
     // For debugging - let's see what Kartra actually returns
     console.log('Kartra API Response:', JSON.stringify(response.data, null, 2));
 
     // Check if the API call was successful and if lead exists
-    if (response.data && response.data.status === 'Success') {
+    if (response.data && response.data.status === 'Success' && response.data.lead_details) {
       // Lead exists and has active subscription
       return {
         statusCode: 200,
@@ -89,6 +95,7 @@ exports.handler = async function(event, context) {
         body: JSON.stringify({
           isVerified: true,
           memberData: response.data,
+          leadId: response.data.lead_details.id,
           debug: 'Lead found successfully'
         })
       };
