@@ -68,13 +68,12 @@ exports.handler = async function(event, context) {
       };
     }
 
-    // Make request to Kartra API to search for lead by email
+    // Make request to Kartra API to get full lead details
     const formData = new URLSearchParams();
     formData.append('api_key', KARTRA_API_KEY);
     formData.append('api_password', KARTRA_API_PASSWORD);
     formData.append('app_id', KARTRA_APP_ID);
-    formData.append('lead[email]', email);
-    formData.append('actions[0][cmd]', 'search_lead');
+    formData.append('get_lead[email]', email);
 
     const response = await axios.post('https://app.kartra.com/api', formData, {
       headers: {
@@ -87,27 +86,61 @@ exports.handler = async function(event, context) {
 
     // Check if the API call was successful and if lead exists
     if (response.data && response.data.status === 'Success' && response.data.lead_details) {
-      // Lead exists and has active subscription
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({
-          isVerified: true,
-          memberData: response.data,
-          leadId: response.data.lead_details.id,
-          debug: 'Lead found successfully'
-        })
-      };
+      const leadDetails = response.data.lead_details;
+      
+      // Check for active memberships
+      const activeMemberships = leadDetails.memberships.filter(membership => 
+        membership.active === "1"
+      );
+      
+      // Check for active transactions (subscriptions, purchases)
+      const activeTransactions = leadDetails.transactions.filter(transaction => 
+        transaction.transaction_type === "Sale" || 
+        transaction.transaction_type === "Rebill"
+      );
+      
+      // Determine if user has active subscription
+      const hasActiveSubscription = activeMemberships.length > 0 || activeTransactions.length > 0;
+      
+      if (hasActiveSubscription) {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            isVerified: true,
+            hasActiveSubscription: true,
+            leadId: leadDetails.id,
+            email: leadDetails.email,
+            membershipDetails: {
+              memberships: activeMemberships,
+              transactions: activeTransactions
+            },
+            message: 'Access granted - active subscription found'
+          })
+        };
+      } else {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            isVerified: true,
+            hasActiveSubscription: false,
+            leadId: leadDetails.id,
+            email: leadDetails.email,
+            message: 'Lead found but no active subscription'
+          })
+        };
+      }
     } else {
-      // Lead not found or not active - include raw response for debugging
+      // Lead not found
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
           isVerified: false,
-          message: 'Email not found or subscription not active',
-          debug: response.data,
-          kartraRawResponse: response.data
+          hasActiveSubscription: false,
+          message: 'Email not found in system',
+          kartraResponse: response.data
         })
       };
     }
@@ -123,6 +156,7 @@ exports.handler = async function(event, context) {
         headers,
         body: JSON.stringify({
           isVerified: false,
+          hasActiveSubscription: false,
           error: 'Verification failed',
           details: error.response.data,
           debug: 'Kartra API error response'
