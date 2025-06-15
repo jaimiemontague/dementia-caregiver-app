@@ -20,7 +20,14 @@ function CustomHeader() {
         <View style={styles.topRow}>
           {/* Back button (hidden on Home) */}
           {!isHome ? (
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity 
+              onPress={() => {
+                console.log('Back button pressed');
+                router.back();
+              }}
+              style={styles.backButton}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <Ionicons name="arrow-back" size={24} color="#FFF" />
             </TouchableOpacity>
           ) : (
@@ -86,7 +93,14 @@ export default function TabLayout() {
 
       {/* Floating Home Button (only if not on Home) */}
       {!isHome && (
-        <TouchableOpacity onPress={() => router.push('/')} style={styles.floatingHomeButton}>
+        <TouchableOpacity 
+          onPress={() => {
+            console.log('Home button pressed');
+            router.push('/');
+          }} 
+          style={styles.floatingHomeButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Ionicons name="home" size={28} color="#fff" />
         </TouchableOpacity>
       )}
@@ -112,6 +126,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
+  backButton: {
+    padding: 8,
+    borderRadius: 20,
+    minWidth: 40,
+    minHeight: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   logo: {
     width: 250,
     height: 60,
@@ -133,5 +155,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     padding: 12,
     borderRadius: 30,
+    minWidth: 52,
+    minHeight: 52,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
