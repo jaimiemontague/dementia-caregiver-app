@@ -65,7 +65,7 @@ export default function LoginScreen() {
       } else if (data.isVerified && !data.hasActiveSubscription) {
         showError(
           'No Active Membership',
-          'Your email was found but you don\'t have an active membership. Please contact support if you believe this is an error.'
+          'Your email was found but you don\'t have an active membership (or your membership is under a different email.) Please email kristamesenbrink@dementiasuccesspath.com if you believe this is an error.'
         );
       } else {
         showError(
