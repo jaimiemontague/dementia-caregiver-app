@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ActivityIndicator, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ActivityIndicator, Image, Platform, Linking, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useAuth } from '@/contexts/AuthContext';
@@ -86,67 +86,101 @@ export default function LoginScreen() {
 
   return (
     <CenteredContainer>
-      <View style={styles.container}>
-        {/* Pink Header Section */}
-        <View style={styles.headerSection}>
-          {/* App Logo */}
-          <View style={styles.logoContainer}>
-            <Image 
-              source={require('../assets/images/appheader.png')} 
-              style={styles.logo}
-              resizeMode="contain"
-            />
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          {/* Pink Header Section */}
+          <View style={styles.headerSection}>
+            {/* App Logo */}
+            <View style={styles.logoContainer}>
+              <Image 
+                source={require('../assets/images/appheader.png')} 
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            </View>
           </View>
-        </View>
 
-        {/* White Form Section */}
-        <View style={styles.formSection}>
-          <View style={styles.formContainer}>
-            <Text style={styles.title}>Welcome!</Text>
-            <Text style={styles.subtitle}>Please enter your email to verify your membership.</Text>
-            
-            <TextInput
-              style={styles.emailInput}
-              placeholder="Enter your email address"
-              value={email}
-              onChangeText={(text) => {
-                setEmail(text);
-                clearError(); // Clear error when user starts typing
-              }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={!loading}
-            />
+          {/* White Form Section */}
+          <View style={styles.formSection}>
+            <View style={styles.formContainer}>
+              <Text style={styles.title}>Welcome!</Text>
+              <Text style={styles.subtitle}>Please enter your email to verify your membership.</Text>
+              
+              <TextInput
+                style={styles.emailInput}
+                placeholder="Enter your email address"
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  clearError(); // Clear error when user starts typing
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                editable={!loading}
+              />
 
-            {/* Error Message for Web */}
-            {errorMessage && Platform.OS === 'web' && (
-              <Text style={styles.errorText}>{errorMessage}</Text>
-            )}
-
-            <TouchableOpacity 
-              style={[styles.loginButton, loading && styles.loginButtonDisabled]}
-              onPress={handleLogin}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.loginButtonText}>Verify Membership</Text>
+              {/* Error Message for Web */}
+              {errorMessage && Platform.OS === 'web' && (
+                <Text style={styles.errorText}>{errorMessage}</Text>
               )}
-            </TouchableOpacity>
 
-            <Text style={styles.helpText}>
-              Need help? Contact support at kristamesenbrink@dementiasuccesspath.com
-            </Text>
+              <TouchableOpacity 
+                style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+                onPress={handleLogin}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.loginButtonText}>Verify Membership</Text>
+                )}
+              </TouchableOpacity>
+
+              <Text style={styles.helpText}>
+                Need help? Contact support at kristamesenbrink@dementiasuccesspath.com
+              </Text>
+
+              {/* Non-member information section */}
+              <View style={styles.nonMemberSection}>
+                <Text style={styles.nonMemberTitle}>Don't have a membership yet?</Text>
+                <Text style={styles.nonMemberDescription}>
+                  This app is for our private membership community. If you're looking for dementia caregiving support:
+                </Text>
+                
+                <TouchableOpacity 
+                  style={styles.linkButton}
+                  onPress={() => Linking.openURL('https://dementiasuccesspath.com/free-cheatsheets-bundle')}
+                >
+                  <Text style={styles.linkButtonText}>Get Free Resources</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  style={styles.linkButton}
+                  onPress={() => Linking.openURL('https://dementiasuccesspath.com/dementia-caregiving-made-easy')}
+                >
+                  <Text style={styles.linkButtonText}>Learn About Membership</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </CenteredContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -166,11 +200,11 @@ const styles = StyleSheet.create({
     height: 80,
   },
   formSection: {
-    flex: 1,
     backgroundColor: '#fff',
     justifyContent: 'flex-start',
     paddingHorizontal: 30,
     paddingTop: 30,
+    paddingBottom: 60,
   },
   formContainer: {
     alignItems: 'center',
@@ -236,5 +270,42 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     borderColor: '#ffcdd2',
+  },
+  nonMemberSection: {
+    marginTop: 40,
+    paddingTop: 30,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 400,
+  },
+  nonMemberTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  nonMemberDescription: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 25,
+    lineHeight: 22,
+  },
+  linkButton: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#DAB2AC',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  linkButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 }); 
