@@ -105,31 +105,42 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 16,
+    color: '#333',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   subheader: {
     marginTop: 30,
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#333',
   },
   text: {
     fontSize: 16,
     marginTop: 10,
     marginBottom: 4,
+    color: '#333',
+    lineHeight: 22,
   },
   textnobottom: {
     fontSize: 16,
+    color: '#333',
+    lineHeight: 22,
   },
   textnotop: {
     fontSize: 16,
     marginBottom: 4,
+    color: '#333',
+    lineHeight: 22,
   },
   bullet: {
     fontSize: 16,
     marginLeft: 10,
     marginTop: 4,
+    color: '#333',
+    lineHeight: 22,
   },
   linkText: {
     color: '#1e90ff',
@@ -138,7 +149,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   textInput: {
-    borderColor: '#ccc',
+    borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 8,
     padding: 12,
@@ -150,7 +161,7 @@ const styles = StyleSheet.create({
   sendButton: {
     backgroundColor: '#FFA790',
     padding: 14,
-    borderRadius: 10,
+    borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
   },

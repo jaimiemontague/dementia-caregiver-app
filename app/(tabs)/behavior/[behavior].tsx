@@ -56,10 +56,13 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   header: {
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 24,
     textTransform: 'capitalize',
     color: '#333',
+    textAlign: 'center',
+    lineHeight: 30,
   },
   card: {
     backgroundColor: '#FFA790',

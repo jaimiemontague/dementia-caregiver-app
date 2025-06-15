@@ -185,16 +185,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  header: {
-    backgroundColor: '#DAB2AC',
-    paddingTop: 60,
-    paddingBottom: 20,
-    alignItems: 'center',
-  },
-  logo: {
-    width: 250,
-    height: 60,
-  },
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',

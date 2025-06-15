@@ -171,13 +171,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight: '600',
     color: '#333',
     flex: 1,
     paddingRight: 10,
+    lineHeight: 26,
   },
   favoriteButton: {
     padding: 4,
@@ -195,6 +197,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     marginBottom: 20,
+    lineHeight: 22,
   },
   webVideoWrapper: {
     position: 'relative',

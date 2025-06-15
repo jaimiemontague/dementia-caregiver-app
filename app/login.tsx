@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerSection: {
-    backgroundColor: '#FFA790',
+    backgroundColor: '#DAB2AC',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 60,
