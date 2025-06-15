@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ActivityIndicator, Image, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,19 +7,34 @@ import { useAuth } from '@/contexts/AuthContext';
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   const { login } = useAuth();
 
+  const showError = (title: string, message: string) => {
+    if (Platform.OS === 'web') {
+      setErrorMessage(message);
+    } else {
+      Alert.alert(title, message, [{ text: 'OK' }]);
+    }
+  };
+
+  const clearError = () => {
+    setErrorMessage('');
+  };
+
   const handleLogin = async () => {
+    clearError();
+
     if (!email.trim()) {
-      Alert.alert('Email Required', 'Please enter your email address.');
+      showError('Email Required', 'Please enter your email address.');
       return;
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+      showError('Invalid Email', 'Please enter a valid email address.');
       return;
     }
 
@@ -48,24 +63,21 @@ export default function LoginScreen() {
         // Navigate to main app
         router.replace('/(tabs)');
       } else if (data.isVerified && !data.hasActiveSubscription) {
-        Alert.alert(
+        showError(
           'No Active Membership',
-          'Your email was found but you don\'t have an active membership. Please contact support if you believe this is an error.',
-          [{ text: 'OK' }]
+          'Your email was found but you don\'t have an active membership. Please contact support if you believe this is an error.'
         );
       } else {
-        Alert.alert(
+        showError(
           'Email Not Found',
-          'We couldn\'t find your email in our system. Please make sure you\'re using the email associated with your membership.',
-          [{ text: 'OK' }]
+          'We couldn\'t find your email in our system. Please make sure you\'re using the email associated with your membership.'
         );
       }
     } catch (error) {
       console.error('Login error:', error);
-      Alert.alert(
+      showError(
         'Connection Error',
-        'Unable to verify your membership. Please check your internet connection and try again.',
-        [{ text: 'OK' }]
+        'Unable to verify your membership. Please check your internet connection and try again.'
       );
     } finally {
       setLoading(false);
@@ -97,12 +109,20 @@ export default function LoginScreen() {
               style={styles.emailInput}
               placeholder="Enter your email address"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={(text) => {
+                setEmail(text);
+                clearError(); // Clear error when user starts typing
+              }}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
               editable={!loading}
             />
+
+            {/* Error Message for Web */}
+            {errorMessage && Platform.OS === 'web' && (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            )}
 
             <TouchableOpacity 
               style={[styles.loginButton, loading && styles.loginButtonDisabled]}
@@ -204,5 +224,17 @@ const styles = StyleSheet.create({
     color: '#888',
     textAlign: 'center',
     marginTop: 20,
+  },
+  errorText: {
+    color: '#d32f2f',
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 15,
+    fontWeight: '500',
+    backgroundColor: '#ffebee',
+    padding: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#ffcdd2',
   },
 }); 
