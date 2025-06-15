@@ -93,14 +93,8 @@ exports.handler = async function(event, context) {
         membership.active === "1"
       );
       
-      // Check for active transactions (subscriptions, purchases)
-      const activeTransactions = leadDetails.transactions.filter(transaction => 
-        transaction.transaction_type === "Sale" || 
-        transaction.transaction_type === "Rebill"
-      );
-      
-      // Determine if user has active subscription
-      const hasActiveSubscription = activeMemberships.length > 0 || activeTransactions.length > 0;
+      // Determine if user has active subscription (only check memberships)
+      const hasActiveSubscription = activeMemberships.length > 0;
       
       if (hasActiveSubscription) {
         return {
@@ -112,10 +106,9 @@ exports.handler = async function(event, context) {
             leadId: leadDetails.id,
             email: leadDetails.email,
             membershipDetails: {
-              memberships: activeMemberships,
-              transactions: activeTransactions
+              memberships: activeMemberships
             },
-            message: 'Access granted - active subscription found'
+            message: 'Access granted - active membership found'
           })
         };
       } else {
@@ -127,7 +120,7 @@ exports.handler = async function(event, context) {
             hasActiveSubscription: false,
             leadId: leadDetails.id,
             email: leadDetails.email,
-            message: 'Lead found but no active subscription'
+            message: 'Lead found but no active membership'
           })
         };
       }
