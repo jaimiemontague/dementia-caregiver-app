@@ -34,7 +34,7 @@ function CustomHeader() {
             <View style={{ width: 24 }} /> // spacer so logo stays centered
           )}
 
-          {/* Centered logo */}
+          {/* Centered logo  */}
           <Image
             source={require('../../assets/images/appheader.png')}
             style={styles.logo}
