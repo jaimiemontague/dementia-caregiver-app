@@ -17,10 +17,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/logo1024x1024.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.dementiasuccesspath.dementiahelpnow"
+      "package": "com.dementiasuccesspath.dementiahelpnow",
+      "statusBar": {
+        "style": "dark",
+        "backgroundColor": "#ffffff"
+      }
     },
     "web": {
       "bundler": "metro",
