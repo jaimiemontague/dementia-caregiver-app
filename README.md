@@ -10,7 +10,7 @@ Built using [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/)
 
 - iOS (via App Store or TestFlight)
 - Android (via APK or Google Play Store)
-- Web (hosted version for caregivers who don’t want to install the app)
+- Web (hosted version for caregivers who don't want to install the app)
 
 ---
 
@@ -22,6 +22,8 @@ Built using [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/)
 - **Search & Suggestions** – Find help instantly with predictive behavior/situation search
 - **Help Now Page** – One-tap access to Krista and emergency coaching info
 - **In-App Navigation** – Always-visible back button for intuitive UX
+- **Favorites** – Tap the heart icon to save go-to videos and surface them on the home screen
+- **Recently Viewed** – The app automatically remembers your last watches so you can jump back in quickly
 
 ---
 
@@ -42,7 +44,7 @@ Built using [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/)
 
 ## Getting Started (Dev)
 
-You’ll need `node`, `npm` and `expo-cli` installed.
+You'll need `node`, `npm` and `expo-cli` installed.
 
    git clone https://github.com/jaimiemontague/dementia-caregiver-app
 
@@ -90,7 +92,7 @@ View our full privacy policy here:
 
 ## Contact & Support
 
-If you’re a caregiver in crisis or need help using the app:  
+If you're a caregiver in crisis or need help using the app:  
 
    -Visit the **"Help Now"** section inside the app  
    -Or email us at [kristamesenbrink@dementiasuccesspath.com](mailto:kristamesenbrink@dementiasuccesspath.com)
@@ -100,8 +102,7 @@ If you’re a caregiver in crisis or need help using the app:
 ## Roadmap for Future Versions
 
 - Offline video caching
-- Feature to favorite videos and show those on the home page.
-- Feature to show recently viewed videos and show those on the home page.
+- (implemented in v1.1) Favorites & Recently Viewed
 - Store analytics integration (basic usage stats)
 
 ---
