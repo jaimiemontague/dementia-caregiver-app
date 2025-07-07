@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Help-Now",
+    "name": "Help Now",
     "slug": "dementia-help-now",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,7 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.dementiasuccesspath.dementiahelpnow",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleDisplayName": "Help Now"
       }
     },
     "android": {
@@ -26,7 +27,8 @@
         "backgroundColor": "#ffffff",
         "hidden": false,
         "translucent": false
-      }
+      },
+      "label": "Help Now"
     },
     "web": {
       "bundler": "metro",
