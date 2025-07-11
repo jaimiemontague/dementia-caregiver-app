@@ -70,7 +70,7 @@ To export for web:
 
 ## App Permissions
 
-This app does **not** collect any personal data, location, or use third-party trackers. It is fully GDPR and HIPAA respectful.
+This app does **not** share any personal data, location, or use third-party trackers. It is fully GDPR and HIPAA respectful.  It collects the user's email address for verification only (not saved internally) and simply app usage (selecting behaviors, videos) info for troubleshooting and app usage analytics.
 
 ---
 

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ActivityInd
 import { useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useAuth } from '@/contexts/AuthContext';
+import { StatusBar } from 'expo-status-bar';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -86,6 +87,7 @@ export default function LoginScreen() {
 
   return (
     <CenteredContainer>
+      <StatusBar style="dark" backgroundColor="#DAB2AC" translucent={false} />
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}

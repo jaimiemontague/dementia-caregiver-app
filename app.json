@@ -28,7 +28,9 @@
         "hidden": false,
         "translucent": false
       },
-      "label": "Help Now"
+      "label": "Help Now",
+      "supportsTablet": true,
+      "screenOrientation": "portrait"
     },
     "web": {
       "bundler": "metro",
