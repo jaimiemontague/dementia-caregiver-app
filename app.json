@@ -14,7 +14,8 @@
       "buildNumber": "3",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "CFBundleDisplayName": "Help Now"
+        "CFBundleDisplayName": "Help Now",
+        "NSMicrophoneUsageDescription": "This app uses the microphone only when needed to record or play back caregiver messages."
       }
     },
     "android": {
