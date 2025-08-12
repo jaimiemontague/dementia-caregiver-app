@@ -143,31 +143,36 @@ export default function LoginScreen() {
                 )}
               </TouchableOpacity>
 
+              {/* Members-only notice */}
+              <Text style={styles.membersOnlyText}>For existing members only.</Text>
+
               <Text style={styles.helpText}>
                 Need help? Contact support at kristamesenbrink@dementiasuccesspath.com
               </Text>
 
-              {/* Non-member information section */}
-              <View style={styles.nonMemberSection}>
-                <Text style={styles.nonMemberTitle}>Don't have a membership yet?</Text>
-                <Text style={styles.nonMemberDescription}>
-                  This app is for our private membership community. If you're looking for dementia caregiving support:
-                </Text>
-                
-                <TouchableOpacity 
-                  style={styles.linkButton}
-                  onPress={() => Linking.openURL('https://dementiasuccesspath.com/free-cheatsheets-bundle')}
-                >
-                  <Text style={styles.linkButtonText}>Get Free Resources</Text>
-                </TouchableOpacity>
-                
-                <TouchableOpacity 
-                  style={styles.linkButton}
-                  onPress={() => Linking.openURL('https://dementiasuccesspath.com/dementia-caregiving-made-easy')}
-                >
-                  <Text style={styles.linkButtonText}>Learn About Membership</Text>
-                </TouchableOpacity>
-              </View>
+              {/* Non-member information section – hidden on iOS to comply with App Store guideline 3.1.1 */}
+              {Platform.OS !== 'ios' && (
+                <View style={styles.nonMemberSection}>
+                  <Text style={styles.nonMemberTitle}>Don't have a membership yet?</Text>
+                  <Text style={styles.nonMemberDescription}>
+                    This app is for our private membership community. If you're looking for dementia caregiving support:
+                  </Text>
+
+                  <TouchableOpacity 
+                    style={styles.linkButton}
+                    onPress={() => Linking.openURL('https://dementiasuccesspath.com/free-cheatsheets-bundle')}
+                  >
+                    <Text style={styles.linkButtonText}>Get Free Resources</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity 
+                    style={styles.linkButton}
+                    onPress={() => Linking.openURL('https://dementiasuccesspath.com/dementia-caregiving-made-easy')}
+                  >
+                    <Text style={styles.linkButtonText}>Learn About Membership</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -260,6 +265,12 @@ const styles = StyleSheet.create({
     color: '#888',
     textAlign: 'center',
     marginTop: 20,
+  },
+  membersOnlyText: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 12,
   },
   errorText: {
     color: '#d32f2f',
