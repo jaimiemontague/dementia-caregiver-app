@@ -12,7 +12,11 @@
     "production": {
       "distribution": "store",
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease",
+        "env": {
+          "SUPPORT_16KB_PAGE_SIZE": "1"
+        }
       },
       "ios": {}
     }
