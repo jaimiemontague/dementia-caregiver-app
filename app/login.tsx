@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ActivityIndicator, Image, Platform, Linking, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth, type AccessTier } from '@/contexts/AuthContext';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+const LOGIN_URL = 'https://dementia-help-now.netlify.app/.netlify/functions/kartra-auth';
+const SUPPORT_EMAIL = 'kristamesenbrink@dementiasuccesspath.com';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -29,14 +32,16 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     clearError();
 
-    if (!email.trim()) {
+    const normalizedEmail = email.toLowerCase().trim();
+
+    if (!normalizedEmail) {
       showError('Email Required', 'Please enter your email address.');
       return;
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(normalizedEmail)) {
       showError('Invalid Email', 'Please enter a valid email address.');
       return;
     }
@@ -44,23 +49,25 @@ export default function LoginScreen() {
     setLoading(true);
 
     try {
-      const response = await fetch('https://dementia-help-now.netlify.app/.netlify/functions/kartra-auth', {
+      const response = await fetch(LOGIN_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: email.toLowerCase().trim() }),
+        body: JSON.stringify({ email: normalizedEmail, platform: Platform.OS }),
       });
 
       const data = await response.json();
 
-      if (data.isVerified && data.hasActiveSubscription) {
-        // Store authentication data using context
+      if (data.isVerified && (data.tier || data.hasActiveSubscription)) {
+        // Logins before October 2026 returned no tier; those were members.
+        const tier: AccessTier = data.tier === 'free' ? 'free' : 'member';
         await login({
-          email: data.email,
-          leadId: data.leadId,
+          email: data.email || normalizedEmail,
+          leadId: data.leadId || '',
           authenticated: true,
           timestamp: Date.now(),
+          tier,
         });
 
         // Navigate to main app
@@ -68,19 +75,24 @@ export default function LoginScreen() {
       } else if (data.isVerified && !data.hasActiveSubscription) {
         showError(
           'No Active Membership',
-          'Your email was found but you don\'t have an active membership (or your membership is under a different email.) Please email kristamesenbrink@dementiasuccesspath.com if you believe this is an error.'
+          `Your email was found but you don't have an active membership (or your membership is under a different email.) Please email ${SUPPORT_EMAIL} if you believe this is an error.`
+        );
+      } else if (data.error) {
+        showError(
+          'Try Again',
+          'We couldn\'t check your email just now. Please try again in a minute.'
         );
       } else {
         showError(
           'Email Not Found',
-          'We couldn\'t find your email in our system. Please make sure you\'re using the email associated with your membership.'
+          `We couldn't find that email. Use the email you signed up with on Facebook, or the email on your membership. Need help? Email ${SUPPORT_EMAIL}.`
         );
       }
     } catch (error) {
       console.error('Login error:', error);
       showError(
         'Connection Error',
-        'Unable to verify your membership. Please check your internet connection and try again.'
+        'Unable to log you in. Please check your internet connection and try again.'
       );
     } finally {
       setLoading(false);
@@ -90,7 +102,7 @@ export default function LoginScreen() {
   return (
     <CenteredContainer>
       <StatusBar style="dark" />
-      <ScrollView 
+      <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -100,8 +112,8 @@ export default function LoginScreen() {
           <View style={[styles.headerSection, { paddingTop: insets.top + 20 }]}>
             {/* App Logo */}
             <View style={styles.logoContainer}>
-              <Image 
-                source={require('../assets/images/appheader.png')} 
+              <Image
+                source={require('../assets/images/appheader.png')}
                 style={styles.logo}
                 resizeMode="contain"
               />
@@ -112,8 +124,8 @@ export default function LoginScreen() {
           <View style={styles.formSection}>
             <View style={styles.formContainer}>
               <Text style={styles.title}>Welcome!</Text>
-              <Text style={styles.subtitle}>Please enter your email to verify your membership.</Text>
-              
+              <Text style={styles.subtitle}>Enter the email you signed up with, or the email on your membership.</Text>
+
               <TextInput
                 style={styles.emailInput}
                 placeholder="Enter your email address"
@@ -133,7 +145,7 @@ export default function LoginScreen() {
                 <Text style={styles.errorText}>{errorMessage}</Text>
               )}
 
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.loginButton, loading && styles.loginButtonDisabled]}
                 onPress={handleLogin}
                 disabled={loading}
@@ -141,33 +153,30 @@ export default function LoginScreen() {
                 {loading ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
-                  <Text style={styles.loginButtonText}>Verify Membership</Text>
+                  <Text style={styles.loginButtonText}>Log In</Text>
                 )}
               </TouchableOpacity>
 
-              {/* Members-only notice */}
-              <Text style={styles.membersOnlyText}>For existing members only.</Text>
-
               <Text style={styles.helpText}>
-                Need help? Contact support at kristamesenbrink@dementiasuccesspath.com
+                Need help? Contact support at {SUPPORT_EMAIL}
               </Text>
 
-              {/* Non-member information section – hidden on iOS to comply with App Store guideline 3.1.1 */}
+              {/* Sign-up section – hidden on iOS to comply with App Store guideline 3.1.1 */}
               {Platform.OS !== 'ios' && (
                 <View style={styles.nonMemberSection}>
-                  <Text style={styles.nonMemberTitle}>Don't have a membership yet?</Text>
+                  <Text style={styles.nonMemberTitle}>Don't have access yet?</Text>
                   <Text style={styles.nonMemberDescription}>
-                    This app is for our private membership community. If you're looking for dementia caregiving support:
+                    The app is free for family caregivers. Sign up, then log in here with the same email.
                   </Text>
 
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={styles.linkButton}
-                    onPress={() => Linking.openURL('https://dementiasuccesspath.com/free-cheatsheets-bundle')}
+                    onPress={() => Linking.openURL('https://dementiasuccesspath.com/dementia-help-now-app')}
                   >
-                    <Text style={styles.linkButtonText}>Get Free Resources</Text>
+                    <Text style={styles.linkButtonText}>Get the Free App</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={styles.linkButton}
                     onPress={() => Linking.openURL('https://dementiasuccesspath.com/dementia-caregiving-made-easy')}
                   >
@@ -266,12 +275,6 @@ const styles = StyleSheet.create({
     color: '#888',
     textAlign: 'center',
     marginTop: 20,
-  },
-  membersOnlyText: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginTop: 12,
   },
   errorText: {
     color: '#d32f2f',

@@ -7,12 +7,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
+import { useAuth } from '@/contexts/AuthContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 function CustomHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { isMember } = useAuth();
   const isHome = pathname === '/index' || pathname === '/(tabs)/index' || pathname === '/';
 
   return (
@@ -21,7 +23,7 @@ function CustomHeader() {
         <View style={styles.topRow}>
           {/* Back button (hidden on Home) */}
           {!isHome ? (
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => {
                 console.log('Back button pressed');
                 router.back();
@@ -42,16 +44,20 @@ function CustomHeader() {
             resizeMode="contain"
           />
 
-          {/* Help Now link */}
-          <TouchableOpacity
-            onPress={() => router.push('/(tabs)/help-now')}
-            style={{ paddingRight: 6 }}
-          >
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text style={styles.appNameHelp}>Help</Text>
-              <Text style={styles.appNameNow}>Now!</Text>
-            </View>
-          </TouchableOpacity>
+          {/* Help Now link: direct access to Krista is part of the membership */}
+          {isMember ? (
+            <TouchableOpacity
+              onPress={() => router.push('/(tabs)/help-now')}
+              style={{ paddingRight: 6 }}
+            >
+              <View style={{ alignItems: 'flex-end' }}>
+                <Text style={styles.appNameHelp}>Help</Text>
+                <Text style={styles.appNameNow}>Now!</Text>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <View style={{ width: 40 }} /> // spacer so logo stays centered
+          )}
         </View>
       </View>
     </View>
@@ -95,11 +101,11 @@ export default function TabLayout() {
 
       {/* Floating Home Button (only if not on Home) */}
       {!isHome && (
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => {
             console.log('Home button pressed');
             router.push('/');
-          }} 
+          }}
           style={[styles.floatingHomeButton, { bottom: insets.bottom + 20 }]}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >

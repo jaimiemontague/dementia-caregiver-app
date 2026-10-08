@@ -2,10 +2,49 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Linking, TextInput, Alert, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
+import { useAuth } from '@/contexts/AuthContext';
+
+/**
+ * Shown to free-tier users who reach this route (for example through a saved link).
+ * Direct access to Krista is part of the membership. No purchase link on iOS
+ * (App Store guideline 3.1.1); the web and Android builds may point at the site.
+ */
+function MembersOnlyNotice() {
+  const router = useRouter();
+
+  return (
+    <CenteredContainer>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <Text style={styles.header}>Help Now! is for members</Text>
+          <Text style={styles.text}>
+            Members can send Krista a question straight from the app and usually hear back within 24 hours.
+          </Text>
+          <Text style={styles.text}>
+            In the meantime, the{' '}
+            <Text style={styles.linkInline} onPress={() => router.replace('/')}>
+              Home page
+            </Text>{' '}
+            has a short video for every situation. Type what you&apos;re dealing with in the search box to find it fast.
+          </Text>
+          {Platform.OS !== 'ios' && (
+            <Text
+              style={styles.linkText}
+              onPress={() => Linking.openURL('https://dementiasuccesspath.com/dementia-caregiving-made-easy')}
+            >
+              → Learn about the membership
+            </Text>
+          )}
+        </View>
+      </ScrollView>
+    </CenteredContainer>
+  );
+}
 
 export default function HelpNowScreen() {
   const [message, setMessage] = useState('');
   const router = useRouter();
+  const { isMember } = useAuth();
 
   const handleSendEmail = () => {
     if (!message.trim()) {
@@ -27,6 +66,10 @@ export default function HelpNowScreen() {
 
     setMessage('');
   };
+
+  if (!isMember) {
+    return <MembersOnlyNotice />;
+  }
 
   return (
     <CenteredContainer>
