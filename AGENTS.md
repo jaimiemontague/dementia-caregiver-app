@@ -128,3 +128,15 @@ Prepare the final summary report with:
 - Before/after package version map for all 12 package families.
 - Output from `npm audit` confirming 0 high/critical vulnerabilities.
 - Verification results for Android build, target API level 35 declaration, and 16 KB page-size compliance.
+
+---
+
+## State as of October 8, 2026 (read this before the sections above)
+
+The sections above describe the July 2026 baseline. Since then:
+
+- The July remediation (Expo SDK 57, hardened `kartra-auth.js`, Node 22, API 36) is committed on branch `sdk57-security-remediation`, with a second patch pass on October 8: every Expo package on SDK 57's current patch, axios 1.20.0, overrides in `package.json`. Four advisories have no published fix and are listed with reasons in `audit-allowlist.json`; **`npm run audit:gate` is the release gate**, not the raw `npm audit` count. `STORE_RELEASE_GUIDE.md` and `SECURITY_REMEDIATION_REPORT.md` describe both passes.
+- Branch `free-tier` (on top of it) adds access tiers: `netlify/functions/kartra-auth.js` returns `tier` ("member" for any active Kartra membership, "free" for any Kartra lead or any contact in the Mailchimp audience in any status), records free logins in Mailchimp (date fields from `APP_FIRST_LOGIN_FIELD` / `APP_LAST_LOGIN_FIELD`, tags `app user` / `app returned`) and every login in Netlify Blobs (`@netlify/blobs`, best effort). The app stores the tier in `contexts/AuthContext.tsx` (`isMember`), hides the Help Now link and screen from free users, and the login copy no longer says members only. The function needs `MAILCHIMP_API_KEY` in Netlify's environment.
+- Neither branch is merged or deployed. GitHub's Dependabot alerts on `main` refer to the October 2025 lockfile and go away when `sdk57-security-remediation` merges.
+- The product direction (free app for Facebook leads, member layer of about 100 more Reels plus cheat sheets, search keywords per situation) is in the vault: `Documents\Jaimie and DSP\outputs\dsp\2026-10-07-dhn-app-facebook-campaign-plan.md` and `2026-10-07-dhn-app-upgrade-plan.md`.
+- Git on this OneDrive folder: if `git checkout` fails with "unable to append to '.git/logs/HEAD'", run `git config core.logAllRefUpdates false` (the webhook repo needed it; this one did not).
