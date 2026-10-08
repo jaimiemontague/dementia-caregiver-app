@@ -2,7 +2,6 @@ import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 
 export default function TabTwoScreen() {

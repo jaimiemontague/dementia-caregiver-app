@@ -6,6 +6,7 @@ node_modules/
 # Expo
 .expo/
 dist/
+dist-*/
 web-build/
 expo-env.d.ts
 
@@ -30,7 +31,15 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
+.env.*
+!.env.example
 .env*.local
+
+# Store submission and signing credentials
+credentials.json
+google-service-account*.json
+service-account*.json
 
 # typescript
 *.tsbuildinfo

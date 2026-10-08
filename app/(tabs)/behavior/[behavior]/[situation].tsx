@@ -1,7 +1,6 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { View, Text, StyleSheet, ScrollView, Platform, TouchableOpacity } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
-import { useFocusEffect } from '@react-navigation/native';
 import { useRef, useCallback, useEffect } from 'react';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
@@ -15,7 +14,6 @@ const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
   const { behavior, situation } = useLocalSearchParams();
-  const videoRef = useRef<any>(null);
   const webVideoRef = useRef<HTMLVideoElement | null>(null);
   const { addRecentVideo } = useRecentlyViewed();
   const { toggleFavorite, isFavorite } = useFavorites();
@@ -65,7 +63,7 @@ export default function Page() {
             if (player.status !== 'error' && player.currentTime !== undefined) {
               player.pause();
             }
-          } catch (error) {
+          } catch {
             // Silently ignore cleanup errors as the player might already be released
           }
         }
@@ -75,7 +73,7 @@ export default function Page() {
           try {
             webVideoRef.current.pause();
             webVideoRef.current.currentTime = 0;
-          } catch (error) {
+          } catch {
             // Silently ignore cleanup errors
           }
         }
@@ -144,7 +142,7 @@ export default function Page() {
             nativeControls
             contentFit="contain"
             style={styles.video}
-            allowsFullscreen
+            fullscreenOptions={{ enable: true }}
             allowsPictureInPicture
           />
         )}

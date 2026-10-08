@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Linking, TextInput, Alert, ScrollView, TouchableOpacity, Platform } from 'react-native';
-import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 

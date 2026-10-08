@@ -20,7 +20,7 @@ export default function AuthWrapper({ children }: { children: React.ReactNode })
       // User is authenticated but on login screen
       router.replace('/(tabs)');
     }
-  }, [isAuthenticated, loading, segments]);
+  }, [isAuthenticated, loading, router, segments]);
 
   // Show loading screen while checking authentication
   if (loading) {
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-}); 
+});

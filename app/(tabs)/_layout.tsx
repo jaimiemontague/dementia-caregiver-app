@@ -2,8 +2,8 @@ import { Tabs, usePathname, useRouter } from 'expo-router';
 import React from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
@@ -12,10 +12,11 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 function CustomHeader() {
   const pathname = usePathname();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const isHome = pathname === '/index' || pathname === '/(tabs)/index' || pathname === '/';
 
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
       <View style={styles.innerHeader}>
         <View style={styles.topRow}>
           {/* Back button (hidden on Home) */}
@@ -59,6 +60,8 @@ function CustomHeader() {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? 'dark' : 'light';
+  const insets = useSafeAreaInsets();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -68,9 +71,8 @@ export default function TabLayout() {
     <View style={{ flex: 1 }}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          tabBarActiveTintColor: Colors[theme].tint,
           header: () => <CustomHeader />,
-          tabBarButton: HapticTab,
           tabBarBackground: TabBarBackground,
           tabBarStyle: { display: 'none' },
         }}
@@ -98,7 +100,7 @@ export default function TabLayout() {
             console.log('Home button pressed');
             router.push('/');
           }} 
-          style={styles.floatingHomeButton}
+          style={[styles.floatingHomeButton, { bottom: insets.bottom + 20 }]}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons name="home" size={28} color="#fff" />
@@ -111,7 +113,6 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#DAB2AC',
-    paddingTop: 60,
     paddingBottom: 20,
     alignItems: 'center',
   },

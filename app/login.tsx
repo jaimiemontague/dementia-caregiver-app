@@ -4,12 +4,14 @@ import { useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useAuth } from '@/contexts/AuthContext';
 import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { login } = useAuth();
 
   const showError = (title: string, message: string) => {
@@ -87,7 +89,7 @@ export default function LoginScreen() {
 
   return (
     <CenteredContainer>
-      <StatusBar style="dark" backgroundColor="#DAB2AC" translucent={false} />
+      <StatusBar style="dark" />
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -95,7 +97,7 @@ export default function LoginScreen() {
       >
         <View style={styles.container}>
           {/* Pink Header Section */}
-          <View style={styles.headerSection}>
+          <View style={[styles.headerSection, { paddingTop: insets.top + 20 }]}>
             {/* App Logo */}
             <View style={styles.logoContainer}>
               <Image 
@@ -196,7 +198,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#DAB2AC',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 60,
     paddingBottom: 30,
   },
   logoContainer: {
@@ -321,4 +322,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-}); 
+});

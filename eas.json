@@ -1,4 +1,8 @@
 {
+  "cli": {
+    "version": ">= 21.2.0",
+    "appVersionSource": "remote"
+  },
   "build": {
     "preview": {
       "distribution": "internal",
@@ -11,12 +15,22 @@
     },
     "production": {
       "distribution": "store",
+      "autoIncrement": true,
       "android": {
         "buildType": "app-bundle",
         "gradleCommand": ":app:bundleRelease",
         "env": {
           "SUPPORT_16KB_PAGE_SIZE": "1"
         }
+      },
+      "ios": {}
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
       },
       "ios": {}
     }

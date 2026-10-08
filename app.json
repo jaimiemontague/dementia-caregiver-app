@@ -2,41 +2,28 @@
   "expo": {
     "name": "Help Now",
     "slug": "dementia-help-now",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/applogo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.dementiasuccesspath.dementiahelpnow",
-      "buildNumber": "5",
+      "buildNumber": "6",
+      "deploymentTarget": "16.4",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "CFBundleDisplayName": "Help Now",
-        "NSMicrophoneUsageDescription": "This app uses the microphone only when needed to record or play back caregiver messages."
+        "CFBundleDisplayName": "Help Now"
       }
     },
     "android": {
-      "versionCode": 5,
+      "versionCode": 6,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/applogo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.dementiasuccesspath.dementiahelpnow",
-      "statusBar": {
-        "style": "dark",
-        "backgroundColor": "#ffffff",
-        "hidden": false,
-        "translucent": false
-      },
-      "label": "Help Now",
-      "supportsTablet": true,
-      "screenOrientation": "portrait",
-      "compileSdkVersion": 35,
-      "targetSdkVersion": 35,
-      "minSdkVersion": 26
+      "package": "com.dementiasuccesspath.dementiahelpnow"
     },
     "web": {
       "bundler": "metro",
@@ -52,6 +39,21 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-font",
+      "expo-video",
+      "expo-web-browser",
+      "expo-status-bar",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "buildToolsVersion": "36.0.0",
+            "minSdkVersion": 26
+          }
         }
       ]
     ],

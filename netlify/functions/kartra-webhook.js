@@ -26,22 +26,14 @@ exports.handler = async function(event, context) {
 
   try {
     console.log('Received webhook from Kartra');
-    console.log('Headers:', JSON.stringify(event.headers, null, 2));
-    console.log('Body:', event.body);
 
     // Parse the webhook data from Kartra
     const webhookData = JSON.parse(event.body);
-    
-    console.log('Parsed webhook data:', JSON.stringify(webhookData, null, 2));
 
     // Check if this is a subscription cancellation
     if (webhookData.action === 'cancel_subscription') {
       const leadEmail = webhookData.lead.email;
-      const transactionDetails = webhookData.action_details.transaction_details;
-      
-      console.log(`Subscription cancelled for email: ${leadEmail}`);
-      console.log(`Product: ${transactionDetails.product_name}`);
-      console.log(`Transaction ID: ${transactionDetails.transaction_id}`);
+      console.log('Subscription cancellation received');
 
       // Here you would typically:
       // 1. Mark the user as inactive in your database
@@ -73,18 +65,16 @@ exports.handler = async function(event, context) {
       };
     }
 
-  } catch (error) {
-    console.error('Webhook error:', error);
-    console.error('Raw body:', event.body);
+  } catch {
+    console.error('Kartra webhook processing failed');
 
     return {
       statusCode: 200, // Return 200 to acknowledge receipt even on error
       headers,
       body: JSON.stringify({
         status: 'error',
-        message: 'Failed to process webhook',
-        error: error.message
+        message: 'Failed to process webhook'
       })
     };
   }
-}; 
+};

@@ -1,8 +1,6 @@
-import { View, Text, StyleSheet, Image, TextInput, FlatList, TouchableOpacity, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useState, useEffect, useMemo } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useState, useMemo, useCallback } from 'react';
 import BehaviorCard from '../../components/BehaviorCard';
 import RecentlyViewedCard from '../../components/RecentlyViewedCard';
 import FavoriteCard from '../../components/FavoriteCard';
@@ -24,9 +22,6 @@ const behaviors = behaviorKeys.map((key, index) => ({
 export default function Page() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<
-    { label: string; behavior: string; situation?: string }[]
-  >([]);
 
   const router = useRouter();
   const { recentVideos, refreshRecentVideos } = useRecentlyViewed();
@@ -59,17 +54,15 @@ export default function Page() {
     return index;
   }, []);
 
-  // Filter suggestions on query change
-  useEffect(() => {
-    if (!query.trim()) {
-      setSuggestions([]);
-      return;
+  const suggestions = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) {
+      return [];
     }
 
-    const filtered = searchIndex.filter(item =>
-      item.label.toLowerCase().includes(query.toLowerCase())
+    return searchIndex.filter(item =>
+      item.label.toLowerCase().includes(normalizedQuery)
     );
-    setSuggestions(filtered);
   }, [query, searchIndex]);
 
   const handleSelect = (item: { behavior: string; situation?: string }) => {

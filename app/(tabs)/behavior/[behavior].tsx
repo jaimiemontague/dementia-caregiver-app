@@ -3,8 +3,6 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 
 import videoData from '../../../data/videoData.json';
-import { Component } from 'react';
-
 type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
 const typedVideoData = videoData as VideoDataType;
 

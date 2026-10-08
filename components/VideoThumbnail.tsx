@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Platform } from 'react-native';
+import { View, Image, StyleSheet, Platform, type ImageStyle, type StyleProp } from 'react-native';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 
 interface VideoThumbnailProps {
   videoUrl: string;
-  style?: any;
+  style?: StyleProp<ImageStyle>;
 }
 
 export default function VideoThumbnail({ videoUrl, style }: VideoThumbnailProps) {
   const [thumbnailUri, setThumbnailUri] = useState<string | null>(null);
   const [error, setError] = useState(false);
-
-  useEffect(() => {
-    if (Platform.OS === 'web') {
-      // For web, we'll create a video element to capture a frame
-      generateWebThumbnail();
-    } else {
-      // For native, use expo-video-thumbnails
-      generateNativeThumbnail();
-    }
-  }, [videoUrl]);
 
   const generateNativeThumbnail = async () => {
     try {
@@ -38,9 +28,6 @@ export default function VideoThumbnail({ videoUrl, style }: VideoThumbnailProps)
 
   const generateWebThumbnail = async () => {
     try {
-      // First, try with a proxy to handle CORS
-      const proxyUrl = `https://cors-anywhere.herokuapp.com/${videoUrl}`;
-      
       const video = document.createElement('video');
       video.crossOrigin = 'anonymous';
       video.muted = true;
@@ -58,7 +45,7 @@ export default function VideoThumbnail({ videoUrl, style }: VideoThumbnailProps)
           video.onerror = reject;
           setTimeout(() => reject(new Error('Timeout')), 3000);
         });
-      } catch (directError) {
+      } catch {
         console.log('Direct video load failed, skipping proxy attempt due to CORS restrictions');
         // S3 videos often have CORS issues that can't be bypassed
         // For production, you'd need to configure CORS on your S3 bucket
@@ -101,6 +88,17 @@ export default function VideoThumbnail({ videoUrl, style }: VideoThumbnailProps)
     }
   };
 
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      // For web, create a video element to capture a frame.
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- State updates occur after asynchronous media events.
+      generateWebThumbnail();
+    } else {
+      // For native, use expo-video-thumbnails.
+      generateNativeThumbnail();
+    }
+  }, [videoUrl]);
+
   if (!error && thumbnailUri) {
     return (
       <Image 
@@ -125,4 +123,4 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#2A2A2A',
   },
-}); 
+});
