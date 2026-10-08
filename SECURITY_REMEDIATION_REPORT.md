@@ -97,3 +97,15 @@ All checks were run from a clean workspace with Node 22.14.0, npm 10.9.2, and lo
 ## Remaining moderate audit item
 
 All 11 reported entries are the dependency-chain propagation of one moderate advisory: `uuid@7.0.3` inside `xcode@3.0.1`, used by Expo’s Node-based native configuration tooling. It is not application runtime code. There is no compatible parent update in the current stable Expo SDK; npm’s suggested “fix” is a downgrade to Expo 46, which would reintroduce unsupported dependencies and fail current store platform requirements. A forced override was intentionally not used because it could break native project generation. Monitor stable Expo SDK updates and remove this residual finding when the upstream `xcode` dependency updates.
+
+
+## Second pass, October 8, 2026
+
+Run on the clean SDK 57 tree while committing the July work, which had never been committed.
+
+- `npx expo install --fix`: every Expo package moved to the SDK 57 patch release current on this date (expo 57.0.27, react-native 0.86.3, expo-router 57.0.25, jest-expo 57.0.5, and the rest).
+- axios `^1.18.1` to `^1.20.0`: twelve new axios advisories since July, all fixed in 1.20.0. The Kartra request in `netlify/functions/kartra-auth.js` is unchanged and its tests pass.
+- Overrides added or changed: brace-expansion 5.0.12 (was 5.0.8; the minimatch 3 patch still applies), compression 1.8.2, shell-quote 1.12.0 (the one critical, via react-devtools-core), source-map-js 1.2.2, nanoid 3.3.20 for the 3.x range, js-yaml 3.15.2 and 4.3.2 for their ranges, @xmldom/xmldom 0.8.15 under @expo/plist and 0.9.12 under plist, uuid ^11.1.1 under xcode.
+- Left alone on purpose: image-size stays on 1.2.1 because metro 0.84 passes a file path and image-size 2 accepts only buffers (build-time only, on the app's own assets); decode-uri-component stays on 0.2.2 because the fixed 0.5.0 is ESM-only and query-string 7 requires CommonJS.
+- Result: `npm audit` went from 70 findings (1 critical, 56 high, 13 moderate) to 4 unique advisories, none with a published fix (braces, node-forge, sprintf-js, decode-uri-component). They are recorded with reasons in `audit-allowlist.json`, and `npm run audit:gate` fails on anything outside that list. Clean `npm ci`, `tsc --noEmit`, lint (0 errors, the five documented hook warnings), jest (3 suites, 5 tests) and `expo export --platform web` all pass.
+- GitHub showed 152 open Dependabot alerts against the October 2025 lockfile still on `main`; this branch replaces that lockfile.

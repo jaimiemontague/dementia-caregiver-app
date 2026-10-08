@@ -68,7 +68,7 @@ Run each command and stop if any one fails:
 
 ```powershell
 npm ci
-npm audit --audit-level=high
+npm run audit:gate
 npx expo-doctor@latest
 npm run lint
 npx tsc --noEmit
@@ -77,7 +77,7 @@ npx expo export --platform android --output-dir dist-android
 npx expo export --platform ios --output-dir dist-ios
 ```
 
-`npm audit` will still display the documented moderate Expo build-tool advisory. It must show 0 high and 0 critical. Lint may show the five documented hook warnings, but must show 0 errors.
+`npm run audit:gate` lists every advisory `npm audit` reports and fails on any that is not in `audit-allowlist.json` (the advisories with no published fix, each with a reason; four as of October 8, 2026). A raw `npm audit` still shows high findings for those, all in build and test tooling; the gate, not the raw count, is the release criterion. Lint may show the five documented hook warnings, but must show 0 errors.
 
 Before building, verify the live Netlify site still has `KARTRA_API_KEY` and `KARTRA_API_PASSWORD` configured and deploy the updated functions. If Netlify is connected to the Git repository, pushing the reviewed commit to its production branch should run the configured Node 22 build. Otherwise:
 

@@ -1,0 +1,30 @@
+{
+  "updated": "2026-10-08",
+  "note": "Advisories accepted because no fixed version exists or the fix breaks the toolchain. `npm run audit:gate` fails on anything not listed here. Re-check at every release and remove an entry as soon as a fix ships.",
+  "accepted": [
+    {
+      "id": "GHSA-vfj7-8cjw-p6xm",
+      "package": "braces",
+      "severity": "high",
+      "reason": "Dev-only: reached through jest and patch-package via micromatch. Every published version (<= 3.0.3) is affected and no fix was released as of 2026-10-08. Not in the shipped app bundle."
+    },
+    {
+      "id": "GHSA-86w9-cpqp-85rv",
+      "package": "node-forge",
+      "severity": "high",
+      "reason": "Dev-only: @expo/cli code-signing certificates. The latest release 1.4.0 is affected and no fix was released as of 2026-10-08. Not in the shipped app bundle."
+    },
+    {
+      "id": "GHSA-hp3w-g68c-fv3c",
+      "package": "sprintf-js",
+      "severity": "moderate",
+      "reason": "Dev-only: jest coverage via @istanbuljs/load-nyc-config and argparse 1. The latest release 1.1.3 is affected and no fix was released as of 2026-10-08."
+    },
+    {
+      "id": "GHSA-vcc3-ghjq-m6fr",
+      "package": "decode-uri-component",
+      "severity": "moderate",
+      "reason": "Runtime, via query-string 7 (expo-router 57 and react-navigation). The fixed 0.5.0 is ESM-only and query-string 7 requires CommonJS, so it cannot be overridden on SDK 57; Expo SDK 58 moves to query-string 9. Impact is slow decoding of a malformed deep-link query string."
+    }
+  ]
+}
