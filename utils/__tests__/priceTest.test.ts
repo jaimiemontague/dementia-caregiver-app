@@ -46,7 +46,7 @@ describe('assignment', () => {
     expect(PLUS_PRODUCTS).toContain(a.product);
   });
 
-  it('splits caregivers roughly evenly across the three prices', () => {
+  it('splits caregivers roughly evenly across the five prices', () => {
     const counts: Record<string, number> = {};
     for (let i = 0; i < 3000; i++) {
       const product = assignProduct(emailHash(`caregiver${i}@example.com`));
@@ -54,8 +54,8 @@ describe('assignment', () => {
     }
     expect(Object.keys(counts).sort()).toEqual([...PLUS_PRODUCTS].sort());
     for (const count of Object.values(counts)) {
-      expect(count).toBeGreaterThan(900);
-      expect(count).toBeLessThan(1100);
+      expect(count).toBeGreaterThan(520);
+      expect(count).toBeLessThan(680);
     }
   });
 

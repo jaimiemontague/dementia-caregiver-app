@@ -23,7 +23,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-const PRODUCTS = ['help_now_plus_27', 'help_now_plus_37', 'help_now_plus_47'];
+const PRODUCTS = ['help_now_plus_7', 'help_now_plus_17', 'help_now_plus_27', 'help_now_plus_37', 'help_now_plus_47'];
 const CONCURRENCY = 8;
 
 function listPrice(product) {

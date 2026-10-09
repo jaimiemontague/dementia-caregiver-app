@@ -1,7 +1,7 @@
 /**
  * The Help Now Plus price test.
  *
- * Three non-consumable store products, one price each. Every caregiver is assigned one of
+ * Five non-consumable store products, one price each ($7, $17, $27, $37, $47). Every caregiver is assigned one of
  * them deterministically from their emailHash (utils/identity.ts), or from a random id saved
  * on this phone when a session has no email, so the price is the same in every session and
  * on every phone. The app records the assignment the first time it shows the price (that
@@ -13,7 +13,9 @@ import { Storage } from '@/hooks/useWebStorage';
 import { sha256Hex } from './sha256';
 import { emailHash, normalizeEmail } from './identity';
 
-export const PLUS_PRODUCTS = ['help_now_plus_27', 'help_now_plus_37', 'help_now_plus_47'] as const;
+// The list is part of every assignment: adding or removing a product reassigns everyone, so
+// change it only together with PRICE_TEST_ID.
+export const PLUS_PRODUCTS = ['help_now_plus_7', 'help_now_plus_17', 'help_now_plus_27', 'help_now_plus_37', 'help_now_plus_47'] as const;
 export type PlusProductId = (typeof PLUS_PRODUCTS)[number];
 
 /** Part of every assignment. Changing it starts a new test: everyone is reassigned. */

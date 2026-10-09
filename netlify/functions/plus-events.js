@@ -33,7 +33,7 @@ const headers = {
 };
 
 const STORE_NAME = 'app-plus';
-const PRODUCTS = new Set(['help_now_plus_27', 'help_now_plus_37', 'help_now_plus_47']);
+const PRODUCTS = new Set(['help_now_plus_7', 'help_now_plus_17', 'help_now_plus_27', 'help_now_plus_37', 'help_now_plus_47']);
 const PLATFORMS = new Set(['ios', 'android']);
 const HASH_PATTERN = /^[0-9a-f]{12}$/;
 const TEST_PATTERN = /^[a-z0-9-]{1,40}$/;

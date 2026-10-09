@@ -1,7 +1,7 @@
 /**
  * The store side of Help Now Plus, through RevenueCat (react-native-purchases).
  *
- * One entitlement, "plus", unlocked by any of the three non-consumable products in
+ * One entitlement, "plus", unlocked by any of the five non-consumable products in
  * utils/priceTest.ts. The RevenueCat user is the caregiver's emailHash, so a purchase
  * follows the login email to any phone. The public SDK keys come from app.config.js
  * (REVENUECAT_IOS_KEY / REVENUECAT_ANDROID_KEY at build time), never from the repo.

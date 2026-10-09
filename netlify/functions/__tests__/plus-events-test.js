@@ -91,7 +91,7 @@ describe('plus-events Netlify function', () => {
   it('rejects anything that is not a valid event', async () => {
     const bad = [
       assignment({ type: 'refund' }),
-      assignment({ product: 'help_now_plus_7' }),
+      assignment({ product: 'help_now_plus_99' }),
       assignment({ emailHash: 'someone@example.com' }),
       assignment({ emailHash: null }),
       assignment({ test: '../logins' }),

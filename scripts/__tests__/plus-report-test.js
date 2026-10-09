@@ -12,6 +12,8 @@ describe('plus-report', () => {
     );
 
     expect(summary.products).toEqual([
+      { product: 'help_now_plus_7', listPrice: 7, saw: 0, buyers: 0, conversion: null, purchases: 0, platforms: {}, gross: 0 },
+      { product: 'help_now_plus_17', listPrice: 17, saw: 0, buyers: 0, conversion: null, purchases: 0, platforms: {}, gross: 0 },
       { product: 'help_now_plus_27', listPrice: 27, saw: 2, buyers: 1, conversion: 0.5, purchases: 1, platforms: { ios: 1 }, gross: 27 },
       { product: 'help_now_plus_37', listPrice: 37, saw: 1, buyers: 1, conversion: 1, purchases: 1, platforms: { android: 1 }, gross: 37 },
       { product: 'help_now_plus_47', listPrice: 47, saw: 1, buyers: 0, conversion: 0, purchases: 0, platforms: {}, gross: 0 },

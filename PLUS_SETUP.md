@@ -1,6 +1,6 @@
 # Help Now Plus: setup
 
-Help Now Plus is a one-time, non-consumable in-app purchase that unlocks the member layer (videos marked `tier: "member"` in `data/videoData.json`) and every cheat sheet. Members get it included; the Help Now screen (writing to Krista) stays members-only. It is sold only through the App Store and Google Play purchase sheet, through RevenueCat. Three products test the price: $27, $37 and $47.
+Help Now Plus is a one-time, non-consumable in-app purchase that unlocks the member layer (videos marked `tier: "member"` in `data/videoData.json`) and every cheat sheet. Members get it included; the Help Now screen (writing to Krista) stays members-only. It is sold only through the App Store and Google Play purchase sheet, through RevenueCat. Five products test the price: $7, $17, $27, $37 and $47 ($7 and $17 added by Jaimie, October 9, 2026).
 
 The code is done on branch `member-layer` (October 9, 2026). Nothing below has been set up yet: no store products, no RevenueCat account, no keys. Until the keys exist, the paywall says purchases aren't available.
 
@@ -16,16 +16,18 @@ The code is done on branch `member-layer` (October 9, 2026). Nothing below has b
 ## 2. App Store Connect
 
 1. **Business > Agreements, Tax and Banking**: the Paid Apps Agreement must be active, with bank and tax details. Without it, products can't be tested or sold.
-2. **Apps > Help Now > Monetization > In-App Purchases > +**, three times:
+2. **Apps > Help Now > Monetization > In-App Purchases > +**, five times:
 
    | Type | Reference name | Product ID | Price (base country United States) |
    | --- | --- | --- | --- |
+   | Non-Consumable | Help Now Plus 7 | `help_now_plus_7` | USD 7.00 |
+   | Non-Consumable | Help Now Plus 17 | `help_now_plus_17` | USD 17.00 |
    | Non-Consumable | Help Now Plus 27 | `help_now_plus_27` | USD 27.00 |
    | Non-Consumable | Help Now Plus 37 | `help_now_plus_37` | USD 37.00 |
    | Non-Consumable | Help Now Plus 47 | `help_now_plus_47` | USD 47.00 |
 
    For each: availability in every country the app is in; App Store localization (English US) display name `Help Now Plus`, description `The extra situation videos and printable cheat sheets` (descriptions are limited to 55 characters); a review screenshot of the paywall from the development build. If a price point isn't offered exactly, take the nearest and note it.
-3. **First in-app purchases go to review with an app version.** On the 1.x version page, add the three products under "In-App Purchases and Subscriptions" before Submit for Review.
+3. **First in-app purchases go to review with an app version.** On the 1.x version page, add the five products under "In-App Purchases and Subscriptions" before Submit for Review.
 4. **Users and Access > Integrations > In-App Purchase**: generate a key and download the .p8 (it downloads once). Note the Key ID and the Issuer ID. RevenueCat needs them (section 4).
 5. **Users and Access > Sandbox > Testers > +**: one tester per person testing, each with an email that has never been an Apple Account.
 6. **App Privacy**: purchases are now collected through RevenueCat. Review the declarations for Purchase History and add RevenueCat to the privacy policy's list of processors. The RevenueCat user id is a 12-character hash of the login email.
@@ -36,7 +38,7 @@ The code is done on branch `member-layer` (October 9, 2026). Nothing below has b
 
 1. **Settings > Payments profile**: a merchant account must be linked to sell anything.
 2. **Upload a build that contains the purchases module first.** Play only lets you create in-app products once the app has a bundle with the billing permission (react-native-purchases adds it). A production build submitted with `npx eas-cli@latest submit --platform android --profile production --latest` lands on the internal track as a draft; roll it out to internal testing if Play still asks for a billing build.
-3. **Monetize with Play > Products > One-time products > Create** ("In-app products" in older menus), three times: product ID `help_now_plus_27` / `help_now_plus_37` / `help_now_plus_47` (IDs can never be changed or reused), name `Help Now Plus`, description `The extra situation videos and the printable cheat sheets.`, price USD 27.00 / 37.00 / 47.00, then **Activate**.
+3. **Monetize with Play > Products > One-time products > Create** ("In-app products" in older menus), five times: product ID `help_now_plus_7` / `help_now_plus_17` / `help_now_plus_27` / `help_now_plus_37` / `help_now_plus_47` (IDs can never be changed or reused), name `Help Now Plus`, description `The extra situation videos and the printable cheat sheets.`, price USD 7.00 / 17.00 / 27.00 / 37.00 / 47.00, then **Activate**.
 4. **Settings > License testing**: add the Google accounts that will test. Their purchases are not charged. Testers also join the internal test track (Testing > Internal testing > Testers) and install once from the opt-in link. If a development build doesn't see the products, install the internal-testing build from the Play Store instead.
 5. **Service account for RevenueCat**: follow RevenueCat's "Google Play service credentials" guide (a Google Cloud service account, invited in Play Console > Users and permissions with financial and order access, JSON key uploaded to RevenueCat). New credentials can take a day or more to start working.
 6. **Policy > App content > Data safety**: add purchase history, as for Apple.
@@ -45,9 +47,9 @@ The code is done on branch `member-layer` (October 9, 2026). Nothing below has b
 
 1. Create the account and a project "Help Now". Check their current pricing page; it has been free up to a monthly revenue threshold.
 2. Add two apps: **App Store** (bundle ID `com.dementiasuccesspath.dementiahelpnow`, upload the In-App Purchase key from 2.4) and **Play Store** (package `com.dementiasuccesspath.dementiahelpnow`, upload the service-account JSON from 3.5).
-3. **Products**: add (or import) the three product IDs for each store, six products in all.
-4. **Entitlements**: create one entitlement with the identifier `plus`, exactly, and attach all six products. This is the step that matters most: a product not attached to `plus` takes the money and unlocks nothing (the paywall then says "Something went wrong").
-5. **Offerings**: the app doesn't use them (it picks the product from the price test), but RevenueCat complains in the logs when there are none. Optional: a `default` offering with three custom packages, one per product.
+3. **Products**: add (or import) the five product IDs for each store, ten products in all.
+4. **Entitlements**: create one entitlement with the identifier `plus`, exactly, and attach all ten products. This is the step that matters most: a product not attached to `plus` takes the money and unlocks nothing (the paywall then says "Something went wrong").
+5. **Offerings**: the app doesn't use them (it picks the product from the price test), but RevenueCat complains in the logs when there are none. Optional: a `default` offering with five custom packages, one per product.
 6. **Project settings > Restore behavior**: keep the default, "Transfer to new App User ID". Restore purchases on another login email then moves Plus to that email.
 7. **API keys**: Project settings > API keys. The two public app-specific keys (App Store, starting `appl_`; Play Store, starting `goog_`) are the only keys the app uses. They go to EAS (section 5), never into the repo. The secret key is not used.
 8. **Finding a customer**: customers are named by the emailHash. `npm run plus:report -- --hash someone@example.com` prints it. Each customer carries the attributes `plus_price_test` and `plus_price_product`, so RevenueCat's charts can be split by price.
@@ -108,11 +110,11 @@ On the iPhone: Settings > Privacy & Security > Developer Mode on, then Settings 
 - `npm run plus:report` prints, per product: saw price, buyers, conversion, purchases by platform, gross at list price. `--json` gives the same as JSON. A store transaction recorded under two emails counts once.
 - The report checks every record against the login log (`users/<emailHash>` in the Netlify Blobs store `app-logins`, written by the login function). Records that match no login are counted in a note; `--matched-only` leaves them out. Use it if the numbers ever look inflated: plus-events is an open endpoint.
 - Judge the prices by revenue per caregiver who saw the price (conversion times price), not by conversion alone.
-- Small numbers mislead. At the usual thresholds (95% confidence, 80% power), telling 3% conversion from 2% takes about 3,800 caregivers per price. Before that, treat differences as direction only.
+- Small numbers mislead. At the usual thresholds (95% confidence, 80% power), telling 3% conversion from 2% takes about 3,800 caregivers per price, so with five prices about 19,000 caregivers who reach the paywall (three prices needed about 11,400). Before that, treat differences as direction only.
 - RevenueCat has the money actually paid (local prices, store fees, refunds). The Blobs log is for reading the test, and it is an open endpoint, so it could be polluted; cross-check buyers against RevenueCat.
 - Web purchases through the email funnel are not in this test.
 - To end it: keep the winning product only (`PLUS_PRODUCTS` in `utils/priceTest.ts`), and leave the other two active in the stores so earlier buyers keep restoring.
-- Heads-up: both store pages list in-app purchases with prices, so a careful shopper can see all three.
+- Heads-up: both store pages list in-app purchases with prices, so a careful shopper can see all five, the $7 one included, while being offered another.
 
 ## 9. Before the store release
 
