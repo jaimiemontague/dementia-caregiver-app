@@ -663,6 +663,211 @@
       ]
     }
   },
+  "eating-and-medication": {
+    "refusing-to-eat": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ch5jOXDrS___Refusing-to-eat.mp4",
+      "keywords": [
+        "food",
+        "eat",
+        "eating",
+        "meals",
+        "hungry",
+        "not hungry",
+        "appetite",
+        "won't eat",
+        "dinner",
+        "lunch",
+        "breakfast",
+        "plate",
+        "nutrition",
+        "undereating",
+        "weight loss"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refusing-to-drink-water": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CiGUugsj1ng_Refusing-to-drink-water.mp4",
+      "keywords": [
+        "water",
+        "drinking",
+        "drink",
+        "dehydration",
+        "fluids",
+        "thirsty",
+        "hydration",
+        "juice",
+        "won't drink"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refusing-to-take-medication": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgiPKm-uSiU_Refusing-to-take-medication.mp4",
+      "keywords": [
+        "medication",
+        "medicine",
+        "meds",
+        "pills",
+        "prescription",
+        "won't take pills",
+        "spitting out",
+        "dose",
+        "pharmacy"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "being-accused-of-poisoning-food-or-water": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/being-accused-of-poisoning-food-or-water.mp4",
+      "keywords": [
+        "poison",
+        "poisoning",
+        "won't eat",
+        "won't drink",
+        "suspicious of food",
+        "paranoid",
+        "accused",
+        "water"
+      ],
+      "homeBehavior": "accusations"
+    }
+  },
+  "showering-and-hygiene": {
+    "dementia-refusals-says-i-already-showered": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/dementia-refusals-says-i-already-showered.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "already showered",
+        "I showered yesterday",
+        "smells",
+        "won't shower"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "doesnt-want-to-shower-due-to-modesty": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/doesnt-want-to-shower-due-to-modesty.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "modesty",
+        "embarrassed",
+        "naked",
+        "privacy",
+        "undressing"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refuses-to-shower-im-not-going-to-the-bathroom-with-you": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-im-not-going-to-the-bathroom-with-you.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "bathroom",
+        "won't let me help",
+        "privacy",
+        "embarrassed"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refuses-to-shower-due-to-fear-of-falling": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-due-to-fear-of-falling.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "fear of falling",
+        "afraid",
+        "slipping",
+        "grab bars",
+        "shower chair",
+        "safety"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refuses-to-shower-due-to-temperature-or-pressure": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-due-to-temperature-or-pressure.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "cold",
+        "water temperature",
+        "water pressure",
+        "hurts",
+        "sensitive skin"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refusing-to-brush-teeth": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CkdwVTHDTLc_Refusing-to-brush-teeth.mp4",
+      "keywords": [
+        "teeth",
+        "brushing",
+        "toothbrush",
+        "dental",
+        "mouth",
+        "oral care",
+        "dentures",
+        "hygiene"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refusing-to-use-deodorant": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cuh0m_6seT4_Refusing-to-use-deodorant.mp4",
+      "keywords": [
+        "deodorant",
+        "body odor",
+        "smell",
+        "hygiene",
+        "grooming",
+        "armpits",
+        "stinks"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refusing-to-change-clothes": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CtZtORitBk1_Refusing-to-change-clothes.mp4",
+      "keywords": [
+        "clothes",
+        "clothing",
+        "change clothes",
+        "same outfit",
+        "dirty clothes",
+        "dressing",
+        "getting dressed",
+        "laundry"
+      ],
+      "homeBehavior": "refusals"
+    },
+    "refusing-to-wear-adult-diapers-depends": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0KWERWOgDW_Refusing-to-wear-adult-diapers.mp4",
+      "keywords": [
+        "diapers",
+        "depends",
+        "incontinence",
+        "briefs",
+        "pull ups",
+        "underwear",
+        "accidents",
+        "wetting",
+        "bladder",
+        "bowel"
+      ],
+      "homeBehavior": "refusals"
+    }
+  },
   "inappropriate": {
     "yelling-at-strangers-in-public": {
       "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C72gBawMC_k_Yelling-at-strangers-in-public.mp4",

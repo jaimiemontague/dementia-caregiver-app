@@ -1,5 +1,5 @@
 import videoData from '../../data/videoData.json';
-import { buildSearchIndex, search, stem } from '../search';
+import { buildSearchIndex, prettyBehavior, search, stem } from '../search';
 
 const index = buildSearchIndex(videoData as any);
 const top = (q: string, n = 3) => search(index, q).slice(0, n).map((r) => r.situation ?? `[${r.behavior}]`);
@@ -56,5 +56,18 @@ describe('search', () => {
   it('shows readable labels', () => {
     const hit = search(index, 'food')[0];
     expect(hit.label).toBe('Refusing to eat (Refusals)');
+    expect(prettyBehavior('eating-and-medication')).toBe('Eating & Medication');
+    expect(prettyBehavior('i-want-to-go-home-|-exit-seeking')).toBe('I Want To Go Home | Exit Seeking');
+  });
+
+  it('shows a video shelved in two categories once, and finds the categories themselves', () => {
+    const food = search(index, 'food').filter((h) => h.situation === 'refusing-to-eat');
+    expect(food).toHaveLength(1);
+    expect(top('medication', 4)).toContain('[eating-and-medication]');
+    expect(top('medication', 4)).toContain('refusing-to-take-medication');
+    expect(top('hygiene', 4)).toContain('[showering-and-hygiene]');
+    expect(top('showering', 4)).toContain('[showering-and-hygiene]');
+    const shower = search(index, 'shower').map((h) => h.situation).filter(Boolean);
+    expect(new Set(shower).size).toBe(shower.length);
   });
 });

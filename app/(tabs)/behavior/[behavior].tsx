@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
+import { prettyBehavior } from '@/utils/search';
 
 import videoData from '../../../data/videoData.json';
 type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
@@ -18,7 +19,7 @@ export default function Page() {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>
       <Text style={styles.header}>
-        {normalizedBehavior.replace(/-/g, ' ')}: Choose the specific situation you're dealing with.
+        {prettyBehavior(normalizedBehavior).toLowerCase()}: Choose the specific situation you're dealing with.
       </Text>
 
       {situations.map((situationKey, index) => (

@@ -23,6 +23,7 @@ export type SearchItem = {
 };
 
 type IndexEntry = SearchItem & {
+  key: string;              // the video itself, so a video shelved in two categories shows once
   labelStems: string[];
   primaryStems: string[];   // the first few keywords: what the video is mainly about
   keywordStems: string[];
@@ -81,11 +82,21 @@ function stems(text: string): string[] {
 
 const STOP = new Set(['the', 'a', 'an', 'to', 'of', 'or', 'and', 'eg', 'e', 'g', 'is', 'it', 'are', 'they', 'them', 'their', 'with', 'in', 'on', 'at', 'for', 'when', 'how', 'what', 'say', 'me', 'my', 'i', 'im', 'you', 'your', 'due', 'like', 'from', 'not', 'no', 'wont', 'cant', 'do', 'does', 'did']);
 
+/** Display names that the slug-to-title rule cannot produce (the ampersand categories). */
+export const BEHAVIOR_TITLES: Record<string, string> = {
+  'eating-and-medication': 'Eating & Medication',
+  'showering-and-hygiene': 'Showering & Hygiene',
+};
+
+/** The behavior card title: the display map, else the slug with hyphens as spaces, Title Case. */
 export function prettyBehavior(slug: string): string {
-  return slug
-    .replace(/-\|-/g, ' / ')
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return (
+    BEHAVIOR_TITLES[slug] ??
+    slug
+      .replace(/-/g, ' ')
+      .replace(/!/g, '')
+      .replace(/\b\w/g, (c) => c.toUpperCase())
+  );
 }
 
 export function prettySituation(slug: string): string {
@@ -100,6 +111,7 @@ export function buildSearchIndex(data: VideoData): IndexEntry[] {
     index.push({
       label: prettyBehavior(behavior),
       behavior,
+      key: `behavior:${behavior}`,
       labelStems: behaviorStems,
       primaryStems: [],
       keywordStems: [],
@@ -113,6 +125,7 @@ export function buildSearchIndex(data: VideoData): IndexEntry[] {
         label: `${prettySituation(situation)} (${prettyBehavior(behavior)})`,
         behavior,
         situation,
+        key: typeof entry?.videoUrl === 'string' && entry.videoUrl ? entry.videoUrl : `${behavior}/${situation}`,
         labelStems: labelStems.filter((s) => !STOP.has(s)),
         primaryStems: keywords.slice(0, 2).flatMap(stems),
         keywordStems: keywords.slice(2).flatMap(stems),
@@ -168,5 +181,15 @@ export function search(index: IndexEntry[], query: string, limit = 30): SearchIt
     a.item.tokenCount - b.item.tokenCount ||
     a.item.label.localeCompare(b.item.label),
   );
-  return scored.slice(0, limit).map(({ item }) => ({ label: item.label, behavior: item.behavior, situation: item.situation }));
+  // A video shelved under two categories appears once, under the copy that scored best
+  // (ties go to the one listed first in the data file, its home behavior).
+  const seen = new Set<string>();
+  const out: SearchItem[] = [];
+  for (const { item } of scored) {
+    if (seen.has(item.key)) continue;
+    seen.add(item.key);
+    out.push({ label: item.label, behavior: item.behavior, situation: item.situation });
+    if (out.length >= limit) break;
+  }
+  return out;
 }

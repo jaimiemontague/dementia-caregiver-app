@@ -10,7 +10,7 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { buildSearchIndex, search, type VideoData } from '@/utils/search';
+import { buildSearchIndex, prettyBehavior, search, type VideoData } from '@/utils/search';
 
 import videoData from '../../data/videoData.json';
 
@@ -18,7 +18,7 @@ const behaviorKeys = Object.keys(videoData);
 
 const behaviors = behaviorKeys.map((key, index) => ({
   id: index + 1,
-  title: key.replace(/-/g, ' ').replace(/!/g, '').replace(/\b\w/g, l => l.toUpperCase()),
+  title: prettyBehavior(key),
   slug: key,
 }));
 

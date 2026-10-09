@@ -8,6 +8,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { Ionicons } from '@expo/vector-icons';
 
 import videoData from '../../../../data/videoData.json';
+import { prettyBehavior } from '@/utils/search';
 
 type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
 const typedVideoData = videoData as VideoDataType;
@@ -29,7 +30,7 @@ export default function Page() {
   // Track video view when page loads with video data
   useEffect(() => {
     if (data && behavior && situation) {
-      const behaviorTitle = behaviorKey.replace(/-/g, ' ').replace(/!/g, '').replace(/\b\w/g, l => l.toUpperCase());
+      const behaviorTitle = prettyBehavior(behaviorKey);
       const situationTitle = situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
       
       addRecentVideo({
@@ -83,7 +84,7 @@ export default function Page() {
 
   const handleToggleFavorite = () => {
     if (data) {
-      const behaviorTitle = behaviorKey.replace(/-/g, ' ').replace(/!/g, '').replace(/\b\w/g, l => l.toUpperCase());
+      const behaviorTitle = prettyBehavior(behaviorKey);
       const situationTitle = situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
       
       toggleFavorite({
