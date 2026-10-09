@@ -52,7 +52,8 @@ The code is done on branch `member-layer` (October 9, 2026). Nothing below has b
 5. **Offerings**: the app doesn't use them (it picks the product from the price test), but RevenueCat complains in the logs when there are none. Optional: a `default` offering with five custom packages, one per product.
 6. **Project settings > Restore behavior**: keep the default, "Transfer to new App User ID". Restore purchases on another login email then moves Plus to that email.
 7. **API keys**: Project settings > API keys. The two public app-specific keys (App Store, starting `appl_`; Play Store, starting `goog_`) are the only keys the app uses. They go to EAS (section 5), never into the repo. The secret key is not used.
-8. **Finding a customer**: customers are named by the emailHash. `npm run plus:report -- --hash someone@example.com` prints it. Each customer carries the attributes `plus_price_test` and `plus_price_product`, so RevenueCat's charts can be split by price.
+8. **Store notifications**: so refunds reach RevenueCat when they happen, paste the server-notification URL RevenueCat shows in its App Store app settings into App Store Connect (App Information > App Store Server Notifications, production and sandbox), and connect Google's real-time developer notifications from RevenueCat's Play Store app settings (it gives you the Pub/Sub topic to enter in Play Console > Monetization setup). RevenueCat's own setup guide has the current screens.
+9. **Finding a customer**: customers are named by the emailHash. `npm run plus:report -- --hash someone@example.com` prints it. Each customer carries the attributes `plus_price_test` and `plus_price_product`, so RevenueCat's charts can be split by price.
 
 ## 5. Environment variables
 
