@@ -14,14 +14,15 @@ jest.mock('@netlify/blobs', () => ({
 
 const axios = require('axios');
 const { handler } = require('../kartra-auth');
+const { emailHash } = require('../../../utils/identity');
 
 const originalEnvironment = process.env;
 
-function kartraLead(memberships) {
+function kartraLead(memberships, tags = []) {
   return {
     data: {
       status: 'Success',
-      lead_details: { id: 'lead-123', email: 'member@example.com', memberships },
+      lead_details: { id: 'lead-123', email: 'member@example.com', memberships, tags },
     },
   };
 }
@@ -30,13 +31,14 @@ function kartraNotFound() {
   return { data: { status: 'Error', message: 'Lead not found' } };
 }
 
-function mailchimpContact(overrides = {}) {
+function mailchimpContact(overrides = {}, tags = []) {
   return {
     status: 200,
     data: {
       id: 'mc-abc',
       email_address: 'lead@example.com',
       status: 'unsubscribed',
+      tags,
       merge_fields: { APPFIRST: '', APPLAST: '', ...overrides },
     },
   };
@@ -45,6 +47,9 @@ function mailchimpContact(overrides = {}) {
 function post(email, extra = {}) {
   return handler({ httpMethod: 'POST', body: JSON.stringify({ email, ...extra }) });
 }
+
+// What app builds with Help Now Plus send; older builds send no tiers.
+const PLUS_APP = { platform: 'ios', tiers: ['free', 'plus', 'member'] };
 
 describe('kartra-auth Netlify function', () => {
   let consoleErrorSpy;
@@ -110,6 +115,16 @@ describe('kartra-auth Netlify function', () => {
     expect(mockBlobStore.setJSON).toHaveBeenCalledWith(expect.stringMatching(/^users\/[0-9a-f]{12}$/), expect.objectContaining({ tier: 'member', logins: 1, platforms: ['ios'] }));
   });
 
+  it('keys the login log by the same email hash the app uses for Plus', async () => {
+    axios.post.mockResolvedValue(kartraLead([{ id: 'active', active: '1' }]));
+
+    await post('  Member@Example.com ', { platform: 'ios' });
+
+    // The app's emailHash is the RevenueCat user id and the price-test key; it must match.
+    expect(mockBlobStore.setJSON).toHaveBeenCalledWith(`users/${emailHash('member@example.com')}`, expect.anything());
+    expect(emailHash('  Member@Example.com ')).toBe(emailHash('member@example.com'));
+  });
+
   it('grants the free tier to a Kartra lead without an active membership', async () => {
     axios.post.mockResolvedValue(kartraLead([{ id: 'old', active: '0' }]));
     axios.request.mockResolvedValueOnce({ status: 404, data: { title: 'Resource Not Found' } });
@@ -154,6 +169,77 @@ describe('kartra-auth Netlify function', () => {
     const [, patch, tags] = axios.request.mock.calls.map(([config]) => config);
     expect(patch.data.merge_fields).toEqual({ APPLAST: expect.any(String) });
     expect(tags.data.tags.map((t) => t.name)).toEqual(['app user', 'app returned']);
+  });
+
+  it('grants Plus to a Kartra lead tagged App Plus', async () => {
+    axios.post.mockResolvedValue(kartraLead([{ id: 'old', active: '0' }], [{ tag_name: 'App Plus', tag_date: '2026-10-09' }]));
+    axios.request.mockResolvedValueOnce({ status: 404, data: {} });
+
+    const body = JSON.parse((await post('lead@example.com', PLUS_APP)).body);
+
+    expect(body).toMatchObject({ isVerified: true, hasActiveSubscription: true, tier: 'plus', leadId: 'lead-123', message: 'Access granted - plus' });
+    expect(mockBlobStore.setJSON).toHaveBeenCalledWith(expect.stringMatching(/^users\/[0-9a-f]{12}$/), expect.objectContaining({ tier: 'plus' }));
+  });
+
+  it('grants Plus to a Mailchimp contact tagged App Plus in any case, and still records the login', async () => {
+    axios.post.mockResolvedValue(kartraNotFound());
+    axios.request
+      .mockResolvedValueOnce(mailchimpContact({}, [{ id: 7, name: 'app user' }, { id: 9, name: 'app plus' }]))
+      .mockResolvedValueOnce({ status: 200, data: {} })
+      .mockResolvedValueOnce({ status: 204, data: '' });
+
+    const body = JSON.parse((await post('lead@example.com', PLUS_APP)).body);
+
+    expect(body).toMatchObject({ isVerified: true, tier: 'plus', leadId: 'mc-abc' });
+    const calls = axios.request.mock.calls.map(([config]) => config);
+    expect(calls[0].url).toMatch(/fields=[^&]*\btags\b/);
+    expect(calls.map((call) => call.method)).toEqual(['GET', 'PATCH', 'POST']);
+  });
+
+  it('keeps a member with the Plus tag a member', async () => {
+    axios.post.mockResolvedValue(kartraLead([{ id: 'active', active: '1' }], ['App Plus']));
+
+    const body = JSON.parse((await post('member@example.com', PLUS_APP)).body);
+
+    expect(body.tier).toBe('member');
+    expect(axios.request).not.toHaveBeenCalled();
+  });
+
+  it('leaves an untagged lead on the free tier', async () => {
+    axios.post.mockResolvedValue(kartraLead([], [{ tag_name: 'Jan27 FBOX Signup' }]));
+    axios.request.mockResolvedValueOnce(mailchimpContact({}, [{ id: 7, name: 'app user' }]))
+      .mockResolvedValueOnce({ status: 200, data: {} })
+      .mockResolvedValueOnce({ status: 204, data: '' });
+
+    const body = JSON.parse((await post('lead@example.com', PLUS_APP)).body);
+
+    expect(body).toMatchObject({ tier: 'free', message: 'Access granted - free tier' });
+  });
+
+  it('reads the Plus tag names from the environment', async () => {
+    process.env.KARTRA_PLUS_TAG = 'Plus Buyer';
+    process.env.MAILCHIMP_PLUS_TAG = 'DHN Plus';
+
+    axios.post.mockResolvedValue(kartraLead([], [{ tag_name: 'App Plus' }]));
+    axios.request.mockResolvedValue({ status: 404, data: {} });
+    expect(JSON.parse((await post('lead@example.com', PLUS_APP)).body).tier).toBe('free');
+
+    axios.post.mockResolvedValue(kartraLead([], [{ tag_name: 'plus buyer ' }]));
+    expect(JSON.parse((await post('lead@example.com', PLUS_APP)).body).tier).toBe('plus');
+
+    axios.post.mockResolvedValue(kartraNotFound());
+    axios.request.mockResolvedValueOnce(mailchimpContact({}, [{ id: 3, name: 'DHN Plus' }]));
+    expect(JSON.parse((await post('lead@example.com', PLUS_APP)).body).tier).toBe('plus');
+  });
+
+  it('gives app builds from before Plus the free tier for a Plus buyer', async () => {
+    axios.post.mockResolvedValue(kartraLead([], [{ tag_name: 'App Plus' }]));
+    axios.request.mockResolvedValueOnce({ status: 404, data: {} });
+
+    // Those builds read any tier other than "free" as a member.
+    const body = JSON.parse((await post('lead@example.com', { platform: 'android' })).body);
+
+    expect(body).toMatchObject({ isVerified: true, hasActiveSubscription: true, tier: 'free' });
   });
 
   it('refuses an email found nowhere', async () => {

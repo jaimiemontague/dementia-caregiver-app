@@ -13,10 +13,10 @@ export function cheatsheetHref(url: string): string {
 }
 
 export default function CheatsheetCard({ cheatsheet }: { cheatsheet?: Cheatsheet | null }) {
-  const { isMember } = useAuth();
+  const { hasPlus } = useAuth();
   if (!cheatsheet?.url || !cheatsheet.title) return null;
 
-  if (isMember) {
+  if (hasPlus) {
     return (
       <TouchableOpacity
         style={styles.card}

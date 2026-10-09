@@ -1,27 +1,36 @@
 /*
  * Login check for the Dementia Help Now app.
  *
- * The app posts { email, platform } and gets back a tier:
+ * The app posts { email, platform, tiers } and gets back a tier:
  *   member  - Kartra shows an active membership on any level
+ *   plus    - not a member, but Help Now Plus was bought outside the app: the Kartra
+ *             lead or the Mailchimp contact carries the Plus tag ("App Plus")
  *   free    - the email exists anywhere: a Kartra lead without a membership, or a
  *             contact in the Mailchimp audience in any status (subscribed,
  *             unsubscribed, cleaned, pending, archived). "Ever been on the list"
  *             is the rule, so access never depends on staying subscribed.
  *   (none)  - not found
  *
+ * `tiers` lists the tiers the app build understands. Builds from before Plus send
+ * none and read any tier other than "free" as a member, so they get "free" for a
+ * Plus buyer instead (they have no Plus content to show anyway).
+ * Store purchases of Plus never reach this function: the app reads them from
+ * RevenueCat and unlocks Plus itself.
+ *
  * `isVerified` and `hasActiveSubscription` are kept for the store builds that
  * predate tiers: they admit on hasActiveSubscription alone, so it is true for
- * both tiers and `tier` is the field that gates member features.
+ * every tier and `tier` is the field that gates member features.
  *
- * Every free-tier login is recorded in Mailchimp (first and last login date
- * fields, the tags "app user" and, from the second week on, "app returned").
+ * Every free-tier and Plus login is recorded in Mailchimp (first and last login
+ * date fields, the tags "app user" and, from the second week on, "app returned").
  * Every login is also written to a small Netlify Blobs store when the runtime
  * provides one. Both are best effort and never fail the login.
  *
  * Environment: KARTRA_API_KEY, KARTRA_API_PASSWORD, KARTRA_APP_ID (required),
  * MAILCHIMP_API_KEY (required for the free tier), MAILCHIMP_LIST_ID (default
  * 6bea51ee85), APP_FIRST_LOGIN_FIELD / APP_LAST_LOGIN_FIELD (merge tags,
- * default APPFIRST / APPLAST), APP_USER_TAG / APP_RETURNED_TAG.
+ * default APPFIRST / APPLAST), APP_USER_TAG / APP_RETURNED_TAG, KARTRA_PLUS_TAG /
+ * MAILCHIMP_PLUS_TAG (default "App Plus" for both; matched ignoring case).
  */
 const axios = require('axios');
 const crypto = require('crypto');
@@ -44,6 +53,7 @@ const MAILCHIMP_TIMEOUT_MS = 8000;
 const RETURN_AFTER_DAYS = 7;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PLATFORMS = new Set(['web', 'ios', 'android']);
+const DEFAULT_PLUS_TAG = 'App Plus';
 
 function respond(statusCode, body) {
   return { statusCode, headers, body: JSON.stringify(body) };
@@ -51,6 +61,30 @@ function respond(statusCode, body) {
 
 function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase();
+}
+
+function normalizeTag(name) {
+  return String(name || '').trim().toLowerCase();
+}
+
+/**
+ * Tag names from a Kartra lead or a Mailchimp member, normalized for comparison.
+ * Mailchimp sends { id, name }; Kartra's tag objects are read by tag_name, name or
+ * tag, and plain strings are accepted too.
+ */
+function tagNames(tags) {
+  if (!Array.isArray(tags)) return [];
+  return tags
+    .map((tag) => (typeof tag === 'string' ? tag : tag && (tag.tag_name || tag.name || tag.tag)))
+    .filter((name) => typeof name === 'string' && name.trim())
+    .map(normalizeTag);
+}
+
+function plusTags() {
+  return {
+    kartra: normalizeTag(process.env.KARTRA_PLUS_TAG || DEFAULT_PLUS_TAG),
+    mailchimp: normalizeTag(process.env.MAILCHIMP_PLUS_TAG || DEFAULT_PLUS_TAG)
+  };
 }
 
 function md5(text) {
@@ -107,7 +141,8 @@ async function lookupKartra(email) {
     found: true,
     leadId: lead.id,
     email: lead.email,
-    hasActiveMembership
+    hasActiveMembership,
+    tags: tagNames(lead.tags)
   };
 }
 
@@ -127,7 +162,7 @@ async function mailchimpRequest(config, method, path, data) {
 
 async function lookupMailchimp(config, email) {
   const hash = md5(email);
-  const fields = ['id', 'email_address', 'status', `merge_fields.${config.firstLoginField}`, `merge_fields.${config.lastLoginField}`].join(',');
+  const fields = ['id', 'email_address', 'status', 'tags', `merge_fields.${config.firstLoginField}`, `merge_fields.${config.lastLoginField}`].join(',');
   const response = await mailchimpRequest(config, 'GET', `/lists/${config.listId}/members/${hash}?fields=${fields}`);
   if (response.status === 404) {
     return { found: false };
@@ -141,12 +176,13 @@ async function lookupMailchimp(config, email) {
     hash,
     contactId: response.data.id,
     status: response.data.status,
+    tags: tagNames(response.data.tags),
     firstLogin: merge[config.firstLoginField] || '',
     lastLogin: merge[config.lastLoginField] || ''
   };
 }
 
-async function recordFreeLogin(config, contact, now) {
+async function recordMailchimpLogin(config, contact, now) {
   const today = isoDate(now);
   const mergeFields = { [config.lastLoginField]: today };
   if (!contact.firstLogin) {
@@ -261,25 +297,32 @@ exports.handler = async function (event) {
   const inMailchimp = Boolean(contact && contact.found);
 
   if (inKartra || inMailchimp) {
+    const plusTag = plusTags();
+    const boughtPlus =
+      (inKartra && kartra.tags.includes(plusTag.kartra)) ||
+      (inMailchimp && contact.tags.includes(plusTag.mailchimp));
+    const appKnowsPlus = Array.isArray(body.tiers) && body.tiers.includes('plus');
+    const tier = boughtPlus && appKnowsPlus ? 'plus' : 'free';
+
     if (inMailchimp) {
       try {
-        await recordFreeLogin(mailchimp, contact, now);
+        await recordMailchimpLogin(mailchimp, contact, now);
       } catch (error) {
         console.warn('Mailchimp login record skipped:', error.message);
       }
     }
     try {
-      await recordLoginEvent(event, { emailHash, tier: 'free', platform }, now);
+      await recordLoginEvent(event, { emailHash, tier, platform }, now);
     } catch (error) {
       console.warn('Login log skipped:', error.message);
     }
     return respond(200, {
       isVerified: true,
       hasActiveSubscription: true,
-      tier: 'free',
+      tier,
       leadId: (inKartra && kartra.leadId) || (inMailchimp && contact.contactId) || '',
       email: (inKartra && kartra.email) || email,
-      message: 'Access granted - free tier'
+      message: tier === 'plus' ? 'Access granted - plus' : 'Access granted - free tier'
     });
   }
 

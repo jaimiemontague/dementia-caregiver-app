@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ActivityIndicator, Image, Platform, Linking, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
-import { useAuth, type AccessTier } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { APP_TIERS, tierFromLogin } from '@/utils/access';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -54,14 +55,15 @@ export default function LoginScreen() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: normalizedEmail, platform: Platform.OS }),
+        // `tiers` tells the function this build understands Plus.
+        body: JSON.stringify({ email: normalizedEmail, platform: Platform.OS, tiers: APP_TIERS }),
       });
 
       const data = await response.json();
 
       if (data.isVerified && (data.tier || data.hasActiveSubscription)) {
         // Logins before October 2026 returned no tier; those were members.
-        const tier: AccessTier = data.tier === 'free' ? 'free' : 'member';
+        const tier = tierFromLogin(data.tier);
         await login({
           email: data.email || normalizedEmail,
           leadId: data.leadId || '',
