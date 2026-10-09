@@ -1,242 +1,995 @@
 {
-    "anger": {
-      "being-the-sole-target-of-anger": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CfUN_GnpkAY_Being-the-sole-target-of-anger.mp4"
-      },
-      "yelling-in-anger": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CewqlFfp9lO_Yelling-in-anger.mp4"
-      },
-      "experiencing-anger-outbursts": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpngkR-sEe-_Experiencing-anger-outbursts-v3.mp4"
-      },
-      "getting-hit-or-yelled-at": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChA7YU8DI5T_Getting-hit-or-yelled-at.mp4"
-      }
+  "anger": {
+    "being-the-sole-target-of-anger": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CfUN_GnpkAY_Being-the-sole-target-of-anger.mp4",
+      "keywords": [
+        "anger",
+        "angry",
+        "mean",
+        "mad",
+        "hostile",
+        "only me",
+        "targets me",
+        "nice to everyone else",
+        "hates me"
+      ]
     },
-    "obsession-and-repeating": {
-      "repeatedly-asking-the-same-question-eg-when-are-we-leaving": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cu2ZeG0t5ox_Repeatedly-asking-the-same-question.mp4"
-      },
-      "making-repeated-phone-calls": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ck1HyY6tTb3_Making-repeated-phone-calls.mp4"
-      },
-      "repeatedly-saying-a-phrase-like-help": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C1AjJbnuv99_Repeatedly-saying-a-phrase.mp4"
-      },
-      "repeatedly-asking-for-a-deceased-relative-eg-where-is-mom": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CvDS8VLt2PC_Repeatedly-asking-for-a-deceased-relative.mp4"
-      },
-      "fixating-on-needing-to-leave-or-go-somewhere": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChGESlwrLWq_Fixating-on-needing-to-leave-or-go-somewhere.mp4"
-      },
-      "obsessing-over-lost-items-eg-wheres-my-checkbook": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CuVPvaBrBhw_Obsessing-over-lost-items.mp4"
-      }
+    "yelling-in-anger": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CewqlFfp9lO_Yelling-in-anger.mp4",
+      "keywords": [
+        "yelling",
+        "shouting",
+        "screaming",
+        "angry",
+        "mad",
+        "raising voice",
+        "temper",
+        "rage"
+      ]
     },
-    "delusions": {
-      "believing-someone-is-stealing-their-things": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CrbEugnuiZR_Believing-someone-is-stealing-their-things.mp4"
-      },
-      "believing-someone-is-trying-to-steal-their-money": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CrhISmAJNSn_Believing-someone-is-trying-to-steal-their-money.mp4"
-      },
-      "not-recognizing-their-own-home": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CzHSJ8OuKuA_Not-recognizing-their-own-home.mp4"
-      },
-      "believing-they-need-to-go-to-work": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CzUZCZOuTNA_Believing-they-need-to-go-to-work.mp4"
-      },
-      "believing-someone-is-spying-or-trying-to-hurt-them": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cj6WPqJM1h8_Believing-someone-is-spying-or-trying-to-hurt-them.mp4"
-      }
+    "experiencing-anger-outbursts": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpngkR-sEe-_Experiencing-anger-outbursts-v3.mp4",
+      "keywords": [
+        "outburst",
+        "anger",
+        "angry",
+        "explosive",
+        "temper",
+        "sudden rage",
+        "flare up",
+        "mood swings"
+      ]
     },
-    "i-want-to-go-home-|-exit-seeking": {
-      "how-to-redirect-i-want-to-go-home": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/how-to-redirect-i-want-to-go-home.mp4"
-      },
-      "wants-to-go-home-but-they-are-home": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/wants-to-go-home-but-they-are-home.mp4"
-      },
-      "begs-me-to-go-home-(facility)": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/begs-me-to-take-home-facility.mp4"
-      },
-      "what-to-say-when-they-insist-theyre-leaving": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/what-to-say-when-they-insist-theyre-leaving.mp4"
-      },
-      "insisting-on-going-home-despite-inability": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C2YWz_-s_CD_Insisting-on-going-home-despite-inability.mp4"
-      },
-      "trying-to-leave-the-facility-or-house": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C7P89DYMcDp_Trying-to-leave-the-facility-or-house.mp4"
-      },
-      "demanding-car-keys-to-go-home": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CkgXsdyuw_B_Demanding-car-keys-to-go-home.mp4"
-      },
-      "how-to-avoid-lying-to-them-when-they-want-to-go-home": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/how-to-avoid-lying-to-them-when-they-want-to-go-home.mp4"
-      }
+    "getting-hit-or-yelled-at": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChA7YU8DI5T_Getting-hit-or-yelled-at.mp4",
+      "keywords": [
+        "hitting",
+        "hit",
+        "aggressive",
+        "violent",
+        "combative",
+        "yelled at",
+        "lashing out",
+        "pushing",
+        "grabbing",
+        "physical"
+      ]
+    }
+  },
+  "obsession-and-repeating": {
+    "repeatedly-asking-the-same-question-eg-when-are-we-leaving": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cu2ZeG0t5ox_Repeatedly-asking-the-same-question.mp4",
+      "keywords": [
+        "repeating",
+        "repeats",
+        "same question",
+        "asks over and over",
+        "when are we leaving",
+        "what time",
+        "again and again",
+        "loop"
+      ]
     },
-    "accusations": {
-      "being-accused-of-lying": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cw0hgNsut6p_Being-accused-of-lying.mp4"
-      },
-      "being-accused-of-stealing": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CzE4WT_OHl7_Being-accused-of-stealing.mp4"
-      },
-      "being-accused-of-cheating": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgUj2T-MsFN_Being-accused-of-cheating.mp4"
-      },
-      "being-accused-of-poisoning-food-or-water": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/being-accused-of-poisoning-food-or-water.mp4"
-      },
-      "being-accused-of-trying-to-hurt-them": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CwipPXzPa7C_Being-accused-of-trying-to-hurt-them.mp4"
-      }
+    "making-repeated-phone-calls": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ck1HyY6tTb3_Making-repeated-phone-calls.mp4",
+      "keywords": [
+        "phone",
+        "calling",
+        "calls",
+        "repeated calls",
+        "rings me",
+        "voicemail",
+        "texting",
+        "over and over"
+      ]
     },
-    "refusals": {
-      "refusing-to-eat": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ch5jOXDrS___Refusing-to-eat.mp4"
-      },
-      "dementia-refusals-says-i-already-showered": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/dementia-refusals-says-i-already-showered.mp4"
-      },
-      "refusing-to-take-medication": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgiPKm-uSiU_Refusing-to-take-medication.mp4"
-      },
-      "refuses-help-from-paid-caregiver": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-help-from-paid-caregiver.mp4"
-      },
-      "doesnt-want-to-shower-due-to-modesty": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/doesnt-want-to-shower-due-to-modesty.mp4"
-      },
-      "refusing-to-change-clothes": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CtZtORitBk1_Refusing-to-change-clothes.mp4"
-      },
-      "refuses-to-shower-im-not-going-to-the-bathroom-with-you": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-im-not-going-to-the-bathroom-with-you.mp4"
-      },
-      "refusing-to-wear-adult-diapers-depends": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0KWERWOgDW_Refusing-to-wear-adult-diapers.mp4"
-      },
-      "refusing-to-go-to-the-doctor": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C7iA6JBscUZ_Refusing-to-go-to-the-doctor.mp4"
-      },
-      "refusing-to-stop-driving": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgSAW_QLzh8_Refusing-to-stop-driving.mp4"
-      },
-      "refuses-to-shower-due-to-fear-of-falling": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-due-to-fear-of-falling.mp4"
-      },
-      "refusing-to-accept-your-help": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C2I54LHMp4k_Refusing-to-accept-help-from-a-caregiver.mp4"
-      },
-      "refusing-to-get-out-of-bed": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0M7SWRuv3u_Refusing-to-get-out-of-bed.mp4"
-      },
-      "refusing-to-brush-teeth": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CkdwVTHDTLc_Refusing-to-brush-teeth.mp4"
-      },
-      "refusing-to-drink-water": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CiGUugsj1ng_Refusing-to-drink-water.mp4"
-      },
-      "refusing-to-move-to-assisted-living-or-memory-care": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpBm8v2vIS1_Refusing-to-move-to-assisted-living-or-memory-care.mp4"
-      },
-      "refusing-to-wear-appropriate-clothing": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpV-WtjtWL9_Refusing-to-wear-appropriate-clothing.mp4"
-      },
-      "refusing-to-use-deodorant": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cuh0m_6seT4_Refusing-to-use-deodorant.mp4"
-      },
-      "refusing-to-leave-the-house": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ckb4_fEvkp3_Refusing-to-leave-the-house.mp4"
-      },
-      "refuses-to-shower-due-to-temperature-or-pressure": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-due-to-temperature-or-pressure.mp4"
-      }
+    "repeatedly-saying-a-phrase-like-help": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C1AjJbnuv99_Repeatedly-saying-a-phrase.mp4",
+      "keywords": [
+        "repeating",
+        "help help",
+        "same phrase",
+        "same word",
+        "chanting",
+        "calling out",
+        "noises",
+        "vocalizing"
+      ]
     },
-    "inappropriate": {
-      "yelling-at-strangers-in-public": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C72gBawMC_k_Yelling-at-strangers-in-public.mp4"
-      },
-      "making-rude-or-embarrassing-comments-eg-youre-so-fat": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CtXeXYcM-1c_Making-rude-or-embarrassing-comments.mp4"
-      },
-      "exhibiting-sexually-inappropriate-behavior": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CjWLKEHNEx3_Exhibiting-sexually-inappropriate-behavior.mp4"
-      },
-      "disrobing-or-removing-clothing-in-public": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChU7rbhpyWW_Disrobing-or-removing-clothing-in-public.mp4"
-      },
-      "overfeeding-animals": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0r2aG3uEIP_Overfeeding-pets.mp4"
-      }
+    "repeatedly-asking-for-a-deceased-relative-eg-where-is-mom": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CvDS8VLt2PC_Repeatedly-asking-for-a-deceased-relative.mp4",
+      "keywords": [
+        "where is mom",
+        "mother",
+        "dad",
+        "passed away",
+        "died",
+        "deceased",
+        "asking for parents",
+        "looking for mom",
+        "grief"
+      ]
     },
-    "apathy-|-withdrawal": {
-      "says-im-not-getting-out-of-bed": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/says-im-not-getting-out-of-bed.mp4"
-      },
-      "refusing-to-do-any-activity-due-to-lack-of-interest": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CjYBOwyu4cT_Refusing-to-do-any-activity-due-to-lack-of-interest.mp4"
-      },
-      "doesnt-want-to-go-anywhere-due-to-pain": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/doesnt-want-to-go-anywhere-due-to-pain.mp4"
-      },
-      "says-no-to-everything": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/says-no-to-everything.mp4"
-      }
+    "fixating-on-needing-to-leave-or-go-somewhere": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChGESlwrLWq_Fixating-on-needing-to-leave-or-go-somewhere.mp4",
+      "keywords": [
+        "fixated",
+        "obsessed",
+        "needs to leave",
+        "go somewhere",
+        "appointment",
+        "has to go",
+        "insists",
+        "restless"
+      ]
     },
-    "hallucinations": {
-      "seeing-animals-that-arent-there-eg-dogs": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cfy9pdSrWCG_Seeing-animals-that-arent-there.mp4"
-      },
-      "seeing-bugs": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cfuq_s5up21_Seeing-bugs.mp4"
-      },
-      "seeing-intruders-or-dangerous-people": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CfsGnflPfhx_Seeing-intruders-or-dangerous-people.mp4"
-      },
-      "seeing-deceased-relatives-or-kids": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cvnu8xXLE-r_Seeing-deceased-relatives-or-kids.mp4"
-      }
+    "obsessing-over-lost-items-eg-wheres-my-checkbook": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CuVPvaBrBhw_Obsessing-over-lost-items.mp4",
+      "keywords": [
+        "lost items",
+        "checkbook",
+        "purse",
+        "wallet",
+        "keys",
+        "glasses",
+        "hiding things",
+        "looking for",
+        "misplaced",
+        "where is my"
+      ]
+    }
+  },
+  "delusions": {
+    "believing-someone-is-stealing-their-things": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CrbEugnuiZR_Believing-someone-is-stealing-their-things.mp4",
+      "keywords": [
+        "stealing",
+        "stolen",
+        "thief",
+        "took my things",
+        "missing items",
+        "hiding",
+        "paranoid",
+        "suspicious"
+      ]
     },
-    "wandering": {
-      "constant-pacing": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C098neWOPWB_Constant-pacing.mp4"
-      },
-      "tendency-to-wander-or-leave-the-house": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0ubIhWOlG3_Tendency-to-wander-or-leave-the-house.mp4"
-      },
-      "rummaging-through-things": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C1DMsr8OiSC_Rummaging-through-things.mp4"
-      }
+    "believing-someone-is-trying-to-steal-their-money": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CrhISmAJNSn_Believing-someone-is-trying-to-steal-their-money.mp4",
+      "keywords": [
+        "money",
+        "stealing money",
+        "wallet",
+        "bank",
+        "finances",
+        "checkbook",
+        "cheating me",
+        "paranoid",
+        "financial"
+      ]
     },
-    "sundowning": {
-      "demanding-to-go-home-during-evening-hours": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cv5qLSHtcKF_Demanding-to-go-home-during-evening-hours.mp4"
-      },
-      "screaming-during-sundowning": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChS8axJrW3o_Screaming-during-sundowning.mp4"
-      },
-      "becoming-agitated-or-anxious-in-the-evening": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Convfv-j_r1_Becoming-agitated-or-anxious-in-the-evening.mp4"
-      }
+    "not-recognizing-their-own-home": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CzHSJ8OuKuA_Not-recognizing-their-own-home.mp4",
+      "keywords": [
+        "not my house",
+        "whose house is this",
+        "doesn't recognize home",
+        "wants to go home",
+        "confused about home",
+        "strange place"
+      ]
     },
-    "other": {
-      "forgetting-family-members-or-the-caregivers-name": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C1X_a6oM9Le_Forgetting-family-members-or-the-caregivers-name.mp4"
-      },
-      "struggling-to-tell-the-caregiver-what-they-need": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CoFlAawOVb1_Struggling-to-tell-the-caregiver-what-they-need.mp4"
-      },
-      "hoarding-items": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C02JjrUMccl_Hoarding-items.mp4"
-      },
-      "overfeeding-pets": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0r2aG3uEIP_Overfeeding-pets.mp4"
-      },
-      "calling-the-caregiver-mom-or-someone-else": {
-        "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CkGmWEKjfqG_Calling-the-caregiver-Mom-or-someone-else.mp4"
-      }
+    "believing-they-need-to-go-to-work": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CzUZCZOuTNA_Believing-they-need-to-go-to-work.mp4",
+      "keywords": [
+        "work",
+        "job",
+        "going to work",
+        "late for work",
+        "boss",
+        "office",
+        "has to leave",
+        "former job"
+      ]
+    },
+    "believing-someone-is-spying-or-trying-to-hurt-them": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cj6WPqJM1h8_Believing-someone-is-spying-or-trying-to-hurt-them.mp4",
+      "keywords": [
+        "spying",
+        "watching me",
+        "hurt them",
+        "paranoid",
+        "scared",
+        "afraid",
+        "danger",
+        "poison",
+        "someone is after me",
+        "fear"
+      ]
+    }
+  },
+  "i-want-to-go-home-|-exit-seeking": {
+    "how-to-redirect-i-want-to-go-home": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/how-to-redirect-i-want-to-go-home.mp4",
+      "keywords": [
+        "go home",
+        "redirect",
+        "redirection",
+        "wants to leave",
+        "take me home",
+        "distract",
+        "exit seeking"
+      ]
+    },
+    "wants-to-go-home-but-they-are-home": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/wants-to-go-home-but-they-are-home.mp4",
+      "keywords": [
+        "go home",
+        "already home",
+        "this is your home",
+        "childhood home",
+        "doesn't recognize home",
+        "take me home"
+      ]
+    },
+    "begs-me-to-go-home-(facility)": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/begs-me-to-take-home-facility.mp4",
+      "keywords": [
+        "go home",
+        "facility",
+        "nursing home",
+        "memory care",
+        "assisted living",
+        "begging",
+        "pleading",
+        "take me home",
+        "visit"
+      ]
+    },
+    "what-to-say-when-they-insist-theyre-leaving": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/what-to-say-when-they-insist-theyre-leaving.mp4",
+      "keywords": [
+        "leaving",
+        "insists on leaving",
+        "walking out",
+        "I'm leaving",
+        "going out",
+        "what to say",
+        "exit",
+        "door"
+      ]
+    },
+    "insisting-on-going-home-despite-inability": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C2YWz_-s_CD_Insisting-on-going-home-despite-inability.mp4",
+      "keywords": [
+        "go home",
+        "can't go home",
+        "insists",
+        "unable",
+        "wheelchair",
+        "bedridden",
+        "no home to go to",
+        "arguing"
+      ]
+    },
+    "trying-to-leave-the-facility-or-house": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C7P89DYMcDp_Trying-to-leave-the-facility-or-house.mp4",
+      "keywords": [
+        "leaving",
+        "escaping",
+        "exit",
+        "door",
+        "getting out",
+        "elopement",
+        "wandering off",
+        "facility",
+        "locks",
+        "alarm"
+      ]
+    },
+    "demanding-car-keys-to-go-home": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CkgXsdyuw_B_Demanding-car-keys-to-go-home.mp4",
+      "keywords": [
+        "car keys",
+        "keys",
+        "driving",
+        "drive home",
+        "car",
+        "demands",
+        "wants to drive",
+        "license"
+      ]
+    },
+    "how-to-avoid-lying-to-them-when-they-want-to-go-home": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/how-to-avoid-lying-to-them-when-they-want-to-go-home.mp4",
+      "keywords": [
+        "lying",
+        "therapeutic fibbing",
+        "honesty",
+        "truth",
+        "fib",
+        "white lie",
+        "go home",
+        "what to say"
+      ]
+    }
+  },
+  "accusations": {
+    "being-accused-of-lying": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cw0hgNsut6p_Being-accused-of-lying.mp4",
+      "keywords": [
+        "accused",
+        "liar",
+        "lying",
+        "you're lying",
+        "blames me",
+        "doesn't believe me",
+        "false accusation"
+      ]
+    },
+    "being-accused-of-stealing": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CzE4WT_OHl7_Being-accused-of-stealing.mp4",
+      "keywords": [
+        "accused",
+        "stealing",
+        "thief",
+        "stole",
+        "took my money",
+        "blames me",
+        "missing items",
+        "accusation"
+      ]
+    },
+    "being-accused-of-cheating": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgUj2T-MsFN_Being-accused-of-cheating.mp4",
+      "keywords": [
+        "accused",
+        "cheating",
+        "affair",
+        "unfaithful",
+        "jealous",
+        "spouse",
+        "husband",
+        "wife",
+        "accusation"
+      ]
+    },
+    "being-accused-of-poisoning-food-or-water": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/being-accused-of-poisoning-food-or-water.mp4",
+      "keywords": [
+        "poison",
+        "poisoning",
+        "won't eat",
+        "won't drink",
+        "suspicious of food",
+        "paranoid",
+        "accused",
+        "water"
+      ]
+    },
+    "being-accused-of-trying-to-hurt-them": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CwipPXzPa7C_Being-accused-of-trying-to-hurt-them.mp4",
+      "keywords": [
+        "accused",
+        "hurting them",
+        "abuse",
+        "afraid of me",
+        "scared",
+        "paranoid",
+        "blames me",
+        "accusation"
+      ]
+    }
+  },
+  "refusals": {
+    "refusing-to-eat": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ch5jOXDrS___Refusing-to-eat.mp4",
+      "keywords": [
+        "food",
+        "eat",
+        "eating",
+        "meals",
+        "hungry",
+        "not hungry",
+        "appetite",
+        "won't eat",
+        "dinner",
+        "lunch",
+        "breakfast",
+        "plate",
+        "nutrition",
+        "undereating",
+        "weight loss"
+      ]
+    },
+    "dementia-refusals-says-i-already-showered": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/dementia-refusals-says-i-already-showered.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "already showered",
+        "I showered yesterday",
+        "smells",
+        "won't shower"
+      ]
+    },
+    "refusing-to-take-medication": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgiPKm-uSiU_Refusing-to-take-medication.mp4",
+      "keywords": [
+        "medication",
+        "medicine",
+        "meds",
+        "pills",
+        "prescription",
+        "won't take pills",
+        "spitting out",
+        "dose",
+        "pharmacy"
+      ]
+    },
+    "refuses-help-from-paid-caregiver": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-help-from-paid-caregiver.mp4",
+      "keywords": [
+        "paid caregiver",
+        "home health aide",
+        "aide",
+        "hired help",
+        "stranger",
+        "won't let them in",
+        "refuses help",
+        "agency",
+        "companion"
+      ]
+    },
+    "doesnt-want-to-shower-due-to-modesty": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/doesnt-want-to-shower-due-to-modesty.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "modesty",
+        "embarrassed",
+        "naked",
+        "privacy",
+        "undressing"
+      ]
+    },
+    "refusing-to-change-clothes": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CtZtORitBk1_Refusing-to-change-clothes.mp4",
+      "keywords": [
+        "clothes",
+        "clothing",
+        "change clothes",
+        "same outfit",
+        "dirty clothes",
+        "dressing",
+        "getting dressed",
+        "laundry"
+      ]
+    },
+    "refuses-to-shower-im-not-going-to-the-bathroom-with-you": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-im-not-going-to-the-bathroom-with-you.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "bathroom",
+        "won't let me help",
+        "privacy",
+        "embarrassed"
+      ]
+    },
+    "refusing-to-wear-adult-diapers-depends": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0KWERWOgDW_Refusing-to-wear-adult-diapers.mp4",
+      "keywords": [
+        "diapers",
+        "depends",
+        "incontinence",
+        "briefs",
+        "pull ups",
+        "underwear",
+        "accidents",
+        "wetting",
+        "bladder",
+        "bowel"
+      ]
+    },
+    "refusing-to-go-to-the-doctor": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C7iA6JBscUZ_Refusing-to-go-to-the-doctor.mp4",
+      "keywords": [
+        "doctor",
+        "appointment",
+        "physician",
+        "clinic",
+        "checkup",
+        "won't go",
+        "medical visit",
+        "neurologist",
+        "hospital"
+      ]
+    },
+    "refusing-to-stop-driving": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CgSAW_QLzh8_Refusing-to-stop-driving.mp4",
+      "keywords": [
+        "driving",
+        "drive",
+        "car",
+        "keys",
+        "license",
+        "give up the car",
+        "unsafe driver",
+        "dmv"
+      ]
+    },
+    "refuses-to-shower-due-to-fear-of-falling": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-due-to-fear-of-falling.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "fear of falling",
+        "afraid",
+        "slipping",
+        "grab bars",
+        "shower chair",
+        "safety"
+      ]
+    },
+    "refusing-to-accept-your-help": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C2I54LHMp4k_Refusing-to-accept-help-from-a-caregiver.mp4",
+      "keywords": [
+        "help",
+        "accepting help",
+        "independent",
+        "stubborn",
+        "I can do it myself",
+        "won't let me",
+        "assistance"
+      ]
+    },
+    "refusing-to-get-out-of-bed": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0M7SWRuv3u_Refusing-to-get-out-of-bed.mp4",
+      "keywords": [
+        "bed",
+        "getting up",
+        "won't get up",
+        "stays in bed",
+        "morning",
+        "sleeping all day",
+        "lying down"
+      ]
+    },
+    "refusing-to-brush-teeth": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CkdwVTHDTLc_Refusing-to-brush-teeth.mp4",
+      "keywords": [
+        "teeth",
+        "brushing",
+        "toothbrush",
+        "dental",
+        "mouth",
+        "oral care",
+        "dentures",
+        "hygiene"
+      ]
+    },
+    "refusing-to-drink-water": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CiGUugsj1ng_Refusing-to-drink-water.mp4",
+      "keywords": [
+        "water",
+        "drinking",
+        "drink",
+        "dehydration",
+        "fluids",
+        "thirsty",
+        "hydration",
+        "juice",
+        "won't drink"
+      ]
+    },
+    "refusing-to-move-to-assisted-living-or-memory-care": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpBm8v2vIS1_Refusing-to-move-to-assisted-living-or-memory-care.mp4",
+      "keywords": [
+        "assisted living",
+        "memory care",
+        "nursing home",
+        "facility",
+        "moving",
+        "placement",
+        "won't move",
+        "long term care",
+        "hard conversation"
+      ]
+    },
+    "refusing-to-wear-appropriate-clothing": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CpV-WtjtWL9_Refusing-to-wear-appropriate-clothing.mp4",
+      "keywords": [
+        "clothes",
+        "clothing",
+        "dressing",
+        "inappropriate clothing",
+        "weather",
+        "coat",
+        "shoes",
+        "layers",
+        "getting dressed"
+      ]
+    },
+    "refusing-to-use-deodorant": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cuh0m_6seT4_Refusing-to-use-deodorant.mp4",
+      "keywords": [
+        "deodorant",
+        "body odor",
+        "smell",
+        "hygiene",
+        "grooming",
+        "armpits",
+        "stinks"
+      ]
+    },
+    "refusing-to-leave-the-house": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Ckb4_fEvkp3_Refusing-to-leave-the-house.mp4",
+      "keywords": [
+        "leave the house",
+        "going out",
+        "outings",
+        "won't go anywhere",
+        "homebound",
+        "car ride",
+        "isolating",
+        "errands"
+      ]
+    },
+    "refuses-to-shower-due-to-temperature-or-pressure": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/refuses-to-shower-due-to-temperature-or-pressure.mp4",
+      "keywords": [
+        "shower",
+        "bathe",
+        "bathing",
+        "wash",
+        "hygiene",
+        "cold",
+        "water temperature",
+        "water pressure",
+        "hurts",
+        "sensitive skin"
+      ]
+    }
+  },
+  "inappropriate": {
+    "yelling-at-strangers-in-public": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C72gBawMC_k_Yelling-at-strangers-in-public.mp4",
+      "keywords": [
+        "yelling",
+        "strangers",
+        "public",
+        "store",
+        "restaurant",
+        "embarrassing",
+        "rude",
+        "outburst in public"
+      ]
+    },
+    "making-rude-or-embarrassing-comments-eg-youre-so-fat": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CtXeXYcM-1c_Making-rude-or-embarrassing-comments.mp4",
+      "keywords": [
+        "rude comments",
+        "embarrassing",
+        "insults",
+        "you're fat",
+        "blunt",
+        "no filter",
+        "strangers",
+        "public"
+      ]
+    },
+    "exhibiting-sexually-inappropriate-behavior": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CjWLKEHNEx3_Exhibiting-sexually-inappropriate-behavior.mp4",
+      "keywords": [
+        "sexual",
+        "inappropriate touching",
+        "hypersexual",
+        "advances",
+        "kissing",
+        "groping",
+        "flirting",
+        "disinhibition"
+      ]
+    },
+    "disrobing-or-removing-clothing-in-public": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChU7rbhpyWW_Disrobing-or-removing-clothing-in-public.mp4",
+      "keywords": [
+        "undressing",
+        "taking clothes off",
+        "naked",
+        "disrobing",
+        "public",
+        "stripping",
+        "clothing"
+      ]
+    },
+    "overfeeding-animals": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0r2aG3uEIP_Overfeeding-pets.mp4",
+      "keywords": [
+        "pet",
+        "pets",
+        "dog",
+        "cat",
+        "feeding the dog",
+        "overfeeding",
+        "animals",
+        "treats",
+        "forgets they fed"
+      ]
+    }
+  },
+  "apathy-|-withdrawal": {
+    "says-im-not-getting-out-of-bed": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/says-im-not-getting-out-of-bed.mp4",
+      "keywords": [
+        "bed",
+        "won't get up",
+        "stays in bed",
+        "sleeping all day",
+        "morning",
+        "no motivation",
+        "depressed",
+        "lying down"
+      ]
+    },
+    "refusing-to-do-any-activity-due-to-lack-of-interest": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CjYBOwyu4cT_Refusing-to-do-any-activity-due-to-lack-of-interest.mp4",
+      "keywords": [
+        "activities",
+        "bored",
+        "no interest",
+        "won't do anything",
+        "sits all day",
+        "tv all day",
+        "motivation",
+        "hobbies",
+        "engagement"
+      ]
+    },
+    "doesnt-want-to-go-anywhere-due-to-pain": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/doesnt-want-to-go-anywhere-due-to-pain.mp4",
+      "keywords": [
+        "pain",
+        "hurts",
+        "aches",
+        "won't go out",
+        "arthritis",
+        "sore",
+        "mobility",
+        "discomfort",
+        "outings"
+      ]
+    },
+    "says-no-to-everything": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/says-no-to-everything.mp4",
+      "keywords": [
+        "says no",
+        "no to everything",
+        "negative",
+        "refuses everything",
+        "stubborn",
+        "won't cooperate",
+        "resistant"
+      ]
+    }
+  },
+  "hallucinations": {
+    "seeing-animals-that-arent-there-eg-dogs": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cfy9pdSrWCG_Seeing-animals-that-arent-there.mp4",
+      "keywords": [
+        "hallucination",
+        "seeing things",
+        "animals",
+        "dogs",
+        "cats",
+        "snakes",
+        "mice",
+        "not there",
+        "visual"
+      ]
+    },
+    "seeing-bugs": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cfuq_s5up21_Seeing-bugs.mp4",
+      "keywords": [
+        "hallucination",
+        "bugs",
+        "insects",
+        "spiders",
+        "ants",
+        "crawling",
+        "skin",
+        "patterns",
+        "seeing things"
+      ]
+    },
+    "seeing-intruders-or-dangerous-people": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CfsGnflPfhx_Seeing-intruders-or-dangerous-people.mp4",
+      "keywords": [
+        "hallucination",
+        "intruder",
+        "strangers in the house",
+        "burglar",
+        "man in the house",
+        "scared",
+        "danger",
+        "seeing people"
+      ]
+    },
+    "seeing-deceased-relatives-or-kids": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cvnu8xXLE-r_Seeing-deceased-relatives-or-kids.mp4",
+      "keywords": [
+        "hallucination",
+        "seeing people",
+        "deceased",
+        "passed away",
+        "mom",
+        "dad",
+        "children",
+        "little girl",
+        "visitors",
+        "not there"
+      ]
+    }
+  },
+  "wandering": {
+    "constant-pacing": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C098neWOPWB_Constant-pacing.mp4",
+      "keywords": [
+        "pacing",
+        "restless",
+        "walking back and forth",
+        "can't sit still",
+        "agitated",
+        "anxious",
+        "moving constantly"
+      ]
+    },
+    "tendency-to-wander-or-leave-the-house": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0ubIhWOlG3_Tendency-to-wander-or-leave-the-house.mp4",
+      "keywords": [
+        "wandering",
+        "wanders off",
+        "leaves the house",
+        "gets lost",
+        "exit",
+        "door alarm",
+        "gps",
+        "safety",
+        "elopement"
+      ]
+    },
+    "rummaging-through-things": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C1DMsr8OiSC_Rummaging-through-things.mp4",
+      "keywords": [
+        "rummaging",
+        "digging through drawers",
+        "going through things",
+        "searching",
+        "messing with",
+        "hiding items",
+        "closets"
+      ]
+    }
+  },
+  "sundowning": {
+    "demanding-to-go-home-during-evening-hours": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Cv5qLSHtcKF_Demanding-to-go-home-during-evening-hours.mp4",
+      "keywords": [
+        "sundowning",
+        "evening",
+        "late afternoon",
+        "night",
+        "go home",
+        "agitated at night",
+        "dusk",
+        "worse at night"
+      ]
+    },
+    "screaming-during-sundowning": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/ChS8axJrW3o_Screaming-during-sundowning.mp4",
+      "keywords": [
+        "sundowning",
+        "screaming",
+        "yelling",
+        "evening",
+        "night",
+        "agitation",
+        "late day",
+        "crying out"
+      ]
+    },
+    "becoming-agitated-or-anxious-in-the-evening": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/Convfv-j_r1_Becoming-agitated-or-anxious-in-the-evening.mp4",
+      "keywords": [
+        "sundowning",
+        "evening",
+        "anxious",
+        "agitated",
+        "restless",
+        "night",
+        "late afternoon",
+        "confusion at night",
+        "lights"
+      ]
+    }
+  },
+  "other": {
+    "forgetting-family-members-or-the-caregivers-name": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C1X_a6oM9Le_Forgetting-family-members-or-the-caregivers-name.mp4",
+      "keywords": [
+        "forgets my name",
+        "doesn't know me",
+        "forgot who I am",
+        "doesn't recognize me",
+        "who are you",
+        "memory",
+        "names",
+        "family"
+      ]
+    },
+    "struggling-to-tell-the-caregiver-what-they-need": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CoFlAawOVb1_Struggling-to-tell-the-caregiver-what-they-need.mp4",
+      "keywords": [
+        "communication",
+        "can't find words",
+        "nonverbal",
+        "trouble speaking",
+        "aphasia",
+        "frustrated",
+        "expressing needs",
+        "understanding"
+      ]
+    },
+    "hoarding-items": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C02JjrUMccl_Hoarding-items.mp4",
+      "keywords": [
+        "hoarding",
+        "collecting",
+        "piles",
+        "clutter",
+        "hiding things",
+        "saving trash",
+        "napkins",
+        "stuffing pockets",
+        "tissues"
+      ]
+    },
+    "overfeeding-pets": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/C0r2aG3uEIP_Overfeeding-pets.mp4",
+      "keywords": [
+        "pet",
+        "pets",
+        "dog",
+        "cat",
+        "feeding",
+        "overfeeding",
+        "animals",
+        "treats",
+        "forgets they fed"
+      ]
+    },
+    "calling-the-caregiver-mom-or-someone-else": {
+      "videoUrl": "https://dementiacaregivingmadeeasy.s3.us-east-1.amazonaws.com/videos/CkGmWEKjfqG_Calling-the-caregiver-Mom-or-someone-else.mp4",
+      "keywords": [
+        "calls me mom",
+        "thinks I'm someone else",
+        "mistaken identity",
+        "confuses me with",
+        "wrong name",
+        "who they think I am"
+      ]
     }
   }
+}

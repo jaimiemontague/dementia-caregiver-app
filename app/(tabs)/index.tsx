@@ -10,6 +10,7 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { buildSearchIndex, search, type VideoData } from '@/utils/search';
 
 import videoData from '../../data/videoData.json';
 
@@ -39,35 +40,11 @@ export default function Page() {
     }, [])
   );
 
-  // Build a global search index
-  const searchIndex = useMemo(() => {
-    const index: { label: string; behavior: string; situation?: string }[] = [];
+  // Search over situation labels, their keywords and the behavior names, with word-form
+  // matching ("eating" finds "eat") and ranking by how directly each result matches.
+  const searchIndex = useMemo(() => buildSearchIndex(videoData as VideoData), []);
 
-    for (const [behavior, situations] of Object.entries(videoData)) {
-      index.push({ label: behavior, behavior });
-
-      for (const situation of Object.keys(situations)) {
-        index.push({
-          label: `${behavior} → ${situation}`,
-          behavior,
-          situation,
-        });
-      }
-    }
-
-    return index;
-  }, []);
-
-  const suggestions = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    if (!normalizedQuery) {
-      return [];
-    }
-
-    return searchIndex.filter(item =>
-      item.label.toLowerCase().includes(normalizedQuery)
-    );
-  }, [query, searchIndex]);
+  const suggestions = useMemo(() => search(searchIndex, query), [query, searchIndex]);
 
   const handleSelect = (item: { behavior: string; situation?: string }) => {
     if (item.situation) {
@@ -99,7 +76,7 @@ export default function Page() {
         <TextInput
           value={query}
           onChangeText={setQuery}
-          placeholder="Type behavior or situation"
+          placeholder="A word like food, shower, keys or sundowning"
           style={styles.searchInput}
         />
       </View>
