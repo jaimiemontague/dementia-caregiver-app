@@ -17,7 +17,6 @@ export const PLUS_COPY = {
 
   // Paywall: buying
   buyButton: 'Get Plus for [PRICE]',
-  buyButtonNoPrice: 'Get Plus',
   oneTime: 'One-time purchase. No subscription.',
   chargedIos: 'Payment is charged to your Apple Account when you confirm the purchase.',
   chargedAndroid: 'Payment is charged to your Google Play account when you confirm the purchase.',
@@ -43,7 +42,6 @@ export const PLUS_COPY = {
   pending: 'Your purchase is waiting for approval. Plus unlocks as soon as it goes through.',
   notAllowed: 'Purchases are turned off on this device.',
   network: "We couldn't reach the store. Check your connection and try again.",
-  alreadyOwned: 'You already own Plus. Tap Restore purchases to unlock it.',
   failed: 'Something went wrong. Please try again.',
 
   // Where free users meet Plus

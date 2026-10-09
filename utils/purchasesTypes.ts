@@ -15,4 +15,7 @@ export type BuyResult =
   | { status: 'purchased'; productId: string; transactionId: string | null; unlocked: boolean }
   | { status: 'cancelled' | 'pending' | 'not-allowed' | 'already-owned' | 'network' | 'failed' | 'unavailable' };
 
+/** A store transaction for one of the Plus products. */
+export type PlusTransaction = { productId: string; transactionId: string };
+
 export type RestoreResult = { status: 'restored' | 'nothing' | 'network' | 'failed' | 'unavailable' };

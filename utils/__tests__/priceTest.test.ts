@@ -1,3 +1,17 @@
+import { emailHash } from '../identity';
+import {
+  PLUS_EVENTS_URL,
+  PLUS_PRODUCTS,
+  PRICE_TEST_ID,
+  assignProduct,
+  flushPlusEvents,
+  priceTestUser,
+  recordAssignment,
+  recordPurchase,
+  rememberPendingPurchase,
+  settlePendingPurchase,
+} from '../priceTest';
+
 const mockStorage = new Map<string, string>();
 jest.mock('@/hooks/useWebStorage', () => ({
   Storage: {
@@ -10,18 +24,6 @@ jest.mock('@/hooks/useWebStorage', () => ({
     }),
   },
 }));
-
-import { emailHash } from '../identity';
-import {
-  PLUS_EVENTS_URL,
-  PLUS_PRODUCTS,
-  PRICE_TEST_ID,
-  assignProduct,
-  flushPlusEvents,
-  priceTestUser,
-  recordAssignment,
-  recordPurchase,
-} from '../priceTest';
 
 const fetchMock = jest.fn();
 const sentBodies = () => fetchMock.mock.calls.map(([, init]) => JSON.parse(init.body));
@@ -127,8 +129,29 @@ describe('recording', () => {
     await recordPurchase(user, { product: user.product, platform: 'ios', transactionId: '2000' });
     expect(queued()).toHaveLength(1);
 
+    // Not deployed yet: keep it.
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
+    await flushPlusEvents();
+    expect(queued()).toHaveLength(1);
+
     fetchMock.mockResolvedValueOnce({ ok: false, status: 400 });
     await flushPlusEvents();
     expect(queued()).toEqual([]);
+  });
+
+  it('records a purchase that was waiting for approval once the store approves it, once', async () => {
+    const user = await priceTestUser('caregiver@example.com');
+    const other = await priceTestUser('someone-else@example.com');
+    await rememberPendingPurchase(user);
+
+    // Another caregiver on the same phone does not settle it.
+    await settlePendingPurchase(other, { product: null, platform: 'ios', transactionId: null });
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    await rememberPendingPurchase(user);
+    await settlePendingPurchase(user, { product: 'help_now_plus_47', platform: 'ios', transactionId: '30001' });
+    await settlePendingPurchase(user, { product: 'help_now_plus_47', platform: 'ios', transactionId: '30001' });
+
+    expect(sentBodies()).toEqual([expect.objectContaining({ type: 'purchase', emailHash: user.emailHash, product: 'help_now_plus_47', transactionId: '30001' })]);
   });
 });

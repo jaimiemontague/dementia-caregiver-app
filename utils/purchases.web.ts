@@ -3,9 +3,9 @@
  * state. Same API as utils/purchases.ts, without loading the RevenueCat SDK at all.
  */
 import type { PlusProductId } from './priceTest';
-import type { BuyResult, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';
+import type { BuyResult, PlusTransaction, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';
 
-export type { BuyResult, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';
+export type { BuyResult, PlusTransaction, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';
 
 export const PLUS_ENTITLEMENT = 'plus';
 
@@ -18,6 +18,10 @@ export async function identifyPurchaser(_appUserId: string | null): Promise<void
 export async function forgetPurchaser(): Promise<void> {}
 
 export async function ownsPlus(): Promise<boolean | null> {
+  return null;
+}
+
+export async function latestPlusTransaction(): Promise<PlusTransaction | null> {
   return null;
 }
 
@@ -35,6 +39,6 @@ export async function restorePurchases(): Promise<RestoreResult> {
 
 export async function setPriceTestAttributes(_product: PlusProductId): Promise<void> {}
 
-export function onPlusChange(_listener: (ownsPlus: boolean) => void): () => void {
+export function onPlusChange(_listener: (ownsPlus: boolean, transaction: PlusTransaction | null) => void): () => void {
   return () => {};
 }

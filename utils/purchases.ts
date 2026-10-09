@@ -14,24 +14,26 @@ import { NativeModules, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import { isRunningInExpoGo } from 'expo';
 import type { CustomerInfo, PurchasesStoreProduct } from 'react-native-purchases';
-import { PRICE_TEST_ID, type PlusProductId } from './priceTest';
-import type { BuyResult, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';
+import { PRICE_TEST_ID, isPlusProduct, type PlusProductId } from './priceTest';
+import type { BuyResult, PlusTransaction, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';
 
-export type { BuyResult, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';
+export type { BuyResult, PlusTransaction, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';
 
 export const PLUS_ENTITLEMENT = 'plus';
 
 type Sdk = typeof import('react-native-purchases');
 
-let sdkPromise: Promise<Sdk> | null = null;
+let sdk: Sdk | null = null;
 let configured = false;
 let currentUser: string | null = null;
 let identifying: Promise<void> = Promise.resolve();
 const products = new Map<string, PurchasesStoreProduct>();
 
-function loadSdk(): Promise<Sdk> {
-  if (!sdkPromise) sdkPromise = import('react-native-purchases');
-  return sdkPromise;
+/** Loaded on first use, and only once purchasesSupport() has said the native module is there. */
+function loadSdk(): Sdk {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  if (!sdk) sdk = require('react-native-purchases') as Sdk;
+  return sdk;
 }
 
 function apiKey(): string {
@@ -49,6 +51,14 @@ function ownsPlusIn(info: CustomerInfo): boolean {
   return Boolean(info.entitlements.active[PLUS_ENTITLEMENT]);
 }
 
+/** The most recent store transaction for one of the Plus products. */
+function latestPlusTransactionIn(info: CustomerInfo): PlusTransaction | null {
+  const plus = (info.nonSubscriptionTransactions ?? [])
+    .filter((transaction) => isPlusProduct(transaction.productIdentifier))
+    .sort((a, b) => String(b.purchaseDate).localeCompare(String(a.purchaseDate)));
+  return plus.length ? { productId: plus[0].productIdentifier, transactionId: plus[0].transactionIdentifier } : null;
+}
+
 /** Store calls that change who RevenueCat is talking about run one at a time, in order. */
 function inTurn(task: () => Promise<void>): Promise<void> {
   const run = identifying.then(task);
@@ -63,7 +73,7 @@ function inTurn(task: () => Promise<void>): Promise<void> {
 export function identifyPurchaser(appUserId: string | null): Promise<void> {
   return inTurn(async () => {
     if (purchasesSupport() !== 'ready') return;
-    const { default: Purchases } = await loadSdk();
+    const { default: Purchases } = loadSdk();
     if (!configured) {
       Purchases.configure({ apiKey: apiKey(), appUserID: appUserId });
       configured = true;
@@ -84,7 +94,7 @@ export function identifyPurchaser(appUserId: string | null): Promise<void> {
 export function forgetPurchaser(): Promise<void> {
   return inTurn(async () => {
     if (!configured || currentUser === null) return;
-    const { default: Purchases } = await loadSdk();
+    const { default: Purchases } = loadSdk();
     if (!(await Purchases.isAnonymous())) await Purchases.logOut();
     currentUser = null;
   });
@@ -103,6 +113,17 @@ export async function ownsPlus(): Promise<boolean | null> {
   if (!sdk) return null;
   try {
     return ownsPlusIn(await sdk.default.getCustomerInfo());
+  } catch {
+    return null;
+  }
+}
+
+/** The latest Plus transaction of the current RevenueCat user, for recording a purchase approved later. */
+export async function latestPlusTransaction(): Promise<PlusTransaction | null> {
+  const sdk = await readySdk();
+  if (!sdk) return null;
+  try {
+    return latestPlusTransactionIn(await sdk.default.getCustomerInfo());
   } catch {
     return null;
   }
@@ -180,21 +201,12 @@ export async function setPriceTestAttributes(product: PlusProductId): Promise<vo
 }
 
 /** Calls back whenever RevenueCat reports new customer info (an approved pending purchase, a refund). */
-export function onPlusChange(listener: (ownsPlus: boolean) => void): () => void {
+export function onPlusChange(listener: (ownsPlus: boolean, transaction: PlusTransaction | null) => void): () => void {
   if (purchasesSupport() !== 'ready') return () => {};
-  let active = true;
-  const handler = (info: CustomerInfo) => {
-    if (active) listener(ownsPlusIn(info));
-  };
-  loadSdk()
-    .then((sdk) => {
-      if (active) sdk.default.addCustomerInfoUpdateListener(handler);
-    })
-    .catch(() => undefined);
+  const handler = (info: CustomerInfo) => listener(ownsPlusIn(info), latestPlusTransactionIn(info));
+  const { default: Purchases } = loadSdk();
+  Purchases.addCustomerInfoUpdateListener(handler);
   return () => {
-    active = false;
-    loadSdk()
-      .then((sdk) => sdk.default.removeCustomerInfoUpdateListener(handler))
-      .catch(() => undefined);
+    Purchases.removeCustomerInfoUpdateListener(handler);
   };
 }

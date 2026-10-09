@@ -8,6 +8,8 @@ import {
   priceTestUser,
   recordAssignment,
   recordPurchase,
+  rememberPendingPurchase,
+  settlePendingPurchase,
   type PlusProductId,
   type PriceTestUser,
 } from '@/utils/priceTest';
@@ -15,6 +17,7 @@ import {
   buyProduct,
   forgetPurchaser,
   identifyPurchaser,
+  latestPlusTransaction,
   loadProduct,
   onPlusChange,
   ownsPlus,
@@ -106,6 +109,15 @@ export function PlusProvider({ children }: { children: React.ReactNode }) {
         await setPriceTestAttributes(testUser.product);
         const owns = await ownsPlus();
         if (!cancelled && owns !== null) await setStorePlus(owns, email);
+        if (!cancelled && owns) {
+          // A purchase that was waiting for approval last time went through.
+          const transaction = await latestPlusTransaction();
+          await settlePendingPurchase(testUser, {
+            product: transaction?.productId ?? null,
+            platform: Platform.OS,
+            transactionId: transaction?.transactionId ?? null,
+          });
+        }
       } catch {
         // The store is unreachable: keep the saved tier and try again next time.
       } finally {
@@ -120,9 +132,18 @@ export function PlusProvider({ children }: { children: React.ReactNode }) {
   // Pending purchases that get approved later, refunds, purchases made from the store itself.
   useEffect(
     () =>
-      onPlusChange((owns) => {
+      onPlusChange((owns, transaction) => {
         const current = emailRef.current;
-        if (current !== null && identifiedRef.current === current) setStorePlus(owns, current);
+        const testUser = userRef.current;
+        if (current === null || identifiedRef.current !== current) return;
+        setStorePlus(owns, current);
+        if (owns && testUser) {
+          settlePendingPurchase(testUser, {
+            product: transaction?.productId ?? null,
+            platform: Platform.OS,
+            transactionId: transaction?.transactionId ?? null,
+          }).catch(() => undefined);
+        }
       }),
     [setStorePlus],
   );
@@ -173,6 +194,8 @@ export function PlusProvider({ children }: { children: React.ReactNode }) {
       }
       // The store says this account already owns Plus: restore it rather than send them hunting.
       if (result.status === 'already-owned') return await restoreFor(forEmail);
+      // Recorded once the store approves it (on a later refresh or a store update).
+      if (result.status === 'pending') await rememberPendingPurchase(testUser);
       return result.status;
     } finally {
       setBusy(false);

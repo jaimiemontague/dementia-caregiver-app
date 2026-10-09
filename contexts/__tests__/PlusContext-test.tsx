@@ -32,6 +32,7 @@ const mockStore = {
   forgetPurchaser: jest.fn(async () => undefined),
   setPriceTestAttributes: jest.fn(async (_product: string) => undefined),
   ownsPlus: jest.fn(async (): Promise<boolean | null> => false),
+  latestPlusTransaction: jest.fn(async (): Promise<{ productId: string; transactionId: string } | null> => null),
   loadProduct: jest.fn(async (id: string) => ({ id, priceString: '$37.00' })),
   buyProduct: jest.fn(),
   restorePurchases: jest.fn(),
@@ -43,6 +44,7 @@ jest.mock('@/utils/purchases', () => ({
   forgetPurchaser: () => mockStore.forgetPurchaser(),
   setPriceTestAttributes: (product: string) => mockStore.setPriceTestAttributes(product),
   ownsPlus: () => mockStore.ownsPlus(),
+  latestPlusTransaction: () => mockStore.latestPlusTransaction(),
   loadProduct: (id: string) => mockStore.loadProduct(id),
   buyProduct: (id: string) => mockStore.buyProduct(id),
   restorePurchases: () => mockStore.restorePurchases(),
@@ -160,6 +162,27 @@ describe('PlusProvider', () => {
 
     expect(outcome).toBe('restored');
     expect(mockAuth.setStorePlus).toHaveBeenLastCalledWith(true, EMAIL);
+  });
+
+  it('records a purchase that was waiting for approval when a later start finds it approved', async () => {
+    mockStore.buyProduct.mockResolvedValueOnce({ status: 'pending' });
+    await mount();
+
+    let outcome: PlusOutcome | undefined;
+    await act(async () => {
+      outcome = await plus.buy();
+    });
+    expect(outcome).toBe('pending');
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    // Next app start: the store now says Plus is owned.
+    mockStore.ownsPlus.mockResolvedValueOnce(true);
+    mockStore.latestPlusTransaction.mockResolvedValueOnce({ productId: PRODUCT, transactionId: 'tx-9' });
+    await mount();
+
+    expect(mockAuth.setStorePlus).toHaveBeenLastCalledWith(true, EMAIL);
+    const bodies = fetchMock.mock.calls.map(([, init]) => JSON.parse(init.body));
+    expect(bodies).toEqual([expect.objectContaining({ type: 'purchase', product: PRODUCT, transactionId: 'tx-9' })]);
   });
 
   it('reports a cancelled purchase and an empty restore without unlocking anything', async () => {

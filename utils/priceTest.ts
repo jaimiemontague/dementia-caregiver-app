@@ -44,6 +44,9 @@ type QueuedEvent = PlusEventBody & {
 const DEVICE_ID_KEY = 'plus_device_id';
 const QUEUE_KEY = 'plus_events_queue';
 const RECORDED_KEY = 'plus_assignments_recorded';
+const PENDING_KEY = 'plus_pending_purchase';
+// Not found (the function isn't deployed yet), timeout, too many requests: worth another try.
+const RETRY_STATUSES = new Set([404, 408, 429]);
 const MAX_QUEUE = 50;
 const SEND_TIMEOUT_MS = 10000;
 
@@ -81,6 +84,10 @@ export async function priceTestUser(email: string | null | undefined): Promise<P
   return { emailHash: null, deviceHash, product: assignProduct(`device:${deviceHash}`) };
 }
 
+function userMarker(user: PriceTestUser): string {
+  return user.emailHash ?? `device:${user.deviceHash}`;
+}
+
 async function readList<T>(key: string): Promise<T[]> {
   try {
     const raw = await Storage.getItem(key);
@@ -106,7 +113,7 @@ async function enqueue(user: PriceTestUser, body: PlusEventBody, product: PlusPr
 
 /** Record that this caregiver has seen their price. Once per caregiver and test. */
 export async function recordAssignment(user: PriceTestUser, now: Date = new Date()): Promise<void> {
-  const marker = `${PRICE_TEST_ID}:${user.emailHash ?? `device:${user.deviceHash}`}`;
+  const marker = `${PRICE_TEST_ID}:${userMarker(user)}`;
   const recorded = await readList<string>(RECORDED_KEY);
   if (recorded.includes(marker)) return;
   await enqueue(user, { type: 'assignment', assignedAt: now.toISOString() });
@@ -128,7 +135,34 @@ export async function recordPurchase(
   await flushPlusEvents();
 }
 
-/** True when the event is done with: stored, or refused for good (a 4xx never improves). */
+/**
+ * A purchase the store is still waiting to approve (Ask to Buy, a slow payment method).
+ * It is recorded by settlePendingPurchase once the store reports Plus as owned.
+ */
+export async function rememberPendingPurchase(user: PriceTestUser): Promise<void> {
+  await Storage.setItem(PENDING_KEY, JSON.stringify({ user: userMarker(user), product: user.product }));
+}
+
+/** Record a remembered pending purchase now that the store has approved it (once, for the caregiver who made it). */
+export async function settlePendingPurchase(
+  user: PriceTestUser,
+  approved: { product: string | null; platform: string; transactionId: string | null },
+): Promise<void> {
+  const raw = await Storage.getItem(PENDING_KEY);
+  if (!raw) return;
+  await Storage.removeItem(PENDING_KEY);
+  let pending: { user?: string; product?: string } | null = null;
+  try {
+    pending = JSON.parse(raw);
+  } catch {
+    pending = null;
+  }
+  if (!pending || pending.user !== userMarker(user)) return;
+  const product = isPlusProduct(approved.product) ? approved.product : isPlusProduct(pending.product) ? pending.product : user.product;
+  await recordPurchase(user, { product, platform: approved.platform, transactionId: approved.transactionId });
+}
+
+/** True when the event is done with: stored, or refused for good (a bad request never improves). */
 async function send(event: QueuedEvent): Promise<boolean> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), SEND_TIMEOUT_MS);
@@ -139,7 +173,7 @@ async function send(event: QueuedEvent): Promise<boolean> {
       body: JSON.stringify(event),
       signal: controller.signal,
     });
-    return response.ok || (response.status >= 400 && response.status < 500);
+    return response.ok || (response.status >= 400 && response.status < 500 && !RETRY_STATUSES.has(response.status));
   } catch {
     return false;
   } finally {
