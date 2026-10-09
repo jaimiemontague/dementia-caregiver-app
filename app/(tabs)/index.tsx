@@ -8,6 +8,7 @@ import HorizontalScrollSection from '../../components/HorizontalScrollSection';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useFavorites } from '@/hooks/useFavorites';
+import { useAuth } from '@/contexts/AuthContext';
 
 import videoData from '../../data/videoData.json';
 
@@ -26,6 +27,7 @@ export default function Page() {
   const router = useRouter();
   const { recentVideos, refreshRecentVideos } = useRecentlyViewed();
   const { favoriteVideos, refreshFavorites } = useFavorites();
+  const { authData, logout } = useAuth();
 
   // Refresh recent videos and favorites when screen is focused
   useFocusEffect(
@@ -158,14 +160,32 @@ export default function Page() {
       {/* Favorites Section */}
       {favoriteVideos.length > 0 && !suggestions.length && (
         <View style={styles.favoritesSection}>
-          <HorizontalScrollSection 
-            title="Favorites" 
+          <HorizontalScrollSection
+            title="Favorites"
             subtitle="Your saved videos"
           >
             {favoriteVideos.map((video, index) => (
               <FavoriteCard key={`${video.behavior}-${video.situation}-${index}`} video={video} />
             ))}
           </HorizontalScrollSection>
+        </View>
+      )}
+
+      {/* Log out: clears the saved login so another email can be used */}
+      {!suggestions.length && (
+        <View style={styles.logoutRow}>
+          <Text style={styles.logoutEmail}>
+            {authData?.email ? `Logged in as ${authData.email}` : ''}
+          </Text>
+          <TouchableOpacity
+            onPress={async () => {
+              await logout();
+              router.replace('/login');
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={styles.logoutLink}>Log out</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View></ScrollView>
@@ -252,5 +272,21 @@ const styles = StyleSheet.create({
   },
   favoritesSection: {
     marginTop: 0,
+  },
+  logoutRow: {
+    marginTop: 36,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+  },
+  logoutEmail: {
+    fontSize: 13,
+    color: '#888',
+    marginBottom: 6,
+    textAlign: 'center',
+  },
+  logoutLink: {
+    fontSize: 15,
+    color: '#1e90ff',
+    textDecorationLine: 'underline',
   },
 });
