@@ -17,6 +17,10 @@ export async function identifyPurchaser(_appUserId: string | null): Promise<void
 
 export async function forgetPurchaser(): Promise<void> {}
 
+export async function purchaserIs(_appUserId: string | null): Promise<boolean> {
+  return false;
+}
+
 export async function ownsPlus(): Promise<boolean | null> {
   return null;
 }

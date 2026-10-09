@@ -5,9 +5,11 @@ import { emailHash, normalizeEmail } from '@/utils/identity';
 import {
   flushPlusEvents,
   isPlusProduct,
+  offerFor,
   priceTestUser,
   recordAssignment,
   recordPurchase,
+  rememberDeviceProduct,
   rememberPendingPurchase,
   settlePendingPurchase,
   type PlusProductId,
@@ -21,6 +23,7 @@ import {
   loadProduct,
   onPlusChange,
   ownsPlus,
+  purchaserIs,
   purchasesSupport,
   restorePurchases,
   setPriceTestAttributes,
@@ -63,6 +66,20 @@ interface PlusContextType {
 
 const PlusContext = createContext<PlusContextType | undefined>(undefined);
 
+/**
+ * Point RevenueCat at this session's caregiver and confirm it took. False when the store
+ * can't be reached: then nothing is bought, restored or taken away for anyone.
+ */
+async function ensurePurchaser(email: string): Promise<boolean> {
+  const appUserId = email ? emailHash(email) : null;
+  try {
+    await identifyPurchaser(appUserId);
+    return await purchaserIs(appUserId);
+  } catch {
+    return false;
+  }
+}
+
 export function PlusProvider({ children }: { children: React.ReactNode }) {
   const { authData, isAuthenticated, isMember, loading, setStorePlus } = useAuth();
   const email = isAuthenticated ? normalizeEmail(authData?.email) : null;
@@ -89,7 +106,7 @@ export function PlusProvider({ children }: { children: React.ReactNode }) {
     if (loading) return;
     let cancelled = false;
     (async () => {
-      const testUser = email !== null ? await priceTestUser(email) : null;
+      const testUser = email !== null ? await offerFor(await priceTestUser(email)) : null;
       if (cancelled) return;
       userRef.current = testUser;
       setUser(testUser);
@@ -103,8 +120,8 @@ export function PlusProvider({ children }: { children: React.ReactNode }) {
           await forgetPurchaser();
           return;
         }
-        await identifyPurchaser(email ? emailHash(email) : null);
-        if (cancelled) return;
+        // Unreachable store: keep the saved tier and try again next time.
+        if (!(await ensurePurchaser(email)) || cancelled) return;
         identifiedRef.current = email;
         await setPriceTestAttributes(testUser.product);
         const owns = await ownsPlus();
@@ -164,10 +181,15 @@ export function PlusProvider({ children }: { children: React.ReactNode }) {
   }, [support]);
 
   const restoreFor = useCallback(
-    async (forEmail: string | null): Promise<PlusOutcome> => {
+    async (forEmail: string): Promise<PlusOutcome> => {
+      // A restore filed under anyone else would move the purchase to them.
+      if (!(await ensurePurchaser(forEmail))) return 'network';
+      identifiedRef.current = forEmail;
       const result = await restorePurchases();
       if (result.status === 'restored') {
-        if (forEmail !== null) await setStorePlus(true, forEmail);
+        const transaction = await latestPlusTransaction();
+        await rememberDeviceProduct(transaction?.productId);
+        await setStorePlus(true, forEmail);
         return 'restored';
       }
       return result.status === 'nothing' ? 'nothing-to-restore' : result.status;
@@ -178,18 +200,23 @@ export function PlusProvider({ children }: { children: React.ReactNode }) {
   const buy = useCallback(async (): Promise<PlusOutcome> => {
     const testUser = userRef.current;
     const forEmail = emailRef.current;
-    if (support !== 'ready' || !testUser) return 'unavailable';
+    if (support !== 'ready' || !testUser || forEmail === null) return 'unavailable';
     setBusy(true);
     try {
+      // A purchase made while RevenueCat is on anyone else would be filed under them.
+      if (!(await ensurePurchaser(forEmail))) return 'network';
+      identifiedRef.current = forEmail;
       const result = await buyProduct(testUser.product);
       if (result.status === 'purchased') {
+        const product = isPlusProduct(result.productId) ? result.productId : testUser.product;
+        rememberDeviceProduct(product).catch(() => undefined);
         recordPurchase(testUser, {
-          product: isPlusProduct(result.productId) ? result.productId : testUser.product,
+          product,
           platform: Platform.OS,
           transactionId: result.transactionId,
         }).catch(() => undefined);
         if (!result.unlocked) return 'failed';
-        if (forEmail !== null) await setStorePlus(true, forEmail);
+        await setStorePlus(true, forEmail);
         return 'purchased';
       }
       // The store says this account already owns Plus: restore it rather than send them hunting.
@@ -203,10 +230,11 @@ export function PlusProvider({ children }: { children: React.ReactNode }) {
   }, [support, setStorePlus, restoreFor]);
 
   const restore = useCallback(async (): Promise<PlusOutcome> => {
-    if (support !== 'ready') return 'unavailable';
+    const forEmail = emailRef.current;
+    if (support !== 'ready' || forEmail === null) return 'unavailable';
     setBusy(true);
     try {
-      return await restoreFor(emailRef.current);
+      return await restoreFor(forEmail);
     } finally {
       setBusy(false);
     }

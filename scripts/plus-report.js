@@ -7,11 +7,17 @@
  *   NETLIFY_SITE_ID=<site id> NETLIFY_AUTH_TOKEN=<personal access token> npm run plus:report
  *   npm run plus:report -- --test plus-price-2026-10   which test (default: PRICE_TEST_ID in utils/priceTest.ts)
  *   npm run plus:report -- --json                      the summary as JSON
+ *   npm run plus:report -- --matched-only              only caregivers the login log knows (see below)
  *   npm run plus:report -- --hash someone@example.com  the emailHash for one email, to find that
  *                                                      caregiver in RevenueCat or the login log
  *
  * Gross is at the US list price in the product id; store fees, tax and local prices are not
  * in it. RevenueCat has what was actually paid.
+ *
+ * plus-events is an open endpoint, so the report checks each record's emailHash against the
+ * login log (users/<emailHash> in the "app-logins" store). A record no login matches is
+ * counted and flagged; --matched-only leaves those out. A store transaction recorded under
+ * two caregivers (a second email restoring on the same phone) counts once.
  */
 const crypto = require('crypto');
 const fs = require('fs');
@@ -40,8 +46,29 @@ function userOf(record) {
   return record.emailHash ? `e-${record.emailHash}` : `d-${record.deviceHash}`;
 }
 
-/** Per-product numbers from the assignment and purchase records. */
-function summarize(assignments, purchases) {
+/**
+ * Per-product numbers from the assignment and purchase records. knownUsers is the set of
+ * emailHashes with a login record (or null when the login log could not be read).
+ */
+function summarize(allAssignments, allPurchases, { knownUsers = null, matchedOnly = false } = {}) {
+  const matched = (record) => !knownUsers || Boolean(record.emailHash && knownUsers.has(record.emailHash));
+
+  let duplicateTransactions = 0;
+  const transactions = new Set();
+  const uniquePurchases = allPurchases.filter((record) => {
+    if (!record.transactionId) return true;
+    if (transactions.has(record.transactionId)) {
+      duplicateTransactions += 1;
+      return false;
+    }
+    transactions.add(record.transactionId);
+    return true;
+  });
+  const unmatchedAssignments = knownUsers ? allAssignments.filter((record) => !matched(record)).length : null;
+  const unmatchedPurchases = knownUsers ? uniquePurchases.filter((record) => !matched(record)).length : null;
+  const assignments = matchedOnly ? allAssignments.filter(matched) : allAssignments;
+  const purchases = matchedOnly ? uniquePurchases.filter(matched) : uniquePurchases;
+
   const rows = new Map(
     PRODUCTS.map((product) => [product, { product, listPrice: listPrice(product), saw: 0, buyers: new Set(), purchases: 0, platforms: {}, gross: 0 }]),
   );
@@ -85,7 +112,7 @@ function summarize(assignments, purchases) {
     (sum, r) => ({ saw: sum.saw + r.saw, buyers: sum.buyers + r.buyers, purchases: sum.purchases + r.purchases, gross: sum.gross + r.gross }),
     { saw: 0, buyers: 0, purchases: 0, gross: 0 },
   );
-  return { products, total, notes: { withoutAssignment, otherProduct } };
+  return { products, total, notes: { withoutAssignment, otherProduct, duplicateTransactions, unmatchedAssignments, unmatchedPurchases, matchedOnly: Boolean(matchedOnly && knownUsers) } };
 }
 
 function percent(value) {
@@ -108,7 +135,13 @@ function formatReport(testId, summary, readAt) {
   line('total', '', summary.total);
   lines.push('');
   if (summary.notes.withoutAssignment) lines.push(`Note: ${summary.notes.withoutAssignment} purchase(s) with no assignment record (the app could not send it).`);
-  if (summary.notes.otherProduct) lines.push(`Note: ${summary.notes.otherProduct} purchase(s) of a product other than the one assigned.`);
+  if (summary.notes.otherProduct) lines.push(`Note: ${summary.notes.otherProduct} purchase(s) of a product other than the one assigned (a second email on a phone that already bought Plus is offered that product).`);
+  if (summary.notes.duplicateTransactions) lines.push(`Note: ${summary.notes.duplicateTransactions} purchase record(s) repeat a store transaction already counted.`);
+  if (summary.notes.unmatchedAssignments === null) {
+    lines.push('Note: the login log could not be read, so records were not checked against logins.');
+  } else if (summary.notes.unmatchedAssignments || summary.notes.unmatchedPurchases) {
+    lines.push(`Note: ${summary.notes.unmatchedAssignments} assignment and ${summary.notes.unmatchedPurchases} purchase record(s) match no login in the login log${summary.notes.matchedOnly ? ' and are left out' : '; --matched-only leaves them out'}.`);
+  }
   lines.push('Gross is at list price, before store fees and tax. RevenueCat has what was actually paid.');
   return lines.join('\n');
 }
@@ -145,7 +178,14 @@ async function main(argv) {
     readRecords(store, `assignments/${testId}/`),
     readRecords(store, `purchases/${testId}/`),
   ]);
-  const summary = summarize(assignments, purchases);
+  let knownUsers = null;
+  try {
+    const { blobs } = await getStore({ name: 'app-logins', siteID, token }).list({ prefix: 'users/' });
+    knownUsers = new Set(blobs.map((blob) => blob.key.slice('users/'.length)));
+  } catch {
+    knownUsers = null;
+  }
+  const summary = summarize(assignments, purchases, { knownUsers, matchedOnly: argv.includes('--matched-only') });
   if (argv.includes('--json')) {
     console.log(JSON.stringify({ test: testId, ...summary }, null, 2));
   } else {

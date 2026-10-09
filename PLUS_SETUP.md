@@ -29,7 +29,8 @@ The code is done on branch `member-layer` (October 9, 2026). Nothing below has b
 4. **Users and Access > Integrations > In-App Purchase**: generate a key and download the .p8 (it downloads once). Note the Key ID and the Issuer ID. RevenueCat needs them (section 4).
 5. **Users and Access > Sandbox > Testers > +**: one tester per person testing, each with an email that has never been an Apple Account.
 6. **App Privacy**: purchases are now collected through RevenueCat. Review the declarations for Purchase History and add RevenueCat to the privacy policy's list of processors. The RevenueCat user id is a 12-character hash of the login email.
-7. **App Review Information**: give a free-tier demo login (an email in Mailchimp or Kartra with no membership and no `App Plus` tag). A member login never sees Plus. Say where Plus is: the "Help Now Plus" row on Home, or "Get Plus" on any cheat sheet card. Mention nothing else about how Plus is sold.
+7. **App Review Information**: give a free-tier demo login (an email in Mailchimp or Kartra with no membership and no `App Plus` tag). A member login never sees Plus. Say where Plus is: the "Help Now Plus" row on Home, or "Get Plus" on any cheat sheet card. Say why a login comes first: the whole app works by the email the caregiver signed up with, and Plus is tied to that login so it follows them to any phone (Apple has questioned purchases that need an account first, guideline 5.1.1(v)). Mention nothing else about how Plus is sold.
+8. **The Privacy Policy link** opens the policy on dementiasuccesspath.com, the page the store listings use. That site's header has the cart and the member login. If App Review objects under 3.1.1, publish a bare policy page with no site navigation and point `PLUS_LINKS.privacy` in `constants/plusCopy.ts` at it.
 
 ## 3. Google Play Console
 
@@ -102,8 +103,10 @@ On the iPhone: Settings > Privacy & Security > Developer Mode on, then Settings 
 ## 8. Reading the price test
 
 - Each caregiver gets one product from the hash of their login email, the same on every phone and in every session. `PRICE_TEST_ID` in `utils/priceTest.ts` names the test; changing it starts a new one.
+- One exception, to protect buyers: once a phone has bought or restored Plus, the next email that logs in on that phone is offered the same product. Each price is a separate store product, and a store only refuses to charge twice for the same product; this way the store says "already purchased" and hands it over instead. The report notes these as purchases of a product other than the one assigned.
 - The app records the assignment the first time it shows the caregiver their price, and every purchase. "Saw price" in the report is therefore the caregivers who were actually offered that price.
-- `npm run plus:report` prints, per product: saw price, buyers, conversion, purchases by platform, gross at list price. `--json` gives the same as JSON.
+- `npm run plus:report` prints, per product: saw price, buyers, conversion, purchases by platform, gross at list price. `--json` gives the same as JSON. A store transaction recorded under two emails counts once.
+- The report checks every record against the login log (`users/<emailHash>` in the Netlify Blobs store `app-logins`, written by the login function). Records that match no login are counted in a note; `--matched-only` leaves them out. Use it if the numbers ever look inflated: plus-events is an open endpoint.
 - Judge the prices by revenue per caregiver who saw the price (conversion times price), not by conversion alone.
 - Small numbers mislead. At the usual thresholds (95% confidence, 80% power), telling 3% conversion from 2% takes about 3,800 caregivers per price. Before that, treat differences as direction only.
 - RevenueCat has the money actually paid (local prices, store fees, refunds). The Blobs log is for reading the test, and it is an open endpoint, so it could be polluted; cross-check buyers against RevenueCat.
@@ -113,7 +116,7 @@ On the iPhone: Settings > Privacy & Security > Developer Mode on, then Settings 
 
 ## 9. Before the store release
 
-- [ ] `[PLUS PROMISE]` replaced; every string in section 10 approved (Krista for anything that promises something).
+- [ ] `[PLUS PROMISE]` replaced; every string in section 10 approved (Krista for anything that promises something). A production EAS build stops with "Replace [PLUS PROMISE] in constants/plusCopy.ts" until it is (`app.config.js`).
 - [ ] Keys in the EAS `production` environment.
 - [ ] Six products live and attached to `plus` in RevenueCat; App Store products added to the app version.
 - [ ] Section 7 passed on an iPhone and an Android phone.

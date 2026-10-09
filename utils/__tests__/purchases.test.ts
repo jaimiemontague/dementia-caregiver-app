@@ -25,13 +25,25 @@ const info = (ownsPlus: boolean) => ({
 
 const storeError = (code: string) => Object.assign(new Error(`store error ${code}`), { code, userInfo: { readableErrorCode: 'TEST' } });
 
-const setupPurchases = jest.fn();
+// The user the fake store is on, as RevenueCat's native SDK keeps it.
+const ANONYMOUS = '$RCAnonymousID:test';
+let storeUser = ANONYMOUS;
+const setupPurchases = jest.fn((_apiKey: string, appUserID: string | null) => {
+  storeUser = appUserID ?? ANONYMOUS;
+});
 const native = {
   setupPurchases,
   isConfigured: jest.fn(async () => setupPurchases.mock.calls.length > 0),
-  logIn: jest.fn(async (_id: string) => ({ customerInfo: info(false), created: false })),
-  logOut: jest.fn(async () => info(false)),
-  isAnonymous: jest.fn(async () => false),
+  getAppUserID: jest.fn(async () => storeUser),
+  logIn: jest.fn(async (id: string) => {
+    storeUser = id;
+    return { customerInfo: info(false), created: false };
+  }),
+  logOut: jest.fn(async () => {
+    storeUser = ANONYMOUS;
+    return info(false);
+  }),
+  isAnonymous: jest.fn(async () => storeUser === ANONYMOUS),
   getCustomerInfo: jest.fn(async () => info(false)),
   getProductInfo: jest.fn(async (ids: string[], _type: string) =>
     ids.map((id) => ({ identifier: id, priceString: '$37.00', price: 37, currencyCode: 'USD', title: 'Help Now Plus', description: '', productCategory: 'NON_SUBSCRIPTION' })),
@@ -61,6 +73,7 @@ function load(): Purchases {
 
 beforeEach(() => {
   jest.clearAllMocks();
+  storeUser = ANONYMOUS;
 });
 
 it('is ready with the native module and a key', () => {
@@ -83,6 +96,28 @@ it('configures once with the emailHash, then logs in, out and back in as the car
   await purchases.identifyPurchaser('ba9876543210');
   expect(native.logIn).toHaveBeenCalledWith('ba9876543210');
   expect(native.setupPurchases).toHaveBeenCalledTimes(1);
+});
+
+it('asks the store who it is on, so a failed log-in or log-out is never taken for a success', async () => {
+  const purchases = load();
+  await purchases.identifyPurchaser('0123456789ab');
+
+  // Log-out switches users on the phone, then fails to reach RevenueCat.
+  native.logOut.mockImplementationOnce(async () => {
+    storeUser = ANONYMOUS;
+    throw Object.assign(new Error('offline'), { code: '10' });
+  });
+  await expect(purchases.forgetPurchaser()).rejects.toBeTruthy();
+  await purchases.identifyPurchaser('0123456789ab');
+  expect(native.logIn).toHaveBeenCalledWith('0123456789ab');
+  expect(await purchases.purchaserIs('0123456789ab')).toBe(true);
+
+  // Log-in fails: the store stays where it was, and nobody is told otherwise.
+  native.logIn.mockRejectedValueOnce(Object.assign(new Error('timeout'), { code: '10' }));
+  await expect(purchases.identifyPurchaser('ba9876543210')).rejects.toBeTruthy();
+  expect(await purchases.purchaserIs('ba9876543210')).toBe(false);
+  await purchases.identifyPurchaser('ba9876543210');
+  expect(await purchases.purchaserIs('ba9876543210')).toBe(true);
 });
 
 it('never starts the SDK just to forget someone (members, logged-out phones)', async () => {

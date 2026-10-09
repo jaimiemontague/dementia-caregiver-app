@@ -25,7 +25,6 @@ type Sdk = typeof import('react-native-purchases');
 
 let sdk: Sdk | null = null;
 let configured = false;
-let currentUser: string | null = null;
 let identifying: Promise<void> = Promise.resolve();
 const products = new Map<string, PurchasesStoreProduct>();
 
@@ -67,8 +66,17 @@ function inTurn(task: () => Promise<void>): Promise<void> {
 }
 
 /**
+ * Is RevenueCat on this caregiver right now (null: an anonymous buyer)? Always asks the SDK:
+ * a log-in that failed, or a log-out that switched users and then failed, leaves it on a user
+ * nobody asked for, and a purchase made then would be filed under that user.
+ */
+async function isCurrentPurchaser(Purchases: Sdk['default'], appUserId: string | null): Promise<boolean> {
+  return appUserId ? (await Purchases.getAppUserID()) === appUserId : Purchases.isAnonymous();
+}
+
+/**
  * Point RevenueCat at the caregiver who may buy: their emailHash, or null for an
- * anonymous buyer (a session without an email).
+ * anonymous buyer (a session without an email). Rejects when the store can't be reached.
  */
 export function identifyPurchaser(appUserId: string | null): Promise<void> {
   return inTurn(async () => {
@@ -77,27 +85,32 @@ export function identifyPurchaser(appUserId: string | null): Promise<void> {
     if (!configured) {
       Purchases.configure({ apiKey: apiKey(), appUserID: appUserId });
       configured = true;
-      currentUser = appUserId;
       return;
     }
-    if (appUserId === currentUser) return;
-    if (appUserId) {
-      await Purchases.logIn(appUserId);
-    } else if (!(await Purchases.isAnonymous())) {
-      await Purchases.logOut();
-    }
-    currentUser = appUserId;
+    if (await isCurrentPurchaser(Purchases, appUserId)) return;
+    if (appUserId) await Purchases.logIn(appUserId);
+    else await Purchases.logOut();
   });
 }
 
 /** After a logout, or for a member: stop pointing at anyone. Never starts the SDK. */
 export function forgetPurchaser(): Promise<void> {
   return inTurn(async () => {
-    if (!configured || currentUser === null) return;
+    if (!configured) return;
     const { default: Purchases } = loadSdk();
     if (!(await Purchases.isAnonymous())) await Purchases.logOut();
-    currentUser = null;
   });
+}
+
+/** True only when RevenueCat is on exactly this caregiver, so a purchase or restore is filed under them. */
+export async function purchaserIs(appUserId: string | null): Promise<boolean> {
+  const sdk = await readySdk();
+  if (!sdk) return false;
+  try {
+    return await isCurrentPurchaser(sdk.default, appUserId);
+  } catch {
+    return false;
+  }
 }
 
 /** Waits for the latest identifyPurchaser call; false when the store can't be used. */

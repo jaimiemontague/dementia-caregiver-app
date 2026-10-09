@@ -45,6 +45,7 @@ const DEVICE_ID_KEY = 'plus_device_id';
 const QUEUE_KEY = 'plus_events_queue';
 const RECORDED_KEY = 'plus_assignments_recorded';
 const PENDING_KEY = 'plus_pending_purchase';
+const DEVICE_PRODUCT_KEY = 'plus_device_product';
 // Not found (the function isn't deployed yet), timeout, too many requests: worth another try.
 const RETRY_STATUSES = new Set([404, 408, 429]);
 const MAX_QUEUE = 50;
@@ -86,6 +87,22 @@ export async function priceTestUser(email: string | null | undefined): Promise<P
 
 function userMarker(user: PriceTestUser): string {
   return user.emailHash ?? `device:${user.deviceHash}`;
+}
+
+/** The Plus product this phone's store account bought or restored, kept for whoever logs in next. */
+export async function rememberDeviceProduct(product: string | null | undefined): Promise<void> {
+  if (isPlusProduct(product)) await Storage.setItem(DEVICE_PRODUCT_KEY, product);
+}
+
+/**
+ * The product to offer this caregiver: their own price, unless this phone's store account
+ * already owns a Plus product. Then that one, so a second login email on the same phone gets
+ * the store's "already purchased" instead of paying again: each price is its own product, and
+ * a store only refuses to sell the same product twice.
+ */
+export async function offerFor(user: PriceTestUser): Promise<PriceTestUser> {
+  const owned = await Storage.getItem(DEVICE_PRODUCT_KEY);
+  return isPlusProduct(owned) && owned !== user.product ? { ...user, product: owned } : user;
 }
 
 async function readList<T>(key: string): Promise<T[]> {

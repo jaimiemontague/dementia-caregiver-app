@@ -196,6 +196,23 @@ describe('kartra-auth Netlify function', () => {
     expect(calls.map((call) => call.method)).toEqual(['GET', 'PATCH', 'POST']);
   });
 
+  it('reads the full tag list when Mailchimp cut it at 50 and the Plus tag was past the cut', async () => {
+    axios.post.mockResolvedValue(kartraNotFound());
+    const fifty = Array.from({ length: 50 }, (_, i) => ({ id: i, name: `campaign tag ${i}` }));
+    axios.request
+      .mockResolvedValueOnce({ ...mailchimpContact({}, fifty), data: { ...mailchimpContact({}, fifty).data, tags_count: 51 } })
+      .mockResolvedValueOnce({ status: 200, data: { tags: [...fifty, { id: 99, name: 'App Plus' }], total_items: 51 } })
+      .mockResolvedValueOnce({ status: 200, data: {} })
+      .mockResolvedValueOnce({ status: 204, data: '' });
+
+    const body = JSON.parse((await post('lead@example.com', PLUS_APP)).body);
+
+    expect(body.tier).toBe('plus');
+    const [, tagsCall] = axios.request.mock.calls.map(([config]) => config);
+    expect(tagsCall).toMatchObject({ method: 'GET' });
+    expect(tagsCall.url).toMatch(/\/members\/[0-9a-f]{32}\/tags\?count=1000/);
+  });
+
   it('keeps a member with the Plus tag a member', async () => {
     axios.post.mockResolvedValue(kartraLead([{ id: 'active', active: '1' }], ['App Plus']));
 

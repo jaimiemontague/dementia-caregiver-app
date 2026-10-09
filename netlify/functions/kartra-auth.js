@@ -54,6 +54,8 @@ const RETURN_AFTER_DAYS = 7;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PLATFORMS = new Set(['web', 'ios', 'android']);
 const DEFAULT_PLUS_TAG = 'App Plus';
+// Mailchimp's member lookup lists at most 50 tags; past that the full list is a second request.
+const MAILCHIMP_TAG_PAGE = 1000;
 
 function respond(statusCode, body) {
   return { statusCode, headers, body: JSON.stringify(body) };
@@ -160,9 +162,21 @@ async function mailchimpRequest(config, method, path, data) {
   });
 }
 
-async function lookupMailchimp(config, email) {
+async function allMailchimpTags(config, hash, partial) {
+  try {
+    const response = await mailchimpRequest(config, 'GET', `/lists/${config.listId}/members/${hash}/tags?count=${MAILCHIMP_TAG_PAGE}&fields=tags.name,total_items`);
+    if (response.status === 200 && response.data && Array.isArray(response.data.tags)) {
+      return tagNames(response.data.tags);
+    }
+  } catch (error) {
+    console.warn('Mailchimp tag list skipped:', error.message);
+  }
+  return partial;
+}
+
+async function lookupMailchimp(config, email, plusTag) {
   const hash = md5(email);
-  const fields = ['id', 'email_address', 'status', 'tags', `merge_fields.${config.firstLoginField}`, `merge_fields.${config.lastLoginField}`].join(',');
+  const fields = ['id', 'email_address', 'status', 'tags', 'tags_count', `merge_fields.${config.firstLoginField}`, `merge_fields.${config.lastLoginField}`].join(',');
   const response = await mailchimpRequest(config, 'GET', `/lists/${config.listId}/members/${hash}?fields=${fields}`);
   if (response.status === 404) {
     return { found: false };
@@ -171,12 +185,16 @@ async function lookupMailchimp(config, email) {
     throw new Error(`Mailchimp lookup failed (${response.status})`);
   }
   const merge = response.data.merge_fields || {};
+  let tags = tagNames(response.data.tags);
+  if (Number(response.data.tags_count) > tags.length && !tags.includes(plusTag)) {
+    tags = await allMailchimpTags(config, hash, tags);
+  }
   return {
     found: true,
     hash,
     contactId: response.data.id,
     status: response.data.status,
-    tags: tagNames(response.data.tags),
+    tags,
     firstLogin: merge[config.firstLoginField] || '',
     lastLogin: merge[config.lastLoginField] || ''
   };
@@ -286,7 +304,7 @@ exports.handler = async function (event) {
   let mailchimpFailed = false;
   if (mailchimp) {
     try {
-      contact = await lookupMailchimp(mailchimp, email);
+      contact = await lookupMailchimp(mailchimp, email, plusTags().mailchimp);
     } catch (error) {
       mailchimpFailed = true;
       console.error('Mailchimp lookup failed:', error.message);

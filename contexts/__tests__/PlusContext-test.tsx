@@ -31,6 +31,7 @@ const mockStore = {
   identifyPurchaser: jest.fn(async (_appUserId: string | null) => undefined),
   forgetPurchaser: jest.fn(async () => undefined),
   setPriceTestAttributes: jest.fn(async (_product: string) => undefined),
+  purchaserIs: jest.fn(async (_appUserId: string | null) => true),
   ownsPlus: jest.fn(async (): Promise<boolean | null> => false),
   latestPlusTransaction: jest.fn(async (): Promise<{ productId: string; transactionId: string } | null> => null),
   loadProduct: jest.fn(async (id: string) => ({ id, priceString: '$37.00' })),
@@ -45,6 +46,7 @@ jest.mock('@/utils/purchases', () => ({
   identifyPurchaser: (id: string | null) => mockStore.identifyPurchaser(id),
   forgetPurchaser: () => mockStore.forgetPurchaser(),
   setPriceTestAttributes: (product: string) => mockStore.setPriceTestAttributes(product),
+  purchaserIs: (id: string | null) => mockStore.purchaserIs(id),
   ownsPlus: () => mockStore.ownsPlus(),
   latestPlusTransaction: () => mockStore.latestPlusTransaction(),
   loadProduct: (id: string) => mockStore.loadProduct(id),
@@ -95,6 +97,8 @@ beforeEach(() => {
   jest.clearAllMocks();
   mockStorage.clear();
   mockStore.support = 'ready';
+  mockStore.purchaserIs.mockResolvedValue(true);
+  mockStore.ownsPlus.mockResolvedValue(false);
   mockAuth.authData = { email: 'Caregiver@Example.com', leadId: '', authenticated: true, timestamp: 0, tier: 'free' };
   mockAuth.isAuthenticated = true;
   mockAuth.isMember = false;
@@ -214,6 +218,43 @@ describe('PlusProvider', () => {
       mockStore.listener?.(false, null);
     });
     expect(mockAuth.setStorePlus).toHaveBeenLastCalledWith(false, EMAIL);
+  });
+
+  it('never buys, restores or changes the tier while the store is on someone else', async () => {
+    mockStore.purchaserIs.mockResolvedValue(false);
+    mockStore.ownsPlus.mockResolvedValue(true);
+    await mount();
+
+    let bought: PlusOutcome | undefined;
+    let restored: PlusOutcome | undefined;
+    await act(async () => {
+      bought = await plus.buy();
+      restored = await plus.restore();
+    });
+
+    expect([bought, restored]).toEqual(['network', 'network']);
+    expect(mockStore.buyProduct).not.toHaveBeenCalled();
+    expect(mockStore.restorePurchases).not.toHaveBeenCalled();
+    expect(mockStore.ownsPlus).not.toHaveBeenCalled();
+    expect(mockAuth.setStorePlus).not.toHaveBeenCalled();
+  });
+
+  it('offers a second email on this phone the product the phone already bought, so the store does not charge twice', async () => {
+    mockStore.buyProduct.mockResolvedValueOnce({ status: 'purchased', productId: PRODUCT, transactionId: 'tx-a', unlocked: true });
+    await mount();
+    await act(async () => {
+      await plus.buy();
+    });
+
+    // Someone else logs in on the same phone; their own price would be another product.
+    let other = '';
+    for (let i = 0; !other; i++) {
+      if (assignProduct(emailHash(`second${i}@example.com`)) !== PRODUCT) other = `second${i}@example.com`;
+    }
+    mockAuth.authData = { email: other, leadId: '', authenticated: true, timestamp: 0, tier: 'free' };
+    await mount();
+
+    expect(plus.product).toBe(PRODUCT);
   });
 
   it('reports a cancelled purchase and an empty restore without unlocking anything', async () => {
