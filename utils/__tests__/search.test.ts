@@ -23,15 +23,17 @@ describe('stem', () => {
 describe('search', () => {
   it('puts refusing to eat at the top for food, eating and eat', () => {
     expect(top('food')[0]).toBe('refusing-to-eat');
-    expect(top('eating')[0]).toBe('refusing-to-eat');
-    expect(top('eat')[0]).toBe('refusing-to-eat');
-    expect(top('Eating')[0]).toBe('refusing-to-eat');
-    expect(top('not eating')[0]).toBe('refusing-to-eat');
+    // "eating" and "eat" also match the Eating & Medication category itself, which may lead.
+    expect(top('eating', 2)).toContain('refusing-to-eat');
+    expect(top('eat', 2)).toContain('refusing-to-eat');
+    expect(top('Eating', 2)).toContain('refusing-to-eat');
+    expect(top('not eating', 2)).toContain('refusing-to-eat');
+    expect(top('eating', 2)).toContain('[eating-and-medication]');
   });
 
   it('finds the shower situations for shower, bath and bathing', () => {
     for (const q of ['shower', 'bath', 'bathing', 'washing']) {
-      const hits = search(index, q);
+      const hits = search(index, q).filter((h) => h.situation);
       expect(hits.length).toBeGreaterThan(3);
       expect(hits.slice(0, 4).every((h) => /shower/.test(h.situation ?? ''))).toBe(true);
     }

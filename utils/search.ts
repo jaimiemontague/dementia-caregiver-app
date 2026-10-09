@@ -24,6 +24,7 @@ export type SearchItem = {
 
 type IndexEntry = SearchItem & {
   key: string;              // the video itself, so a video shelved in two categories shows once
+  isCopy: boolean;          // a copy shelved under a cross-cutting category (has homeBehavior)
   labelStems: string[];
   primaryStems: string[];   // the first few keywords: what the video is mainly about
   keywordStems: string[];
@@ -112,6 +113,7 @@ export function buildSearchIndex(data: VideoData): IndexEntry[] {
       label: prettyBehavior(behavior),
       behavior,
       key: `behavior:${behavior}`,
+      isCopy: false,
       labelStems: behaviorStems,
       primaryStems: [],
       keywordStems: [],
@@ -126,6 +128,7 @@ export function buildSearchIndex(data: VideoData): IndexEntry[] {
         behavior,
         situation,
         key: typeof entry?.videoUrl === 'string' && entry.videoUrl ? entry.videoUrl : `${behavior}/${situation}`,
+        isCopy: typeof entry?.homeBehavior === 'string' && entry.homeBehavior !== behavior,
         labelStems: labelStems.filter((s) => !STOP.has(s)),
         primaryStems: keywords.slice(0, 2).flatMap(stems),
         keywordStems: keywords.slice(2).flatMap(stems),
@@ -178,11 +181,12 @@ export function search(index: IndexEntry[], query: string, limit = 30): SearchIt
   }
   scored.sort((a, b) =>
     b.score - a.score ||
+    Number(a.item.isCopy) - Number(b.item.isCopy) ||
     a.item.tokenCount - b.item.tokenCount ||
     a.item.label.localeCompare(b.item.label),
   );
   // A video shelved under two categories appears once, under the copy that scored best
-  // (ties go to the one listed first in the data file, its home behavior).
+  // (ties go to its home behavior, not the cross-cutting category).
   const seen = new Set<string>();
   const out: SearchItem[] = [];
   for (const { item } of scored) {
