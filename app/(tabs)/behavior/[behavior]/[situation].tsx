@@ -9,8 +9,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 import videoData from '../../../../data/videoData.json';
 import { prettyBehavior } from '@/utils/search';
+import CheatsheetCard, { type Cheatsheet } from '@/components/CheatsheetCard';
 
-type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
+type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string; cheatsheet?: Cheatsheet }>>;
 const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
@@ -149,6 +150,8 @@ export default function Page() {
         )}
 
         {data.prompt2 && <Text style={styles.altPrompt}>{data.prompt2}</Text>}
+
+        <CheatsheetCard cheatsheet={data.cheatsheet} />
       </ScrollView>
     </CenteredContainer>
   );
