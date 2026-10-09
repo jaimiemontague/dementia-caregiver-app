@@ -1,11 +1,12 @@
-import { Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
+import { PLUS_COPY } from '@/constants/plusCopy';
+import { canView, type Cheatsheet } from '@/utils/access';
 
-/** A printable PDF attached to a situation. Members open it; free users see what they're missing. */
-export type Cheatsheet = { title: string; url: string };
-
-const MEMBERSHIP_URL = 'https://dementiasuccesspath.com/dementia-caregiving-made-easy';
+/** A printable PDF attached to a situation. Plus and members open it; free users see what Plus adds. */
+export type { Cheatsheet } from '@/utils/access';
 
 /** S3 keys carry spaces and ampersands; encode once, and leave an already-encoded URL alone. */
 export function cheatsheetHref(url: string): string {
@@ -13,10 +14,11 @@ export function cheatsheetHref(url: string): string {
 }
 
 export default function CheatsheetCard({ cheatsheet }: { cheatsheet?: Cheatsheet | null }) {
-  const { hasPlus } = useAuth();
+  const { accessTier } = useAuth();
+  const router = useRouter();
   if (!cheatsheet?.url || !cheatsheet.title) return null;
 
-  if (hasPlus) {
+  if (canView(cheatsheet, accessTier)) {
     return (
       <TouchableOpacity
         style={styles.card}
@@ -34,18 +36,21 @@ export default function CheatsheetCard({ cheatsheet }: { cheatsheet?: Cheatsheet
     );
   }
 
-  // Free tier: the sheet exists, but it comes with the membership.
+  // Free tier: the sheet exists, and Plus opens it.
   return (
     <View style={[styles.card, styles.locked]}>
       <Ionicons name="lock-closed-outline" size={26} color="#888" style={styles.icon} />
       <View style={styles.textBlock}>
-        <Text style={styles.label}>Members get a printable cheat sheet for this situation</Text>
+        <Text style={styles.label}>{PLUS_COPY.cheatsheetLabel}</Text>
         <Text style={styles.title}>{cheatsheet.title}</Text>
-        {Platform.OS !== 'ios' && (
-          <Text style={styles.link} onPress={() => Linking.openURL(MEMBERSHIP_URL)}>
-            Learn about the membership
-          </Text>
-        )}
+        <Text style={styles.hint}>{PLUS_COPY.cheatsheetLocked}</Text>
+        <TouchableOpacity
+          style={styles.plusButton}
+          onPress={() => router.push('/plus')}
+          accessibilityRole="button"
+        >
+          <Text style={styles.plusButtonText}>{PLUS_COPY.getPlus}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -92,10 +97,17 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4,
   },
-  link: {
-    fontSize: 15,
-    color: '#1e90ff',
-    textDecorationLine: 'underline',
-    marginTop: 8,
+  plusButton: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#FFA790',
+    borderRadius: 8,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    marginTop: 12,
+  },
+  plusButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

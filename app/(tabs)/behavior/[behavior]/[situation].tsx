@@ -1,36 +1,43 @@
-import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { View, Text, StyleSheet, ScrollView, Platform, TouchableOpacity } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { useRef, useCallback, useEffect } from 'react';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useFavorites } from '@/hooks/useFavorites';
+import { useAuth } from '@/contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 
 import videoData from '../../../../data/videoData.json';
 import { prettyBehavior } from '@/utils/search';
+import { canView } from '@/utils/access';
+import { PLUS_COPY } from '@/constants/plusCopy';
 import CheatsheetCard, { type Cheatsheet } from '@/components/CheatsheetCard';
 
-type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string; cheatsheet?: Cheatsheet }>>;
+type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string; tier?: string; cheatsheet?: Cheatsheet }>>;
 const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
   const { behavior, situation } = useLocalSearchParams();
+  const router = useRouter();
   const webVideoRef = useRef<HTMLVideoElement | null>(null);
   const { addRecentVideo } = useRecentlyViewed();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { accessTier } = useAuth();
 
   const behaviorKey = decodeURIComponent(behavior as string).toLowerCase();
   const situationKey = decodeURIComponent(situation as string).toLowerCase();
 
   const data = typedVideoData[behaviorKey]?.[situationKey];
   const isCurrentlyFavorite = isFavorite(behaviorKey, situationKey);
+  // A member-layer video reached without Plus (a saved favorite, a link): no player, a way in instead.
+  const locked = Boolean(data) && !canView(data, accessTier);
 
-  const player = useVideoPlayer({ uri: data?.videoUrl || '' });
+  const player = useVideoPlayer({ uri: !locked && data?.videoUrl ? data.videoUrl : '' });
 
   // Track video view when page loads with video data
   useEffect(() => {
-    if (data && behavior && situation) {
+    if (data && !locked && behavior && situation) {
       const behaviorTitle = prettyBehavior(behaviorKey);
       const situationTitle = situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
       
@@ -42,13 +49,13 @@ export default function Page() {
         situationTitle: situationTitle,
       });
     }
-  }, [behaviorKey, situationKey, data]);
+  }, [behaviorKey, situationKey, data, locked]);
 
   // Clean up video when navigating away
   useFocusEffect(
     useCallback(() => {
-      // Play video when screen is focused
-      if (player && Platform.OS !== 'web') {
+      // Play video when screen is focused (a locked video has no player source)
+      if (player && !locked && Platform.OS !== 'web') {
         try {
           player.play();
         } catch (error) {
@@ -80,7 +87,7 @@ export default function Page() {
           }
         }
       };
-    }, [player])
+    }, [player, locked])
   );
 
   const handleToggleFavorite = () => {
@@ -104,6 +111,26 @@ export default function Page() {
         <View style={styles.container}>
           <Text style={styles.title}>No video available for this situation.</Text>
         </View>
+      </CenteredContainer>
+    );
+  }
+
+  if (locked) {
+    return (
+      <CenteredContainer>
+        <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
+          <Text style={[styles.title, styles.lockedSituation]}>
+            {situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          </Text>
+          <View style={styles.lockedCard}>
+            <Ionicons name="lock-closed-outline" size={30} color="#888" />
+            <Text style={styles.lockedTitle}>{PLUS_COPY.lockedVideoTitle}</Text>
+            <Text style={styles.lockedText}>{PLUS_COPY.includes}</Text>
+            <TouchableOpacity style={styles.plusButton} onPress={() => router.push('/plus')} accessibilityRole="button">
+              <Text style={styles.plusButtonText}>{PLUS_COPY.getPlus}</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </CenteredContainer>
     );
   }
@@ -217,5 +244,44 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 12,
+  },
+  lockedSituation: {
+    flex: 0,
+    paddingRight: 0,
+    marginBottom: 20,
+  },
+  lockedCard: {
+    alignItems: 'center',
+    backgroundColor: '#F6F6F6',
+    borderColor: '#E2E2E2',
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 20,
+  },
+  lockedTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    textAlign: 'center',
+    marginTop: 10,
+    marginBottom: 8,
+  },
+  lockedText: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  plusButton: {
+    backgroundColor: '#FFA790',
+    borderRadius: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    marginTop: 16,
+  },
+  plusButtonText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: 'bold',
   },
 });

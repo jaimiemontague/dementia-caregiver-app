@@ -2,6 +2,7 @@
 
 import { Stack } from 'expo-router';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { PlusProvider } from '@/contexts/PlusContext';
 import AuthWrapper from '@/components/AuthWrapper';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -10,13 +11,16 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
-        <AuthWrapper>
-          <StatusBar style="dark" />
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="login" />
-            <Stack.Screen name="(tabs)" />
-          </Stack>
-        </AuthWrapper>
+        <PlusProvider>
+          <AuthWrapper>
+            <StatusBar style="dark" />
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="login" />
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="plus" options={{ presentation: 'modal' }} />
+            </Stack>
+          </AuthWrapper>
+        </PlusProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );

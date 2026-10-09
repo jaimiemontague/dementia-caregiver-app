@@ -1,18 +1,23 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import CenteredContainer from '@/components/ui/CenteredContainer';
+import PlusBadge from '@/components/PlusBadge';
+import { useAuth } from '@/contexts/AuthContext';
+import { canView } from '@/utils/access';
 import { prettyBehavior } from '@/utils/search';
 
 import videoData from '../../../data/videoData.json';
-type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string }>>;
+type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string; tier?: string }>>;
 const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
   const router = useRouter();
   const { behavior } = useLocalSearchParams();
+  const { accessTier } = useAuth();
 
   const normalizedBehavior = decodeURIComponent(behavior as string).toLowerCase();
-  const situations = Object.keys(typedVideoData[normalizedBehavior] || {});
+  const situationData = typedVideoData[normalizedBehavior] || {};
+  const situations = Object.keys(situationData);
 
   return (
     <CenteredContainer>
@@ -22,25 +27,32 @@ export default function Page() {
         {prettyBehavior(normalizedBehavior).toLowerCase()}: Choose the specific situation you're dealing with.
       </Text>
 
-      {situations.map((situationKey, index) => (
-        <TouchableOpacity
-          key={index}
-          style={styles.card}
-          onPress={() =>
-            router.push({
-              pathname: "/(tabs)/behavior/[behavior]/[situation]",
-              params: {
-                behavior: behavior as string,
-                situation: situationKey,
-              },
-            })
-          }
-        >
-          <Text style={styles.cardText}>
-            {situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-          </Text>
-        </TouchableOpacity>
-      ))}
+      {situations.map((situationKey, index) => {
+        // Member-layer videos stay listed for free users, with a Plus badge, and open the paywall.
+        const locked = !canView(situationData[situationKey], accessTier);
+        return (
+          <TouchableOpacity
+            key={index}
+            style={[styles.card, locked && styles.cardLocked]}
+            onPress={() =>
+              locked
+                ? router.push('/plus')
+                : router.push({
+                    pathname: "/(tabs)/behavior/[behavior]/[situation]",
+                    params: {
+                      behavior: behavior as string,
+                      situation: situationKey,
+                    },
+                  })
+            }
+          >
+            <Text style={[styles.cardText, locked && styles.cardTextLocked]}>
+              {situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+            </Text>
+            {locked && <PlusBadge />}
+          </TouchableOpacity>
+        );
+      })}
     </View>
     </ScrollView>
     </CenteredContainer>
@@ -70,10 +82,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginBottom: 12,
   },
+  cardLocked: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   cardText: {
     fontSize: 14,
     color: '#333',
     fontWeight: '600',
+  },
+  cardTextLocked: {
+    flex: 1,
+    paddingRight: 8,
   },
   scrollContainer: {
     paddingBottom: 30,

@@ -1,19 +1,24 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useState, useMemo, useCallback } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import BehaviorCard from '../../components/BehaviorCard';
 import RecentlyViewedCard from '../../components/RecentlyViewedCard';
 import FavoriteCard from '../../components/FavoriteCard';
 import HorizontalScrollSection from '../../components/HorizontalScrollSection';
+import PlusBadge from '@/components/PlusBadge';
 import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { buildSearchIndex, prettyBehavior, search, type VideoData } from '@/utils/search';
+import { buildSearchIndex, prettyBehavior, search, type SearchItem, type VideoData } from '@/utils/search';
+import { canView, isPlusShelf } from '@/utils/access';
+import { PLUS_COPY } from '@/constants/plusCopy';
 
 import videoData from '../../data/videoData.json';
 
+const typedVideoData = videoData as VideoData;
 const behaviorKeys = Object.keys(videoData);
 
 const behaviors = behaviorKeys.map((key, index) => ({
@@ -29,8 +34,15 @@ export default function Page() {
   const router = useRouter();
   const { recentVideos, refreshRecentVideos } = useRecentlyViewed();
   const { favoriteVideos, refreshFavorites } = useFavorites();
-  const { authData, logout } = useAuth();
+  const { authData, logout, accessTier, hasPlus } = useAuth();
   const insets = useSafeAreaInsets();
+
+  // Free users still see Plus videos and shelves (with a badge); tapping one opens the paywall.
+  const isLocked = (item: SearchItem) => {
+    if (!item.situation) return !hasPlus && isPlusShelf(typedVideoData[item.behavior]);
+    const entry = typedVideoData[item.behavior]?.[item.situation];
+    return Boolean(entry) && !canView(entry, accessTier);
+  };
 
   // Refresh recent videos and favorites when screen is focused
   useFocusEffect(
@@ -42,7 +54,7 @@ export default function Page() {
 
   // Search over situation labels, their keywords and the behavior names, with word-form
   // matching ("eating" finds "eat") and ranking by how directly each result matches.
-  const searchIndex = useMemo(() => buildSearchIndex(videoData as VideoData), []);
+  const searchIndex = useMemo(() => buildSearchIndex(typedVideoData), []);
 
   const suggestions = useMemo(() => search(searchIndex, query), [query, searchIndex]);
 
@@ -84,15 +96,19 @@ export default function Page() {
       {/* Suggestions */}
       {suggestions.length > 0 && (
         <View style={styles.suggestionsContainer}>
-          {suggestions.map((item, index) => (
-            <TouchableOpacity
-              key={item.label + index}
-              onPress={() => handleSelect(item)}
-              style={styles.suggestion}
-            >
-              <Text>{item.label}</Text>
-            </TouchableOpacity>
-          ))}
+          {suggestions.map((item, index) => {
+            const locked = isLocked(item);
+            return (
+              <TouchableOpacity
+                key={item.label + index}
+                onPress={() => (locked ? router.push('/plus') : handleSelect(item))}
+                style={[styles.suggestion, locked && styles.suggestionLocked]}
+              >
+                <Text style={locked ? styles.suggestionTextLocked : undefined}>{item.label}</Text>
+                {locked && <PlusBadge />}
+              </TouchableOpacity>
+            );
+          })}
         </View>
       )}
 
@@ -104,23 +120,48 @@ export default function Page() {
       </View>
 
       <View style={styles.buttonGrid}>
-        {behaviors.map((item) => (
-          <BehaviorCard
-            key={item.id}
-            title={item.title}
-            onPress={() => {
-              setSelectedId(item.id);
-              router.push({
-                pathname: "/(tabs)/behavior/[behavior]",
-                params: {
-                  behavior: item.slug,
-                },
-              });
-            }}
-            selected={item.id === selectedId}
-          />
-        ))}
+        {behaviors.map((item) => {
+          const locked = !hasPlus && isPlusShelf(typedVideoData[item.slug]);
+          return (
+            <BehaviorCard
+              key={item.id}
+              title={item.title}
+              locked={locked}
+              onPress={() => {
+                setSelectedId(item.id);
+                if (locked) {
+                  router.push('/plus');
+                  return;
+                }
+                router.push({
+                  pathname: "/(tabs)/behavior/[behavior]",
+                  params: {
+                    behavior: item.slug,
+                  },
+                });
+              }}
+              selected={item.id === selectedId}
+            />
+          );
+        })}
       </View>
+
+      {/* Help Now Plus, for free users only */}
+      {!hasPlus && !suggestions.length && (
+        <TouchableOpacity
+          style={styles.plusRow}
+          onPress={() => router.push('/plus')}
+          accessibilityRole="button"
+          accessibilityLabel={PLUS_COPY.homeRowLabel}
+        >
+          <Ionicons name="lock-open-outline" size={22} color="#7A4A44" style={styles.plusRowIcon} />
+          <View style={styles.plusRowText}>
+            <Text style={styles.plusRowTitle}>{PLUS_COPY.homeRowTitle}</Text>
+            <Text style={styles.plusRowDetail}>{PLUS_COPY.homeRowDetail}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="#999" />
+        </TouchableOpacity>
+      )}
 
       {/* Recently Viewed Section */}
       {recentVideos.length > 0 && !suggestions.length && (
@@ -203,6 +244,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#EEE',
+  },
+  suggestionLocked: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  suggestionTextLocked: {
+    flex: 1,
+    paddingRight: 8,
+    color: '#666',
+  },
+  plusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginTop: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderColor: '#DAB2AC',
+    borderWidth: 1,
+    borderRadius: 12,
+    backgroundColor: '#FFF8F6',
+  },
+  plusRowIcon: {
+    marginRight: 12,
+  },
+  plusRowText: {
+    flex: 1,
+  },
+  plusRowTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#333',
+  },
+  plusRowDetail: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 2,
   },
   instructionsContainer: {
     paddingHorizontal: 16,

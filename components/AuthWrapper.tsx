@@ -11,7 +11,8 @@ export default function AuthWrapper({ children }: { children: React.ReactNode })
   useEffect(() => {
     if (loading) return; // Don't navigate while checking auth status
 
-    const inAuthGroup = segments[0] === '(tabs)';
+    // The app's screens and the Plus paywall need a login.
+    const inAuthGroup = segments[0] === '(tabs)' || segments[0] === 'plus';
 
     if (!isAuthenticated && inAuthGroup) {
       // User is not authenticated but trying to access protected routes

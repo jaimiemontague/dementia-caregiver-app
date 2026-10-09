@@ -45,12 +45,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // The latest session, for updates that finish after an await (store checks).
   const authRef = useRef<AuthData | null>(null);
 
-  const applyAuthData = (next: AuthData | null) => {
-    authRef.current = next;
-    setAuthData(next);
-    setIsAuthenticated(next !== null);
-  };
-
   const checkAuthStatus = async () => {
     try {
       const storedAuth = await AsyncStorage.getItem('userAuth');
@@ -62,11 +56,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const isRecent = Date.now() - parsedAuth.timestamp < thirtyDays;
 
         if (isRecent && parsedAuth.authenticated) {
-          applyAuthData(parsedAuth);
+          authRef.current = parsedAuth;
+          setAuthData(parsedAuth);
+          setIsAuthenticated(true);
         } else {
           // Auth is too old, clear it
           await AsyncStorage.removeItem('userAuth');
-          applyAuthData(null);
+          authRef.current = null;
+          setAuthData(null);
+          setIsAuthenticated(false);
         }
       }
     } catch (error) {
@@ -79,7 +77,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (newAuthData: AuthData) => {
     try {
       await AsyncStorage.setItem('userAuth', JSON.stringify(newAuthData));
-      applyAuthData(newAuthData);
+      authRef.current = newAuthData;
+      setAuthData(newAuthData);
+      setIsAuthenticated(true);
     } catch (error) {
       console.error('Error storing auth data:', error);
       throw error;
@@ -92,7 +92,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Error clearing auth data:', error);
     } finally {
-      applyAuthData(null);
+      authRef.current = null;
+      setAuthData(null);
+      setIsAuthenticated(false);
     }
   };
 
@@ -102,7 +104,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!current || normalizeEmail(current.email) !== normalizeEmail(forEmail)) return;
     const next = tierAfterStoreCheck(current, ownsPlus);
     if (!next) return;
-    applyAuthData(next);
+    authRef.current = next;
+    setAuthData(next);
     try {
       await AsyncStorage.setItem('userAuth', JSON.stringify(next));
     } catch (error) {
