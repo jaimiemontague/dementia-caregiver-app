@@ -8,6 +8,8 @@ This guide assumes the existing App Store and Play Store records use:
 
 Do not create new store app records. An update must use the existing records, identifiers, and signing credentials.
 
+A release that includes Help Now Plus (branch `member-layer`) also needs the store products, RevenueCat and the RevenueCat keys in the EAS `production` environment before the build: see `PLUS_SETUP.md`.
+
 ## 1. One-time account check
 
 ### Expo

@@ -140,3 +140,10 @@ The sections above describe the July 2026 baseline. Since then:
 - Neither branch is merged or deployed. GitHub's Dependabot alerts on `main` refer to the October 2025 lockfile and go away when `sdk57-security-remediation` merges.
 - The product direction (free app for Facebook leads, member layer of about 100 more Reels plus cheat sheets, search keywords per situation) is in the vault: `Documents\Jaimie and DSP\outputs\dsp\2026-10-07-dhn-app-facebook-campaign-plan.md` and `2026-10-07-dhn-app-upgrade-plan.md`.
 - Git on this OneDrive folder: if `git checkout` fails with "unable to append to '.git/logs/HEAD'", run `git config core.logAllRefUpdates false` (the webhook repo needed it; this one did not).
+
+## State as of October 9, 2026
+
+- Branch `member-layer` (on top of `free-tier`) adds the cheat sheets under the videos, the "Eating & Medication" and "Showering & Hygiene" categories, keyword search, and **Help Now Plus**: a one-time in-app purchase (RevenueCat, `react-native-purchases`) that unlocks the member layer (entries with `tier: "member"`, not in the data yet) and the cheat sheets. Tiers are `free`, `plus`, `member`; `utils/access.ts` (`canView`) decides what opens, members keep Help Now to themselves.
+- Plus is sold only through the in-app purchase. Every Plus string is in `constants/plusCopy.ts`, and a test fails if one mentions buying anywhere else; keep it that way (the app has a guideline 3.1.1 rejection on record).
+- The login function returns `plus` for a Kartra or Mailchimp contact tagged `App Plus`, only to builds that send `tiers` with "plus". The price test (`utils/priceTest.ts`, `netlify/functions/plus-events.js`, `npm run plus:report`) records assignments and purchases by email hash.
+- Purchases need a development build (`eas.json` profile `development`); Expo Go and the web show a preview. Store products, RevenueCat and the keys are not set up yet: `PLUS_SETUP.md` has the steps and the string list.

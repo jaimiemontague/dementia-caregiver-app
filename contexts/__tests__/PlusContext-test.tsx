@@ -36,6 +36,8 @@ const mockStore = {
   loadProduct: jest.fn(async (id: string) => ({ id, priceString: '$37.00' })),
   buyProduct: jest.fn(),
   restorePurchases: jest.fn(),
+  // The store-update listener the provider registers, so a test can play RevenueCat.
+  listener: null as null | ((owns: boolean, transaction: { productId: string; transactionId: string } | null) => void),
 };
 // The factory runs before this file's constants exist, so it hands out delegates.
 jest.mock('@/utils/purchases', () => ({
@@ -48,7 +50,12 @@ jest.mock('@/utils/purchases', () => ({
   loadProduct: (id: string) => mockStore.loadProduct(id),
   buyProduct: (id: string) => mockStore.buyProduct(id),
   restorePurchases: () => mockStore.restorePurchases(),
-  onPlusChange: () => () => {},
+  onPlusChange: (listener: (owns: boolean, transaction: { productId: string; transactionId: string } | null) => void) => {
+    mockStore.listener = listener;
+    return () => {
+      mockStore.listener = null;
+    };
+  },
 }));
 
 const EMAIL = 'caregiver@example.com';
@@ -183,6 +190,30 @@ describe('PlusProvider', () => {
     expect(mockAuth.setStorePlus).toHaveBeenLastCalledWith(true, EMAIL);
     const bodies = fetchMock.mock.calls.map(([, init]) => JSON.parse(init.body));
     expect(bodies).toEqual([expect.objectContaining({ type: 'purchase', product: PRODUCT, transactionId: 'tx-9' })]);
+  });
+
+  it('applies store updates while the app is open, and records a purchase approved then', async () => {
+    mockStore.buyProduct.mockResolvedValueOnce({ status: 'pending' });
+    await mount();
+    await act(async () => {
+      await plus.buy();
+    });
+    mockAuth.setStorePlus.mockClear();
+
+    await act(async () => {
+      mockStore.listener?.(true, { productId: PRODUCT, transactionId: 'tx-ask-to-buy' });
+    });
+    await settle();
+
+    expect(mockAuth.setStorePlus).toHaveBeenCalledWith(true, EMAIL);
+    const bodies = fetchMock.mock.calls.map(([, init]) => JSON.parse(init.body));
+    expect(bodies).toEqual([expect.objectContaining({ type: 'purchase', transactionId: 'tx-ask-to-buy' })]);
+
+    // A refund later: the provider passes it on; AuthContext decides (store-bought Plus goes back to free).
+    await act(async () => {
+      mockStore.listener?.(false, null);
+    });
+    expect(mockAuth.setStorePlus).toHaveBeenLastCalledWith(false, EMAIL);
   });
 
   it('reports a cancelled purchase and an empty restore without unlocking anything', async () => {
