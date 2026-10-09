@@ -9,6 +9,7 @@ import CenteredContainer from '@/components/ui/CenteredContainer';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import videoData from '../../data/videoData.json';
 
@@ -28,6 +29,7 @@ export default function Page() {
   const { recentVideos, refreshRecentVideos } = useRecentlyViewed();
   const { favoriteVideos, refreshFavorites } = useFavorites();
   const { authData, logout } = useAuth();
+  const insets = useSafeAreaInsets();
 
   // Refresh recent videos and favorites when screen is focused
   useFocusEffect(
@@ -88,7 +90,7 @@ export default function Page() {
 
   return (
     <CenteredContainer>
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <ScrollView contentContainerStyle={[styles.scrollContainer, { paddingBottom: insets.bottom + 72 }]}>
     <View style={styles.container}>
 
       {/* Search bar */}
