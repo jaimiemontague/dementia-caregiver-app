@@ -4,10 +4,10 @@ import CenteredContainer from '@/components/ui/CenteredContainer';
 import PlusBadge from '@/components/PlusBadge';
 import { useAuth } from '@/contexts/AuthContext';
 import { canView } from '@/utils/access';
-import { prettyBehavior } from '@/utils/search';
+import { prettyBehavior, situationTitle } from '@/utils/search';
 
 import videoData from '../../../data/videoData.json';
-type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string; tier?: string }>>;
+type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string; tier?: string; label?: string }>>;
 const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
@@ -47,7 +47,7 @@ export default function Page() {
             }
           >
             <Text style={[styles.cardText, locked && styles.cardTextLocked]}>
-              {situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              {situationTitle(situationKey, situationData[situationKey])}
             </Text>
             {locked && <PlusBadge />}
           </TouchableOpacity>

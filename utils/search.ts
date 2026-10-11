@@ -100,9 +100,32 @@ export function prettyBehavior(slug: string): string {
   );
 }
 
-export function prettySituation(slug: string): string {
-  const s = slug.replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+/** Any situation entry; only its optional label is read here. */
+type Labelled = { readonly [key: string]: unknown; label?: unknown };
+
+/** The member layer carries its own label (with quotes and punctuation a slug can't hold). */
+function labelOf(entry?: Labelled | null): string {
+  return typeof entry?.label === 'string' ? entry.label.trim() : '';
+}
+
+/** Search results: the label, else the slug with hyphens as spaces, first letter capitalized. */
+export function prettySituation(slug: string, entry?: Labelled | null): string {
+  const s = labelOf(entry) || slug.replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/** Card and screen titles: every word capitalized, as the free-tier slugs have always shown. */
+export function situationTitle(slug: string, entry?: Labelled | null): string {
+  const label = labelOf(entry);
+  if (label) return label.replace(/(^|[\s"“(])([a-z])/g, (_m, before: string, c: string) => before + c.toUpperCase());
+  return slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+/** Inside a sentence ("Watch this to help with ..."). */
+export function situationPhrase(slug: string, entry?: Labelled | null): string {
+  const label = labelOf(entry);
+  if (label) return label.charAt(0).toLowerCase() + label.slice(1);
+  return slug.replace(/-/g, ' ').toLowerCase();
 }
 
 export function buildSearchIndex(data: VideoData): IndexEntry[] {
@@ -124,7 +147,7 @@ export function buildSearchIndex(data: VideoData): IndexEntry[] {
       const keywords = Array.isArray(entry?.keywords) ? entry.keywords : [];
       const labelStems = stems(situation);
       index.push({
-        label: `${prettySituation(situation)} (${prettyBehavior(behavior)})`,
+        label: `${prettySituation(situation, entry)} (${prettyBehavior(behavior)})`,
         behavior,
         situation,
         key: typeof entry?.videoUrl === 'string' && entry.videoUrl ? entry.videoUrl : `${behavior}/${situation}`,

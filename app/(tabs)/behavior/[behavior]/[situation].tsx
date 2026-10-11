@@ -9,12 +9,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 
 import videoData from '../../../../data/videoData.json';
-import { prettyBehavior } from '@/utils/search';
+import { prettyBehavior, situationPhrase, situationTitle } from '@/utils/search';
 import { canView } from '@/utils/access';
 import { PLUS_COPY } from '@/constants/plusCopy';
 import CheatsheetCard, { type Cheatsheet } from '@/components/CheatsheetCard';
 
-type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string; tier?: string; cheatsheet?: Cheatsheet }>>;
+type VideoDataType = Record<string, Record<string, { videoUrl: string; prompt2?: string; tier?: string; label?: string; cheatsheet?: Cheatsheet }>>;
 const typedVideoData = videoData as VideoDataType;
 
 export default function Page() {
@@ -39,14 +39,13 @@ export default function Page() {
   useEffect(() => {
     if (data && !locked && behavior && situation) {
       const behaviorTitle = prettyBehavior(behaviorKey);
-      const situationTitle = situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      
+
       addRecentVideo({
         behavior: behaviorKey,
         situation: situationKey,
         videoUrl: data.videoUrl,
         title: behaviorTitle,
-        situationTitle: situationTitle,
+        situationTitle: situationTitle(situationKey, data),
       });
     }
   }, [behaviorKey, situationKey, data, locked]);
@@ -93,14 +92,13 @@ export default function Page() {
   const handleToggleFavorite = () => {
     if (data) {
       const behaviorTitle = prettyBehavior(behaviorKey);
-      const situationTitle = situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      
+
       toggleFavorite({
         behavior: behaviorKey,
         situation: situationKey,
         videoUrl: data.videoUrl,
         title: behaviorTitle,
-        situationTitle: situationTitle,
+        situationTitle: situationTitle(situationKey, data),
       });
     }
   };
@@ -120,7 +118,7 @@ export default function Page() {
       <CenteredContainer>
         <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
           <Text style={[styles.title, styles.lockedSituation]}>
-            {situationKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+            {situationTitle(situationKey, data)}
           </Text>
           <View style={styles.lockedCard}>
             <Ionicons name="lock-closed-outline" size={30} color="#888" />
@@ -140,7 +138,7 @@ export default function Page() {
       <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.title}>
-            Watch this to help with {situationKey.replace(/-/g, ' ').toLowerCase()}:
+            Watch this to help with {situationPhrase(situationKey, data)}:
           </Text>
           <TouchableOpacity 
             onPress={handleToggleFavorite} 
