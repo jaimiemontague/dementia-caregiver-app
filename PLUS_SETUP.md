@@ -114,14 +114,14 @@ On the iPhone: Settings > Privacy & Security > Developer Mode on, then Settings 
 - Small numbers mislead. At the usual thresholds (95% confidence, 80% power), telling 3% conversion from 2% takes about 3,800 caregivers per price, so with five prices about 19,000 caregivers who reach the paywall (three prices needed about 11,400). Before that, treat differences as direction only.
 - RevenueCat has the money actually paid (local prices, store fees, refunds). The Blobs log is for reading the test, and it is an open endpoint, so it could be polluted; cross-check buyers against RevenueCat.
 - Web purchases through the email funnel are not in this test.
-- To end it: keep the winning product only (`PLUS_PRODUCTS` in `utils/priceTest.ts`), and leave the other two active in the stores so earlier buyers keep restoring.
+- To end it: keep the winning product only (`PLUS_PRODUCTS` in `utils/priceTest.ts`), and leave the other four active in the stores so earlier buyers keep restoring.
 - Heads-up: both store pages list in-app purchases with prices, so a careful shopper can see all five, the $7 one included, while being offered another.
 
 ## 9. Before the store release
 
 - [ ] `[PLUS PROMISE]` replaced; every string in section 10 approved (Krista for anything that promises something). A production EAS build stops with "Replace [PLUS PROMISE] in constants/plusCopy.ts" until it is (`app.config.js`).
 - [ ] Keys in the EAS `production` environment.
-- [ ] Six products live and attached to `plus` in RevenueCat; App Store products added to the app version.
+- [ ] The five products live in each store and all ten attached to `plus` in RevenueCat; App Store products added to the app version.
 - [ ] Section 7 passed on an iPhone and an Android phone.
 - [ ] App Privacy, Data safety and the privacy policy updated for purchases.
 - [ ] App Review notes and a free demo login (2.7).
