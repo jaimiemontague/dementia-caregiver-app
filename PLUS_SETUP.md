@@ -6,7 +6,7 @@ The code is done on branch `member-layer` (October 9, 2026). Nothing below has b
 
 ## 1. What has to happen, in order
 
-1. Krista's one-sentence promise replaces `[PLUS PROMISE]` in `constants/plusCopy.ts`, and Jaimie approves the strings in section 10.
+1. Done October 11, 2026: Krista's promise is in `constants/plusCopy.ts` and the strings in section 10 are approved.
 2. Agreements and payments in both stores (section 2 and 3).
 3. RevenueCat project, products and the `plus` entitlement (section 4).
 4. Keys into EAS (section 5).
@@ -119,7 +119,7 @@ On the iPhone: Settings > Privacy & Security > Developer Mode on, then Settings 
 
 ## 9. Before the store release
 
-- [ ] `[PLUS PROMISE]` replaced; every string in section 10 approved (Krista for anything that promises something). A production EAS build stops with "Replace [PLUS PROMISE] in constants/plusCopy.ts" until it is (`app.config.js`).
+- [x] Krista's promise in place and every string in section 10 approved (October 11, 2026). A production EAS build stops if a copy placeholder such as `[PLUS PROMISE]` ever comes back (`app.config.js`).
 - [ ] Keys in the EAS `production` environment.
 - [ ] The five products live in each store and all ten attached to `plus` in RevenueCat; App Store products added to the app version.
 - [ ] Section 7 passed on an iPhone and an Android phone.
@@ -135,7 +135,7 @@ All of them live in `constants/plusCopy.ts`. `constants/__tests__/plusCopy.test.
 | Key | Text | Where |
 | --- | --- | --- |
 | `name` | Help Now Plus | Paywall title |
-| `promise` | [PLUS PROMISE] | Paywall, under the title (Krista's sentence, pending) |
+| `promise` | Unlock 100 more videos and 35 printable cheat sheets | Paywall, under the title (Krista's sentence, approved October 11, 2026) |
 | `includes` | Plus adds the extra situation videos and the printable cheat sheets. | Paywall; locked video page |
 | `buyButton` | Get Plus for [PRICE] | Paywall button; [PRICE] is the store's price string |
 | `oneTime` | One-time purchase. No subscription. | Paywall |

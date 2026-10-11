@@ -7,12 +7,12 @@
  * constants/__tests__/plusCopy.test.ts enforces the word list. PLUS_SETUP.md lists the
  * strings for approval.
  *
- * Placeholders: [PLUS PROMISE] is Krista's one-sentence promise (pending); [PRICE] is
+ * The promise is Krista's sentence (approved October 11, 2026). Placeholder: [PRICE] is
  * replaced on screen by the store's price for this user's product, never typed in.
  */
 export const PLUS_COPY = {
   name: 'Help Now Plus',
-  promise: '[PLUS PROMISE]',
+  promise: 'Unlock 100 more videos and 35 printable cheat sheets',
   includes: 'Plus adds the extra situation videos and the printable cheat sheets.',
 
   // Paywall: buying
