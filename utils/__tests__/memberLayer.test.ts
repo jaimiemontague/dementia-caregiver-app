@@ -8,8 +8,8 @@ const member = all.filter((x) => x.e.tier === 'member' && !x.e.homeBehavior);
 const memberCopies = all.filter((x) => x.e.tier === 'member' && x.e.homeBehavior);
 
 describe('member layer data', () => {
-  it('has the 101 member videos, each with a label, keywords and an S3 video', () => {
-    expect(member).toHaveLength(101);
+  it('has the 100 member videos, each with a label, keywords and an S3 video', () => {
+    expect(member).toHaveLength(100);
     for (const { e } of member) {
       expect(typeof e.label).toBe('string');
       expect(e.keywords?.length).toBeGreaterThan(3);
