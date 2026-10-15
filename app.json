@@ -10,7 +10,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.dementiasuccesspath.dementiahelpnow",
-      "buildNumber": "6",
+      "buildNumber": "7",
       "deploymentTarget": "16.4",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
