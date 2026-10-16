@@ -1,6 +1,7 @@
 /**
- * The web app has no store, so Plus can't be bought here: the paywall shows its preview
- * state. Same API as utils/purchases.ts, without loading the RevenueCat SDK at all.
+ * The web app has no store, so Plus can't be bought here: the paywall's preview state sends
+ * people to the phone app (components/PlusPreviewNotice.web.tsx). Same API as
+ * utils/purchases.ts, without loading the RevenueCat SDK at all.
  */
 import type { PlusProductId } from './priceTest';
 import type { BuyResult, PlusTransaction, PurchasesSupport, RestoreResult, StoreProduct } from './purchasesTypes';

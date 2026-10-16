@@ -5,6 +5,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CenteredContainer from '@/components/ui/CenteredContainer';
+import PlusPreviewNotice from '@/components/PlusPreviewNotice';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePlus, type PlusOutcome } from '@/contexts/PlusContext';
 import { PLUS_COPY, PLUS_LINKS, withPrice } from '@/constants/plusCopy';
@@ -51,7 +52,7 @@ export default function PlusScreen() {
   const message = outcome ? OUTCOME_MESSAGES[outcome] : undefined;
 
   const renderPurchase = () => {
-    if (support === 'preview') return <Text style={styles.notice}>{PLUS_COPY.preview}</Text>;
+    if (support === 'preview') return <PlusPreviewNotice />;
     if (support === 'unavailable') return <Text style={styles.notice}>{PLUS_COPY.unavailable}</Text>;
 
     return (

@@ -79,7 +79,7 @@ The login function change is safe to deploy before the app: builds from before P
 
 ## 6. Development build (purchases can't be tested in Expo Go)
 
-Expo Go and the web app don't contain the store module, so the paywall shows "Preview only: purchases work in the installed app." Testing a purchase needs a development build, which carries the module and still reloads code from the PC like Expo Go:
+Expo Go and the web app don't contain the store module. In Expo Go the paywall shows "Preview only: purchases work in the installed app."; on the web it says Plus is bought in the phone app and links to both store listings (`components/PlusPreviewNotice.web.tsx`). Testing a purchase needs a development build, which carries the module and still reloads code from the PC like Expo Go:
 
 ```powershell
 npx eas-cli@latest device:create                                   # once per iPhone: registers it for internal builds
@@ -148,7 +148,7 @@ All of them live in `constants/plusCopy.ts`. `constants/__tests__/plusCopy.test.
 | `loadingPrice` | Getting the price… | Paywall while the store answers |
 | `priceFailed` | The price didn't load. Check your connection and try again. | Paywall |
 | `retry` | Try again | Paywall |
-| `preview` | Preview only: purchases work in the installed app. | Paywall in Expo Go and on the web |
+| `preview` | Preview only: purchases work in the installed app. | Paywall in Expo Go (the web app has its own text, below) |
 | `unavailable` | Purchases aren't available right now. Please try again later. | Paywall in a build without keys |
 | `owned` | You have Help Now Plus | Paywall for Plus buyers and members |
 | `ownedDetail` | The extra situation videos and the printable cheat sheets are unlocked. | Same |
@@ -169,6 +169,17 @@ All of them live in `constants/plusCopy.ts`. `constants/__tests__/plusCopy.test.
 | `homeRowTitle` | Help Now Plus | Home row, free users only |
 | `homeRowDetail` | The extra situation videos and the printable cheat sheets | Home row |
 | `homeRowLabel` | Help Now Plus: see what's included | Home row, for screen readers |
+
+**The web app only** (`components/PlusPreviewNotice.web.tsx`, Jaimie, October 15, 2026). The web can't sell Plus, so its paywall says where to buy it instead of the preview line. The store builds never include this file, so the word list above doesn't apply to it:
+
+| Key | Text |
+| --- | --- |
+| `heading` | Get Plus in the phone app |
+| `steps` | Plus is bought in the free Dementia Help Now app for iPhone, iPad and Android. Download the app, log in with the same email you use here, and tap Get Plus. |
+| `appStore` | App Store (iPhone and iPad), linking to https://apps.apple.com/us/app/dementia-help-now/id6748661448 |
+| `googlePlay` | Google Play (Android), linking to https://play.google.com/store/apps/details?id=com.dementiasuccesspath.dementiahelpnow |
+
+A store purchase doesn't unlock Plus on the web: the web login gets Plus only from the `App Plus` tag.
 
 Kept on purpose, not shown as text: the two policy links in `PLUS_LINKS` (`https://dementiasuccesspath.com/privacy-policy`, the page the store listings use; `https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`, Apple's standard license agreement, which the App Store listing uses because DSP has no terms page of its own; Android shows the privacy policy only) and the endpoint `PLUS_EVENTS_URL` in `utils/priceTest.ts`.
 
